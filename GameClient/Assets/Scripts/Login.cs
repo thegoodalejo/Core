@@ -2,14 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
-public class UIManager : MonoBehaviour
+
+public class Login : MonoBehaviour
 {
-    public static UIManager instance;
+    public static Login instance;
 
     public GameObject startMenu;
     public InputField usernameField;
+    public InputField passwordField;
 
+    private static string userName;
+ 
     private void Awake()
     {
         if (instance == null)
@@ -23,12 +28,21 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    /// <summary>Attempts to connect to the server.</summary>
-    public void ConnectToServer()
+    public void ConnectToGame()
     {
         startMenu.SetActive(false);
         usernameField.interactable = false;
-        Debug.Log("Nombre del Usuario " + Login.GetUserName());
-        Client.instance.ConnectToServer();
+        SetUserName(usernameField.text);
+        SceneManager.LoadScene("Main");
+    }
+
+    private static void SetUserName(string _userName)
+    {
+        userName = _userName;
+    }
+
+    public static string GetUserName()
+    {
+        return userName;
     }
 }
