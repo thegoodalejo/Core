@@ -33,7 +33,8 @@ public class Login : MonoBehaviour
         startMenu.SetActive(false);
         usernameField.interactable = false;
         SetUserName(usernameField.text);
-        SceneManager.LoadScene("Main");
+        Debug.Log("Click()");
+        SceneManager.LoadScene("Menu");
     }
 
     private static void SetUserName(string _userName)

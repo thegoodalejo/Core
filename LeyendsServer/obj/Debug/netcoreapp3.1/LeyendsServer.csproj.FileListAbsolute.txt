@@ -1,0 +1,13 @@
+D:\Leyends\Project\LeyendsServer\obj\Debug\netcoreapp3.1\LeyendsServer.csprojAssemblyReference.cache
+D:\Leyends\Project\LeyendsServer\obj\Debug\netcoreapp3.1\LeyendsServer.AssemblyInfoInputs.cache
+D:\Leyends\Project\LeyendsServer\obj\Debug\netcoreapp3.1\LeyendsServer.AssemblyInfo.cs
+D:\Leyends\Project\LeyendsServer\obj\Debug\netcoreapp3.1\LeyendsServer.csproj.CoreCompileInputs.cache
+D:\Leyends\Project\LeyendsServer\bin\Debug\netcoreapp3.1\LeyendsServer.exe
+D:\Leyends\Project\LeyendsServer\bin\Debug\netcoreapp3.1\LeyendsServer.deps.json
+D:\Leyends\Project\LeyendsServer\bin\Debug\netcoreapp3.1\LeyendsServer.runtimeconfig.json
+D:\Leyends\Project\LeyendsServer\bin\Debug\netcoreapp3.1\LeyendsServer.runtimeconfig.dev.json
+D:\Leyends\Project\LeyendsServer\bin\Debug\netcoreapp3.1\LeyendsServer.dll
+D:\Leyends\Project\LeyendsServer\bin\Debug\netcoreapp3.1\LeyendsServer.pdb
+D:\Leyends\Project\LeyendsServer\obj\Debug\netcoreapp3.1\LeyendsServer.dll
+D:\Leyends\Project\LeyendsServer\obj\Debug\netcoreapp3.1\LeyendsServer.pdb
+D:\Leyends\Project\LeyendsServer\obj\Debug\netcoreapp3.1\LeyendsServer.genruntimeconfig.cache
