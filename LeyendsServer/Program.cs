@@ -41,5 +41,9 @@ namespace LeyendsServer
                 }
             }
         }
+
+        static void OnProcessExit(){
+            Server.Stop();
+        }
     }
 }

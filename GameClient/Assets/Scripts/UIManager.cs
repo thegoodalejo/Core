@@ -28,7 +28,7 @@ public class UIManager : MonoBehaviour
     {
         startMenu.SetActive(false);
         usernameField.interactable = false;
-        Debug.Log("Nombre del Usuario " + Login.GetUserName());
+        Debug.Log("Nombre del Usuario " + LoginUIManager.GetUserName());
         Client.instance.ConnectToServer();
     }
 }

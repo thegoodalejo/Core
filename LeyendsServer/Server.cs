@@ -133,5 +133,11 @@ namespace LeyendsServer
             };
             Console.WriteLine("Initialized packets.");
         }
+        
+        public static void Stop()
+        {
+            tcpListener.Stop();
+            udpListener.Close();
+        }
     }
 }

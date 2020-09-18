@@ -1,20 +1,17 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-
-public class Login : MonoBehaviour
+public class LoginUIManager : MonoBehaviour
 {
-    public static Login instance;
+    public static LoginUIManager instance;
 
     public GameObject startMenu;
     public InputField usernameField;
     public InputField passwordField;
 
     private static string userName;
- 
+
     private void Awake()
     {
         if (instance == null)
@@ -23,7 +20,7 @@ public class Login : MonoBehaviour
         }
         else if (instance != this)
         {
-            Debug.Log("Instance already exists, destroying object!");
+            Debug.Log("Instance AUTH already exists, destroying object!");
             Destroy(this);
         }
     }
@@ -34,7 +31,8 @@ public class Login : MonoBehaviour
         usernameField.interactable = false;
         SetUserName(usernameField.text);
         Debug.Log("Click()");
-        SceneManager.LoadScene("Menu");
+        LoginClient.instance.ConnectToServer();
+        //SceneManager.LoadScene("Menu");
     }
 
     private static void SetUserName(string _userName)
