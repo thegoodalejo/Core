@@ -61,6 +61,7 @@ public class Client : MonoBehaviour
         /// <summary>Attempts to connect to the server via TCP.</summary>
         public void Connect()
         {
+            Debug.Log("Connect");
             socket = new TcpClient
             {
                 ReceiveBufferSize = dataBufferSize,
@@ -74,6 +75,7 @@ public class Client : MonoBehaviour
         /// <summary>Initializes the newly connected client's TCP-related info.</summary>
         private void ConnectCallback(IAsyncResult _result)
         {
+            Debug.Log("ConnectCallback");
             socket.EndConnect(_result);
 
             if (!socket.Connected)
@@ -92,6 +94,7 @@ public class Client : MonoBehaviour
         /// <param name="_packet">The packet to send.</param>
         public void SendData(Packet _packet)
         {
+            Debug.Log("SendData");
             try
             {
                 if (socket != null)
@@ -108,6 +111,7 @@ public class Client : MonoBehaviour
         /// <summary>Reads incoming data from the stream.</summary>
         private void ReceiveCallback(IAsyncResult _result)
         {
+            Debug.Log("ReceiveCallback");
             try
             {
                 int _byteLength = stream.EndRead(_result);

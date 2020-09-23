@@ -8,17 +8,13 @@ namespace LeyendsServer
     /// <summary>Sent from server to client.</summary>
     public enum ServerPackets
     {
-        welcome = 1,
-        spawnPlayer,
-        playerPosition,
-        playerRotation
+        welcome = 1
     }
 
     /// <summary>Sent from client to server.</summary>
     public enum ClientPackets
     {
-        welcomeReceived = 1,
-        playerMovement
+        welcomeReceived = 1
     }
 
     public class Packet : IDisposable

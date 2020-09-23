@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Leyends\\Project\\LeyendsServer\\LeyendsServer.csproj": {}
+    "D:\\Legends\\LeyendsServer\\LeyendsServer.csproj": {}
   },
   "projects": {
-    "D:\\Leyends\\Project\\LeyendsServer\\LeyendsServer.csproj": {
+    "D:\\Legends\\LeyendsServer\\LeyendsServer.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Leyends\\Project\\LeyendsServer\\LeyendsServer.csproj",
+        "projectUniqueName": "D:\\Legends\\LeyendsServer\\LeyendsServer.csproj",
         "projectName": "LeyendsServer",
-        "projectPath": "D:\\Leyends\\Project\\LeyendsServer\\LeyendsServer.csproj",
-        "packagesPath": "C:\\Users\\alejo\\.nuget\\packages\\",
-        "outputPath": "D:\\Leyends\\Project\\LeyendsServer\\obj\\",
+        "projectPath": "D:\\Legends\\LeyendsServer\\LeyendsServer.csproj",
+        "packagesPath": "C:\\Users\\Alejo\\.nuget\\packages\\",
+        "outputPath": "D:\\Legends\\LeyendsServer\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\alejo\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\Alejo\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "netcoreapp3.1"
@@ -50,7 +50,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.300\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.402\\RuntimeIdentifierGraph.json"
         }
       }
     }

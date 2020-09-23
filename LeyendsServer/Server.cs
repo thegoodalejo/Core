@@ -43,7 +43,7 @@ namespace LeyendsServer
         {
             TcpClient _client = tcpListener.EndAcceptTcpClient(_result);
             tcpListener.BeginAcceptTcpClient(TCPConnectCallback, null);
-            Console.WriteLine($"Incoming connection from {_client.Client.RemoteEndPoint}...");
+            Console.WriteLine($"Incoming connection from {_client.Client.RemoteEndPoint} ...");
 
             for (int i = 1; i <= MaxPlayers; i++)
             {
@@ -129,7 +129,7 @@ namespace LeyendsServer
             packetHandlers = new Dictionary<int, PacketHandler>()
             {
                 { (int)ClientPackets.welcomeReceived, ServerHandle.WelcomeReceived },
-                { (int)ClientPackets.playerMovement, ServerHandle.PlayerMovement },
+               // { (int)ClientPackets.userAuth, ServerHandle.UserAuth },
             };
             Console.WriteLine("Initialized packets.");
         }

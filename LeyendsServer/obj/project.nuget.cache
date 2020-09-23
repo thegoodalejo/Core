@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "OZ6VrC6amez52+2JCpRM6aYuiVw3bWheWUP3B7rQdDslXtWqFSF3/lagXI7zSg8FpQRKb5KB7ti93GJq7qLmDw==",
+  "dgSpecHash": "vQhoHdBS4KMWU7va2LRsQdgxF2904bbeKHFxMc3FKlufs28U5ZzBs0tcU1Ue4tTzt+xnL+3HHQqTXDJMCoFjYQ==",
   "success": true,
-  "projectFilePath": "D:\\Leyends\\Project\\LeyendsServer\\LeyendsServer.csproj",
+  "projectFilePath": "D:\\Legends\\LeyendsServer\\LeyendsServer.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }

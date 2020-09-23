@@ -61,12 +61,13 @@ public class LoginClient : MonoBehaviour
         /// <summary>Attempts to connect to the server via TCP.</summary>
         public void Connect()
         {
+            Debug.Log("Connect");
             socket = new TcpClient
             {
                 ReceiveBufferSize = dataBufferSize,
                 SendBufferSize = dataBufferSize
             };
-
+            
             receiveBuffer = new byte[dataBufferSize];
             socket.BeginConnect(instance.ip, instance.port, ConnectCallback, socket);
         }
@@ -74,6 +75,7 @@ public class LoginClient : MonoBehaviour
         /// <summary>Initializes the newly connected client's TCP-related info.</summary>
         private void ConnectCallback(IAsyncResult _result)
         {
+            Debug.Log("ConnectCallback");
             socket.EndConnect(_result);
 
             if (!socket.Connected)
@@ -86,6 +88,7 @@ public class LoginClient : MonoBehaviour
             receivedData = new Packet();
 
             stream.BeginRead(receiveBuffer, 0, dataBufferSize, ReceiveCallback, null);
+            Debug.Log("TCP init");
         }
 
         /// <summary>Sends data to the client via TCP.</summary>
@@ -125,6 +128,7 @@ public class LoginClient : MonoBehaviour
             }
             catch
             {
+                Debug.Log("Disconnect");
                 Disconnect();
             }
         }
@@ -150,9 +154,10 @@ public class LoginClient : MonoBehaviour
 
             while (_packetLength > 0 && _packetLength <= receivedData.UnreadLength())
             {
+                Debug.Log($"while <= 0 {_packetLength > 0 && _packetLength <= receivedData.UnreadLength()}");
                 // While packet contains data AND packet data length doesn't exceed the length of the packet we're reading
                 byte[] _packetBytes = receivedData.ReadBytes(_packetLength);
-                ThreadManager.ExecuteOnMainThread(() =>
+                LoginThreadManager.ExecuteOnMainThread(() =>
                 {
                     using (Packet _packet = new Packet(_packetBytes))
                     {
@@ -212,7 +217,7 @@ public class LoginClient : MonoBehaviour
 
             socket.Connect(endPoint);
             socket.BeginReceive(ReceiveCallback, null);
-
+            Debug.Log("UDP init");
             using (Packet _packet = new Packet())
             {
                 SendData(_packet);
@@ -294,22 +299,8 @@ public class LoginClient : MonoBehaviour
     {
         packetHandlers = new Dictionary<int, PacketHandler>()
         {
-            { (int)ServerPackets.welcome, ClientHandle.Welcome },
-            { (int)ServerPackets.spawnPlayer, ClientHandle.SpawnPlayer },
-            { (int)ServerPackets.playerPosition, ClientHandle.PlayerPosition },
-            { (int)ServerPackets.playerRotation, ClientHandle.PlayerRotation },
-            { (int)ServerPackets.playerDisconnected, ClientHandle.PlayerDisconnected },
-            { (int)ServerPackets.playerHealth, ClientHandle.PlayerHealth },
-            { (int)ServerPackets.playerRespawned, ClientHandle.PlayerRespawned },
-            { (int)ServerPackets.createItemSpawner, ClientHandle.CreateItemSpawner },
-            { (int)ServerPackets.itemSpawned, ClientHandle.ItemSpawned },
-            { (int)ServerPackets.itemPickedUp, ClientHandle.ItemPickedUp },
-            { (int)ServerPackets.spawnProjectile, ClientHandle.SpawnProjectile },
-            { (int)ServerPackets.projectilePosition, ClientHandle.ProjectilePosition },
-            { (int)ServerPackets.projectileExploded, ClientHandle.ProjectileExploded },
-            { (int)ServerPackets.spawnEnemy, ClientHandle.SpawnEnemy },
-            { (int)ServerPackets.enemyPosition, ClientHandle.EnemyPosition },
-            { (int)ServerPackets.enemyHealth, ClientHandle.EnemyHealth },
+            { (int)LoginServerPackets.welcome, LoginHandler.Welcome },
+           // { (int)LoginServerPackets.authResponse, LoginHandler.AuthResponse },
         };
         Debug.Log("Initialized packets.");
     }

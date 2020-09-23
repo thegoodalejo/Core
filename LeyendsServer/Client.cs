@@ -12,7 +12,6 @@ namespace LeyendsServer
         public static int dataBufferSize = 4096;
 
         public int id;
-        public Player player;
         public TCP tcp;
         public UDP udp;
 
@@ -51,8 +50,8 @@ namespace LeyendsServer
                 receiveBuffer = new byte[dataBufferSize];
 
                 stream.BeginRead(receiveBuffer, 0, dataBufferSize, ReceiveCallback, null);
-
-                ServerSend.Welcome(id, "Welcome to the server!");
+                Console.WriteLine("ServerSend.Welcome");
+                ServerSend.Welcome(id, "Welcome");
             }
 
             /// <summary>Sends data to the client via TCP.</summary>
@@ -210,40 +209,10 @@ namespace LeyendsServer
             }
         }
 
-        /// <summary>Sends the client into the game and informs other clients of the new player.</summary>
-        /// <param name="_playerName">The username of the new player.</param>
-        public void SendIntoGame(string _playerName)
-        {
-            player = new Player(id, _playerName, new Vector3(0, 0, 0));
-
-            // Send all players to the new player
-            foreach (Client _client in Server.clients.Values)
-            {
-                if (_client.player != null)
-                {
-                    if (_client.id != id)
-                    {
-                        ServerSend.SpawnPlayer(id, _client.player);
-                    }
-                }
-            }
-
-            // Send the new player to all players (including himself)
-            foreach (Client _client in Server.clients.Values)
-            {
-                if (_client.player != null)
-                {
-                    ServerSend.SpawnPlayer(_client.id, player);
-                }
-            }
-        }
-
         /// <summary>Disconnects the client and stops all network traffic.</summary>
         private void Disconnect()
         {
             Console.WriteLine($"{tcp.socket.Client.RemoteEndPoint} has disconnected.");
-
-            player = null;
 
             tcp.Disconnect();
             udp.Disconnect();

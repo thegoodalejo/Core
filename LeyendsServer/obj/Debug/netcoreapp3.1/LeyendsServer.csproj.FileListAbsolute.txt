@@ -11,3 +11,16 @@ D:\Leyends\Project\LeyendsServer\bin\Debug\netcoreapp3.1\LeyendsServer.pdb
 D:\Leyends\Project\LeyendsServer\obj\Debug\netcoreapp3.1\LeyendsServer.dll
 D:\Leyends\Project\LeyendsServer\obj\Debug\netcoreapp3.1\LeyendsServer.pdb
 D:\Leyends\Project\LeyendsServer\obj\Debug\netcoreapp3.1\LeyendsServer.genruntimeconfig.cache
+D:\Legends\LeyendsServer\bin\Debug\netcoreapp3.1\LeyendsServer.exe
+D:\Legends\LeyendsServer\bin\Debug\netcoreapp3.1\LeyendsServer.deps.json
+D:\Legends\LeyendsServer\bin\Debug\netcoreapp3.1\LeyendsServer.runtimeconfig.json
+D:\Legends\LeyendsServer\bin\Debug\netcoreapp3.1\LeyendsServer.runtimeconfig.dev.json
+D:\Legends\LeyendsServer\bin\Debug\netcoreapp3.1\LeyendsServer.dll
+D:\Legends\LeyendsServer\bin\Debug\netcoreapp3.1\LeyendsServer.pdb
+D:\Legends\LeyendsServer\obj\Debug\netcoreapp3.1\LeyendsServer.csprojAssemblyReference.cache
+D:\Legends\LeyendsServer\obj\Debug\netcoreapp3.1\LeyendsServer.AssemblyInfoInputs.cache
+D:\Legends\LeyendsServer\obj\Debug\netcoreapp3.1\LeyendsServer.AssemblyInfo.cs
+D:\Legends\LeyendsServer\obj\Debug\netcoreapp3.1\LeyendsServer.csproj.CoreCompileInputs.cache
+D:\Legends\LeyendsServer\obj\Debug\netcoreapp3.1\LeyendsServer.dll
+D:\Legends\LeyendsServer\obj\Debug\netcoreapp3.1\LeyendsServer.pdb
+D:\Legends\LeyendsServer\obj\Debug\netcoreapp3.1\LeyendsServer.genruntimeconfig.cache

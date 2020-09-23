@@ -3,7 +3,19 @@ using UnityEngine;
 
 public class LoginHandler : MonoBehaviour
 {
-    public static void AuthResponse(Packet _packet)
+    public static void Welcome(Packet _packet)
+    {
+        string _msg = _packet.ReadString();
+        int _myId = _packet.ReadInt();
+
+        Debug.Log($"Message from server: {_msg}");
+        LoginClient.instance.myId = _myId;
+        LoginClientSend.WelcomeReceived();
+
+        // Now that we have the client's id, connect UDP
+        LoginClient.instance.udp.Connect(((IPEndPoint)LoginClient.instance.tcp.socket.Client.LocalEndPoint).Port);
+    }
+    /*public static void AuthResponse(Packet _packet)
     {
         string _msg = _packet.ReadString();
         int _myId = _packet.ReadInt();
@@ -14,5 +26,5 @@ public class LoginHandler : MonoBehaviour
 
         // Now that we have the client's id, connect UDP
         LoginClient.instance.udp.Connect(((IPEndPoint)LoginClient.instance.tcp.socket.Client.LocalEndPoint).Port);
-    }
+    }*/
 }

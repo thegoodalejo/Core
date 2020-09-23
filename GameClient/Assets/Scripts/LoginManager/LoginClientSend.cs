@@ -7,7 +7,7 @@ public class LoginClientSend : MonoBehaviour
     private static void SendTCPData(Packet _packet)
     {
         _packet.WriteLength();
-        Client.instance.tcp.SendData(_packet);
+        LoginClient.instance.tcp.SendData(_packet);
     }
 
     /// <summary>Sends a packet to the server via UDP.</summary>
@@ -15,15 +15,26 @@ public class LoginClientSend : MonoBehaviour
     private static void SendUDPData(Packet _packet)
     {
         _packet.WriteLength();
-        Client.instance.udp.SendData(_packet);
+        LoginClient.instance.udp.SendData(_packet);
+    }
+
+    public static void WelcomeReceived()
+    {
+        using (Packet _packet = new Packet((int)LoginClientPackets.welcomeReceived))
+        {
+            _packet.Write(LoginClient.instance.myId);
+            _packet.Write(LoginUIManager.instance.usernameField.text);
+
+            SendTCPData(_packet);
+        }
     }
 
     public static void WelcomeAuthReceived()
     {
         using (Packet _packet = new Packet((int)ClientPackets.welcomeReceived))
         {
-            _packet.Write(Client.instance.myId);
-            _packet.Write(UIManager.instance.usernameField.text);
+            _packet.Write(LoginClient.instance.myId);
+            _packet.Write(LoginUIManager.instance.usernameField.text);
 
             SendTCPData(_packet);
         }
