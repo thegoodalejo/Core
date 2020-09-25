@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using MongoDB.Driver;
 
 namespace LeyendsServer
 {
@@ -9,6 +10,23 @@ namespace LeyendsServer
 
         static void Main(string[] args)
         {
+            try
+            {
+                var connString = "mongodb://127.0.0.1:27017";
+                MongoClient client = new MongoClient(connString);
+
+                // List all the MongoDB databases
+                var allDatabases = client.ListDatabases().ToList();
+
+                Console.WriteLine("MongoDB db array type: " + allDatabases.GetType());
+                Console.WriteLine("MongoDB databases:");
+                Console.WriteLine(string.Join(", ", allDatabases));
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error:" + ex.Message);
+            }
+            
             Console.Title = "Game Server";
             isRunning = true;
 
@@ -42,7 +60,8 @@ namespace LeyendsServer
             }
         }
 
-        static void OnProcessExit(){
+        static void OnProcessExit()
+        {
             Server.Stop();
         }
     }
