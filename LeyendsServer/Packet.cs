@@ -8,7 +8,8 @@ namespace LeyendsServer
     /// <summary>Sent from server to client.</summary>
     public enum ServerPackets
     {
-        welcome = 1
+        welcome = 1,
+        auth
     }
 
     /// <summary>Sent from client to server.</summary>

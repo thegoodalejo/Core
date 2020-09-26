@@ -1,7 +1,5 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
-using TMPro;
 
 public class LoginUIManager : MonoBehaviour
 {
@@ -39,10 +37,6 @@ public class LoginUIManager : MonoBehaviour
         dialogueBox.SetActive(true);
         text.text = "Connecting to game ...";
         LoginClient.instance.ConnectToServer();
-        text.text = "Authenticate ...";
-        //LoginClientSend.Auth(usernameField.text, passwordField.text);
-
-        //SceneManager.LoadScene("Menu");
     }
 
     private static void SetUserName(string _userName)

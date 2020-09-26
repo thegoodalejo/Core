@@ -11,20 +11,15 @@ namespace LeyendsServer
         {
             int _clientIdCheck = _packet.ReadInt();
             string _username = _packet.ReadString();
+            string _pass = _packet.ReadString();
 
-            Console.WriteLine($"{Server.clients[_fromClient].tcp.socket.Client.RemoteEndPoint} connected successfully and is now player {_fromClient}.");
+            Console.WriteLine($"{Server.clients[_fromClient].tcp.socket.Client.RemoteEndPoint} connected on pass {_pass} successfully and is now player {_fromClient}.");
             if (_fromClient != _clientIdCheck)
             {
                 Console.WriteLine($"Player \"{_username}\" (ID: {_fromClient}) has assumed the wrong client ID ({_clientIdCheck})!");
             }
+
+            ServerSend.AuthState(_fromClient,DbManager.Auth(_username,_pass));
         }
-
-        /*public static void UserAuth(int _fromClient, Packet _packet)
-        {
-            string _username = _packet.ReadString();
-            string _pass = _packet.ReadString();
-
-            Console.WriteLine($"Player \"{_username}\" (ID: {_fromClient}) using pass ({_pass})!");
-        }*/
     }
 }

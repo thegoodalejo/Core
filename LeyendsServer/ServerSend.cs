@@ -88,6 +88,18 @@ namespace LeyendsServer
                 SendTCPData(_toClient, _packet);
             }
         }
+
+        public static void AuthState(int _toClient, bool _state)
+        {
+            Console.WriteLine($"Sending Auth Response  {_state} to Client {_toClient} ");
+            using (Packet _packet = new Packet((int)ServerPackets.auth))
+            {
+                _packet.Write(_state);
+                _packet.Write(_toClient);
+
+                SendTCPData(_toClient, _packet);
+            }
+        }
         #endregion
     }
 }

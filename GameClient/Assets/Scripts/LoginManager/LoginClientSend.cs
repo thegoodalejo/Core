@@ -24,6 +24,7 @@ public class LoginClientSend : MonoBehaviour
         {
             _packet.Write(LoginClient.instance.myId);
             _packet.Write(LoginUIManager.instance.usernameField.text);
+            _packet.Write(LoginUIManager.instance.passwordField.text);
 
             SendTCPData(_packet);
         }

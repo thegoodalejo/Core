@@ -7,7 +7,8 @@ using UnityEngine;
 /// <summary>Sent from server to client.</summary>
 public enum LoginServerPackets
 {
-    welcome = 1
+    welcome = 1,
+    auth
 }
 
 /// <summary>Sent from client to server.</summary>

@@ -51,7 +51,7 @@ namespace LeyendsServer
 
                 stream.BeginRead(receiveBuffer, 0, dataBufferSize, ReceiveCallback, null);
                 Console.WriteLine("ServerSend.Welcome");
-                ServerSend.Welcome(id, "Welcome");
+                ServerSend.Welcome(id, "Welcome to Auth Server");
             }
 
             /// <summary>Sends data to the client via TCP.</summary>

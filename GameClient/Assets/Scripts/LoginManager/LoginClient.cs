@@ -153,8 +153,7 @@ public class LoginClient : MonoBehaviour
             }
 
             while (_packetLength > 0 && _packetLength <= receivedData.UnreadLength())
-            {
-                Debug.Log($"while <= 0 {_packetLength > 0 && _packetLength <= receivedData.UnreadLength()}");
+            {   
                 // While packet contains data AND packet data length doesn't exceed the length of the packet we're reading
                 byte[] _packetBytes = receivedData.ReadBytes(_packetLength);
                 LoginThreadManager.ExecuteOnMainThread(() =>
@@ -300,7 +299,7 @@ public class LoginClient : MonoBehaviour
         packetHandlers = new Dictionary<int, PacketHandler>()
         {
             { (int)LoginServerPackets.welcome, LoginHandler.Welcome },
-           // { (int)LoginServerPackets.authResponse, LoginHandler.AuthResponse },
+            { (int)LoginServerPackets.auth, LoginHandler.AuthResponse },
         };
         Debug.Log("Initialized packets.");
     }
