@@ -12,6 +12,7 @@ public class LoginClient : MonoBehaviour
     public static int dataBufferSize = 4096;
 
     public string ip = "127.0.0.1";
+    public string token = "";
     public int port = 26940;
     public int myId = 0;
     public TCP tcp;

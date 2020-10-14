@@ -16,12 +16,17 @@ public class LoginHandler : MonoBehaviour
     }
     public static void AuthResponse(Packet _packet)
     {
-        bool _state = _packet.ReadBool();
-        Debug.Log($"Message from Auth server: {_state}");
+        UserProfile _userResponse = _packet.ReadUser();
+
+        Debug.Log($"Message from Auth server: {_userResponse.userAuthState}");
+        Debug.Log($"Message from Auth server: {_userResponse.id}");
+        Debug.Log($"Message from Auth server: {_userResponse.userNickName}");
         // Now that we have the client's id, connect UDP
-        if (_state)
+        if (_userResponse.userAuthState)
         {
             LoginClient.instance.udp.Connect(((IPEndPoint)LoginClient.instance.tcp.socket.Client.LocalEndPoint).Port);
+            MenuUIManager.userNickName = _userResponse.userNickName;
+            LoginClient.instance.token = _userResponse.id;
             SceneManager.LoadScene("Menu");
         }
         else

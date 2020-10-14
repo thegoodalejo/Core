@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Numerics;
 using System.Text;
+using MongoDB.Bson;
 
 namespace LeyendsServer
 {
@@ -15,7 +16,8 @@ namespace LeyendsServer
     /// <summary>Sent from client to server.</summary>
     public enum ClientPackets
     {
-        welcomeReceived = 1
+        welcomeReceived = 1,
+        queueForRandomMatch
     }
 
     public class Packet : IDisposable
@@ -175,6 +177,15 @@ namespace LeyendsServer
             Write(_value.Y);
             Write(_value.Z);
             Write(_value.W);
+        }
+        /// <summary>Adds a User object to the packet.</summary>
+        /// <param name="_value">The User to add.</param>
+        public void Write(User _value)
+        {
+            Write(_value._id.ToString());
+            Write(_value.user_legends_nick);
+            Write(_value.authState);
+            
         }
         #endregion
 

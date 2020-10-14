@@ -12,6 +12,22 @@ public class NetworkManager : MonoBehaviour
 
     private void Awake()
     {
+        string[] args = System.Environment.GetCommandLineArgs();
+        string input = "";
+        for (int i = 0; i < args.Length; i++)
+        {
+            Debug.Log("ARG " + i + ": " + args[i]);
+            if (args[i] == "-exit")
+            {
+                input = args[i + 1];
+            }
+        }
+
+        if (input == "Y")
+        {
+            Application.Quit();
+        }
+
         if (instance == null)
         {
             instance = this;

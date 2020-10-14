@@ -30,24 +30,13 @@ public class LoginClientSend : MonoBehaviour
         }
     }
 
-    public static void WelcomeAuthReceived()
+    /// <summary>Queue server for a MatchFinder.</summary>
+    public static void QueueForRandomMatch()
     {
-        using (Packet _packet = new Packet((int)ClientPackets.welcomeReceived))
+        using (Packet _packet = new Packet((int)LoginClientPackets.queueForRandomMatch))
         {
             _packet.Write(LoginClient.instance.myId);
-            _packet.Write(LoginUIManager.instance.usernameField.text);
-
-            SendTCPData(_packet);
-        }
-    }
-
-    /// <summary>Lets the server know that the welcome message was received.</summary>
-    public static void Auth(string _user, string _pass)
-    {
-        using (Packet _packet = new Packet((int)ClientPackets.welcomeReceived))
-        {
-            _packet.Write(_user);
-            _packet.Write(_pass);
+            _packet.Write(LoginClient.instance.token);
 
             SendTCPData(_packet);
         }

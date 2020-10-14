@@ -377,6 +377,13 @@ public class Packet : IDisposable
     {
         return new Quaternion(ReadFloat(_moveReadPos), ReadFloat(_moveReadPos), ReadFloat(_moveReadPos), ReadFloat(_moveReadPos));
     }
+
+    /// <summary>Reads a User from the packet.</summary>
+    /// <param name="_moveReadPos">Whether or not to move the buffer's read position.</param>
+    public UserProfile ReadUser(bool _moveReadPos = true)
+    {
+        return new UserProfile(ReadString(_moveReadPos), ReadString(_moveReadPos), ReadBool(_moveReadPos));
+    }
     #endregion
 
     private bool disposed = false;

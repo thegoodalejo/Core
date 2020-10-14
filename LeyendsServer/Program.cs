@@ -13,10 +13,8 @@ namespace LeyendsServer
         {
             Console.Title = "Game Server";
             isRunning = true;
-            //Console.WriteLine(DbManager.Auth("Alejo","abc"));
             Thread logInThread = new Thread(new ThreadStart(LoginThread));
             logInThread.Start();
-
             //26940 reservado para logica de Auth
             Server.Start(50, 26940);
         }

@@ -1,5 +1,6 @@
 using System;
 using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
 
 namespace LeyendsServer
@@ -11,23 +12,28 @@ namespace LeyendsServer
         private const string LEYENDS_DB = "LeyendsDb";
         private const string COLLECTION_USERS = "Users";
         private const string COLLECTION_USERS_USER_NAME = "user_name";
-        private const string COLLECTION_USERS_USER_PASS = "user_pass";
-
-        public static bool Auth(string _userName, string _pass)
+        public static User Auth(string _userName, string _pass)
         {
+            User userResponse;
             var filter = Builders<BsonDocument>.Filter.Eq(COLLECTION_USERS_USER_NAME, _userName);
             try
             {
                 MongoClient dbClient = new MongoClient(DB_CONNECTION);
                 var database = dbClient.GetDatabase(LEYENDS_DB);
                 var collection = database.GetCollection<BsonDocument>(COLLECTION_USERS);
-                var pass = collection.Find(filter).FirstOrDefault().GetValue(COLLECTION_USERS_USER_PASS);
-                return pass==_pass;
-            }
+                var result = collection.Find(filter).FirstOrDefault();
+                userResponse = BsonSerializer.Deserialize<User>(result);
+                if(userResponse.user_pass==_pass){
+                    Console.WriteLine("userResponse token : " + userResponse._id);
+                    return userResponse;
+                }else {
+                    return new User();
+                }
+            } //xiEUli^WkkA38cTnKnWQ
             catch (Exception ex)
             {
                 Console.WriteLine("Error:" + ex.Message);
-                return false;
+                return new User();;
             }
         }
 

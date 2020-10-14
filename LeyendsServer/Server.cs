@@ -129,6 +129,7 @@ namespace LeyendsServer
             packetHandlers = new Dictionary<int, PacketHandler>()
             {
                 { (int)ClientPackets.welcomeReceived, ServerHandle.WelcomeReceived },
+                { (int)ClientPackets.queueForRandomMatch, ServerHandle.QueueForRandomMatch },
                // { (int)ClientPackets.userAuth, ServerHandle.UserAuth },
             };
             Console.WriteLine("Initialized packets.");

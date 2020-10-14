@@ -12,12 +12,14 @@ namespace LeyendsServer
         public static int dataBufferSize = 4096;
 
         public int id;
+        public string token;
         public TCP tcp;
         public UDP udp;
 
         public Client(int _clientId)
         {
             id = _clientId;
+            token = "";
             tcp = new TCP(id);
             udp = new UDP(id);
         }
