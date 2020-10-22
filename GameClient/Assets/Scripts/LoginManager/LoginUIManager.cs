@@ -8,6 +8,9 @@ public class LoginUIManager : MonoBehaviour
     public GameObject startMenu;
     public InputField usernameField;
     public InputField passwordField;
+    public Button logIn;
+    public Button trash;
+    public Button queueMe;
 
     public GameObject dialogueBox;
     public Text text;
@@ -17,6 +20,7 @@ public class LoginUIManager : MonoBehaviour
 
     private void Awake()
     {
+        DontDestroyOnLoad(GameObject.Find("LoginManager"));
         if (instance == null)
         {
             instance = this;
@@ -37,6 +41,17 @@ public class LoginUIManager : MonoBehaviour
         dialogueBox.SetActive(true);
         text.text = "Connecting to game ...";
         LoginClient.instance.ConnectToServer();
+    }
+
+    public void SendMeTrash()
+    {
+        LoginClientSend.TrashRequest();
+    }
+
+    public static void FindGame()
+    {
+        Debug.Log("QueueForRandomMatch");
+        LoginClientSend.QueueForRandomMatch();
     }
 
     private static void SetUserName(string _userName)

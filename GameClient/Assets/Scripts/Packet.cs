@@ -223,6 +223,7 @@ public class Packet : IDisposable
     {
         if (buffer.Count > readPos)
         {
+            Console.WriteLine("ReadBytes");
             // If there are unread bytes
             byte[] _value = buffer.GetRange(readPos, _length).ToArray(); // Get the bytes at readPos' position with a range of _length
             if (_moveReadPos)
@@ -230,6 +231,7 @@ public class Packet : IDisposable
                 // If _moveReadPos is true
                 readPos += _length; // Increase readPos by _length
             }
+            Console.WriteLine(_value);
             return _value; // Return the bytes
         }
         else

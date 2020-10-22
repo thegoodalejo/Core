@@ -1,7 +1,3 @@
-using System.IO;
-using System;
-using System.Collections.Generic;
-using System.Xml.Serialization;
 using MongoDB.Bson;
 
 namespace LeyendsServer
@@ -12,10 +8,16 @@ namespace LeyendsServer
         public string user_name  { get; set; }
         public string user_pass { get; set; }
         public string user_legends_nick { get; set; }
-        public bool authState { get; set; }
+        public bool acc_aviable { get; set; }
+        public int acc_Status { get; set; }
 
         public User (){
-            authState = false;
+            acc_aviable = false;
+            user_legends_nick = "Null";
+        }
+        public User(bool state){
+            acc_aviable = true;
+            user_legends_nick = "Null";
         }
 
         public override string ToString()

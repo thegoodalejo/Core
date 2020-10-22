@@ -8,21 +8,16 @@ public class LoginHandler : MonoBehaviour
     {
         string _msg = _packet.ReadString();
         int _myId = _packet.ReadInt();
-
         Debug.Log($"Message from server: {_msg}");
         LoginClient.instance.myId = _myId;
-        LoginUIManager.instance.text.text = "auth";
+        LoginUIManager.instance.text.text = "Auth";
         LoginClientSend.WelcomeReceived();
     }
     public static void AuthResponse(Packet _packet)
     {
         UserProfile _userResponse = _packet.ReadUser();
-
-        Debug.Log($"Message from Auth server: {_userResponse.userAuthState}");
-        Debug.Log($"Message from Auth server: {_userResponse.id}");
-        Debug.Log($"Message from Auth server: {_userResponse.userNickName}");
-        // Now that we have the client's id, connect UDP
-        if (_userResponse.userAuthState)
+        LoginUIManager.instance.logIn.interactable = true;
+        if (_userResponse.acc_aviable)
         {
             LoginClient.instance.udp.Connect(((IPEndPoint)LoginClient.instance.tcp.socket.Client.LocalEndPoint).Port);
             MenuUIManager.userNickName = _userResponse.userNickName;
@@ -36,5 +31,18 @@ public class LoginHandler : MonoBehaviour
             LoginUIManager.instance.usernameField.interactable = true;
             LoginUIManager.instance.passwordField.interactable = true;
         }
+        //LoginClient.instance.udp.Connect(((IPEndPoint)LoginClient.instance.tcp.socket.Client.LocalEndPoint).Port);
+        //SceneManager.LoadScene("Menu");
+    }
+    public static void TrashRecived(Packet _packet)
+    {
+        string _trash = _packet.ReadString();
+        Debug.Log($"TrashRecived {_trash}");
+
+    }
+    public static void QueueRecived(Packet _packet)
+    {
+        Debug.Log($"QueueRecived ");
+        MenuUIManager.instance.queueSize.text = "On Queue...";
     }
 }

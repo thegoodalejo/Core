@@ -10,14 +10,18 @@ namespace LeyendsServer
     public enum ServerPackets
     {
         welcome = 1,
-        auth
+        noAuth,
+        auth,
+        queueUpdate,
+        queueUpdate2
     }
 
     /// <summary>Sent from client to server.</summary>
     public enum ClientPackets
     {
         welcomeReceived = 1,
-        queueForRandomMatch
+        queueRequestForRandomMatch,
+        test
     }
 
     public class Packet : IDisposable
@@ -184,7 +188,7 @@ namespace LeyendsServer
         {
             Write(_value._id.ToString());
             Write(_value.user_legends_nick);
-            Write(_value.authState);
+            Write(_value.acc_aviable);
             
         }
         #endregion

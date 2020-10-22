@@ -33,11 +33,20 @@ public class LoginClientSend : MonoBehaviour
     /// <summary>Queue server for a MatchFinder.</summary>
     public static void QueueForRandomMatch()
     {
-        using (Packet _packet = new Packet((int)LoginClientPackets.queueForRandomMatch))
+        using (Packet _packet = new Packet((int)LoginClientPackets.queueRequestForRandomMatch))
         {
             _packet.Write(LoginClient.instance.myId);
-            _packet.Write(LoginClient.instance.token);
+            MenuUIManager.instance.queue.interactable = false;
+            SendTCPData(_packet);
+        }
+    }
 
+    public static void TrashRequest()
+    {
+        Debug.Log("Trash request");
+        using (Packet _packet = new Packet((int)LoginClientPackets.trashRequest))
+        {
+            _packet.Write(LoginClient.instance.myId);
             SendTCPData(_packet);
         }
     }

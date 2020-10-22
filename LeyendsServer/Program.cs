@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading;
-using MongoDB.Bson;
-using MongoDB.Driver;
+
 
 namespace LeyendsServer
 {
@@ -14,14 +13,18 @@ namespace LeyendsServer
             Console.Title = "Game Server";
             isRunning = true;
             Thread logInThread = new Thread(new ThreadStart(LoginThread));
+            Thread startKeyboardListener = new Thread(new ThreadStart(StartKeyboardListener));
+            Thread queueListener = new Thread(new ThreadStart(QueueListener));
             logInThread.Start();
+            startKeyboardListener.Start();
+            queueListener.Start();
             //26940 reservado para logica de Auth
             Server.Start(50, 26940);
         }
 
         private static void LoginThread()
         {
-            Console.WriteLine($"Login thread started. Running at {Constants.TICKS_PER_SEC} ticks per second.");
+            Console.WriteLine("Login thread started");
             DateTime _nextLoop = DateTime.Now;
 
             while (isRunning)
@@ -29,9 +32,9 @@ namespace LeyendsServer
                 while (_nextLoop < DateTime.Now)
                 {
                     // If the time for the next loop is in the past, aka it's time to execute another tick
-                    LoginAuth.Update(); // Execute game logic
+                    ServerLogic.Update(); // Execute game logic
 
-                    _nextLoop = _nextLoop.AddMilliseconds(Constants.MS_PER_TICK); // Calculate at what point in time the next tick should be executed
+                    _nextLoop = _nextLoop.AddMilliseconds(Constants.MS_PER_TICK_LOGIN); // Calculate at what point in time the next tick should be executed
 
                     if (_nextLoop > DateTime.Now)
                     {
@@ -41,6 +44,51 @@ namespace LeyendsServer
                 }
             }
         }
+
+        private static void StartKeyboardListener()
+        {
+            Console.WriteLine("Commands thread started");
+            DateTime _nextLoop = DateTime.Now;
+            while (isRunning)
+            {
+                while (_nextLoop < DateTime.Now)
+                {
+                    // If the time for the next loop is in the past, aka it's time to execute another tick
+                    ServerCommands.ReadArgs(Console.ReadLine()); // Execute game logic
+
+                    _nextLoop = _nextLoop.AddMilliseconds(Constants.MS_PER_TICK_LOGIN); // Calculate at what point in time the next tick should be executed
+
+                    if (_nextLoop > DateTime.Now)
+                    {
+                        // If the execution time for the next tick is in the future, aka the server is NOT running behind
+                        Thread.Sleep(_nextLoop - DateTime.Now); // Let the thread sleep until it's needed again.
+                    }
+                }
+            }
+        }
+
+        private static void QueueListener()
+        {
+            Console.WriteLine("Queue thread started");
+            DateTime _nextLoop = DateTime.Now;
+            while (isRunning)
+            {
+                while (_nextLoop < DateTime.Now)
+                {
+                    QueueManager.Update();
+
+                    _nextLoop = _nextLoop.AddMilliseconds(Constants.MS_PER_TICK_TICKS_PER_SEC_QUEUE); // Calculate at what point in time the next tick should be executed
+
+                    if (_nextLoop > DateTime.Now)
+                    {
+                        // If the execution time for the next tick is in the future, aka the server is NOT running behind
+                        Thread.Sleep(_nextLoop - DateTime.Now); // Let the thread sleep until it's needed again.
+                    }
+                }
+            }
+        }
+
+        
 
         static void OnProcessExit()
         {

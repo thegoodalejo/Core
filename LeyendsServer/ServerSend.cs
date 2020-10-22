@@ -88,17 +88,52 @@ namespace LeyendsServer
                 SendTCPData(_toClient, _packet);
             }
         }
-
+        /// <summary>Sends a welcome message to the given client.</summary>
+        /// <param name="_toClient">The client to send the packet to.</param>
+        /// <param name="_msg">The message to send.</param>
         public static void AuthState(int _toClient, User _user)
         {
-            Console.WriteLine("Sending Auth Response  {"+_user.authState+"} to Client {"+_toClient+"} ");
+            Console.WriteLine("Sending Auth Response  {" + _user.acc_aviable + "} to Client {" + _toClient + "} ");
             using (Packet _packet = new Packet((int)ServerPackets.auth))
             {
                 _packet.Write(_user);
-
+                _packet.Write(_toClient);
                 SendTCPData(_toClient, _packet);
             }
         }
+
+        public static void AuthState(int _toClient, bool _user)
+        {
+            Console.WriteLine("Sending Auth Response  to Client {" + _toClient + "} ");
+            using (Packet _packet = new Packet((int)ServerPackets.auth))
+            {
+                _packet.Write(_user);
+                _packet.Write(_toClient);
+                SendTCPData(_toClient, _packet);
+            }
+        }
+
+        public static void SendTrash(int _toClient)
+        {
+            Console.WriteLine($"Sending Trash Package to Client {_toClient} ");
+            using (Packet _packet = new Packet((int)ServerPackets.noAuth))
+            {
+                _packet.Write("Trash");
+                _packet.Write(_toClient);
+                SendTCPData(_toClient, _packet);
+            }
+        }
+
+        public static void QueueAcepted(int _toClient)
+        {
+            Console.WriteLine($"Sending Queue Response to client {_toClient}");
+            using (Packet _packet = new Packet((int)ServerPackets.queueUpdate))
+            {
+                _packet.Write(_toClient);
+                SendTCPData(_toClient, _packet);
+            }
+        }
+
         #endregion
     }
 }

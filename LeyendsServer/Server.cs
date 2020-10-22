@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Net;
 using System.Net.Sockets;
+using MongoDB.Bson;
 
 namespace LeyendsServer
 {
@@ -96,7 +97,7 @@ namespace LeyendsServer
             }
             catch (Exception _ex)
             {
-                Console.WriteLine($"Error receiving UDP data: {_ex}");
+               Console.WriteLine($"Error receiving UDP data: {_ex}");
             }
         }
 
@@ -123,21 +124,23 @@ namespace LeyendsServer
         {
             for (int i = 1; i <= MaxPlayers; i++)
             {
-                clients.Add(i, new Client(i));
+                clients.Add(i, new Client(i, ObjectId.Empty));
             }
 
             packetHandlers = new Dictionary<int, PacketHandler>()
             {
                 { (int)ClientPackets.welcomeReceived, ServerHandle.WelcomeReceived },
-                { (int)ClientPackets.queueForRandomMatch, ServerHandle.QueueForRandomMatch },
-               // { (int)ClientPackets.userAuth, ServerHandle.UserAuth },
+                { (int)ClientPackets.queueRequestForRandomMatch, ServerHandle.QueueRequestForRandomMatch },
+                { (int)ClientPackets.test, ServerHandle.ClientTrashRequest },
             };
             Console.WriteLine("Initialized packets.");
         }
-        
+
         public static void Stop()
         {
+            Console.WriteLine("Server Stop TCP.");
             tcpListener.Stop();
+            Console.WriteLine("Server Stop UDP.");
             udpListener.Close();
         }
     }

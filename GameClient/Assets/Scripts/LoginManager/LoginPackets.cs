@@ -8,14 +8,17 @@ using UnityEngine;
 public enum LoginServerPackets
 {
     welcome = 1,
-    auth
+    test,
+    auth,
+    queueUpdate
 }
 
 /// <summary>Sent from client to server.</summary>
 public enum LoginClientPackets
 {
     welcomeReceived = 1,
-    queueForRandomMatch
+    queueRequestForRandomMatch,
+    trashRequest
 }
 
 

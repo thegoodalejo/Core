@@ -4,24 +4,33 @@ using System.Text;
 using System.Net;
 using System.Net.Sockets;
 using System.Numerics;
+using MongoDB.Bson;
 
 namespace LeyendsServer
 {
     class Client
     {
         public static int dataBufferSize = 4096;
-
         public int id;
-        public string token;
+        public ObjectId token;
+        public bool queueStatus;
+        public string queueType;
         public TCP tcp;
         public UDP udp;
 
-        public Client(int _clientId)
+        public Client(int _clientId, ObjectId _token)
         {
             id = _clientId;
-            token = "";
-            tcp = new TCP(id);
+            token = _token;
+            queueStatus = false;
+            queueType = null;
+            tcp = new TCP(id, _token);
             udp = new UDP(id);
+        }
+
+        public override string ToString()
+        {
+            return "Client ID: " + id + " - Token: " + token + " - OnQueue: " + queueStatus + " - QueueType: " + queueType;
         }
 
         public class TCP
@@ -29,13 +38,15 @@ namespace LeyendsServer
             public TcpClient socket;
 
             private readonly int id;
+            private readonly ObjectId token;
             private NetworkStream stream;
             private Packet receivedData;
             private byte[] receiveBuffer;
 
-            public TCP(int _id)
+            public TCP(int _id, ObjectId _token)
             {
                 id = _id;
+                token = _token;
             }
 
             /// <summary>Initializes the newly connected client's TCP-related info.</summary>
@@ -215,9 +226,23 @@ namespace LeyendsServer
         private void Disconnect()
         {
             Console.WriteLine($"{tcp.socket.Client.RemoteEndPoint} has disconnected.");
-
+            DbManager.UpdateState(token, (Int32)Status.Offline);
+            if (this.queueStatus)
+            {
+                Console.WriteLine($"Player {this.token} was in queue.");
+                QueueManager.Remove(id);
+            }
+            ResetSlotPlayer();
             tcp.Disconnect();
             udp.Disconnect();
+
+        }
+
+        private void ResetSlotPlayer()
+        {
+            this.token = ObjectId.Empty;
+            this.queueType = null;
+            this.queueStatus = false;
         }
     }
 }

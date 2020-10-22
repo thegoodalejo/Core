@@ -11,12 +11,11 @@ public class MenuUIManager : MonoBehaviour
     public static MenuUIManager instance;
 
     public GameObject mainMenu;
-    public InputField usernameField;
-    public Text text;
+    public Text playerNickName;
+    public Text queueSize;
+    public Button queue;
 
     public static string userNickName;
-
-    public string queuePlayers;
 
 
     private void Awake()
@@ -35,7 +34,7 @@ public class MenuUIManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        text.text = userNickName;
+        instance.playerNickName.text = userNickName;
         Debug.Log($"UserToken {LoginClient.instance.token}");
     }
 
@@ -47,7 +46,7 @@ public class MenuUIManager : MonoBehaviour
 
     public static void FindGame()
     {
-        Debug.Log($"UserToken {LoginClient.instance.token} in Queue");
+        Debug.Log("QueueForRandomMatch");
         LoginClientSend.QueueForRandomMatch();
     }
 }

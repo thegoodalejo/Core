@@ -44,6 +44,7 @@ namespace LeyendsServer
                 {
                     executeCopiedOnMainThread[i]();
                 }
+
             }
         }
     }
