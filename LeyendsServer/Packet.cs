@@ -10,10 +10,11 @@ namespace LeyendsServer
     public enum ServerPackets
     {
         welcome = 1,
-        noAuth,
+        test,
         auth,
         queueUpdate,
-        queueUpdate2
+        gameFound,
+        groupCreated
     }
 
     /// <summary>Sent from client to server.</summary>
@@ -21,7 +22,9 @@ namespace LeyendsServer
     {
         welcomeReceived = 1,
         queueRequestForRandomMatch,
-        test
+        test,
+        quitQueue,
+        groupRequest
     }
 
     public class Packet : IDisposable

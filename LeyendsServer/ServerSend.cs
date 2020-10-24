@@ -48,6 +48,17 @@ namespace LeyendsServer
                 }
             }
         }
+        /// <summary>Sends a packet to all clients in certain grup via TCP.</summary>
+        /// <param name="_grupClients">The grup of clients to send the data to.</param>
+        /// <param name="_packet">The packet to send.</param>
+        private static void SendTCPDataToAll(List<int> _grupClients, Packet _packet)
+        {
+            _packet.WriteLength();
+            foreach (int _id in _grupClients)
+            {
+                Server.clients[_id].tcp.SendData(_packet);
+            }
+        }
 
         /// <summary>Sends a packet to all clients via UDP.</summary>
         /// <param name="_packet">The packet to send.</param>
@@ -97,18 +108,6 @@ namespace LeyendsServer
             using (Packet _packet = new Packet((int)ServerPackets.auth))
             {
                 _packet.Write(_user);
-                _packet.Write(_toClient);
-                SendTCPData(_toClient, _packet);
-            }
-        }
-
-        public static void AuthState(int _toClient, bool _user)
-        {
-            Console.WriteLine("Sending Auth Response  to Client {" + _toClient + "} ");
-            using (Packet _packet = new Packet((int)ServerPackets.auth))
-            {
-                _packet.Write(_user);
-                _packet.Write(_toClient);
                 SendTCPData(_toClient, _packet);
             }
         }
@@ -116,10 +115,9 @@ namespace LeyendsServer
         public static void SendTrash(int _toClient)
         {
             Console.WriteLine($"Sending Trash Package to Client {_toClient} ");
-            using (Packet _packet = new Packet((int)ServerPackets.noAuth))
+            using (Packet _packet = new Packet((int)ServerPackets.test))
             {
                 _packet.Write("Trash");
-                _packet.Write(_toClient);
                 SendTCPData(_toClient, _packet);
             }
         }
@@ -129,7 +127,34 @@ namespace LeyendsServer
             Console.WriteLine($"Sending Queue Response to client {_toClient}");
             using (Packet _packet = new Packet((int)ServerPackets.queueUpdate))
             {
-                _packet.Write(_toClient);
+                SendTCPData(_toClient, _packet);
+            }
+        }
+        public static void QueueCancel(int _toClient)
+        {
+            Console.WriteLine($"Sending Queue canceled response to client {_toClient}");
+            using (Packet _packet = new Packet((int)ServerPackets.queueUpdate))
+            {
+                SendTCPData(_toClient, _packet);
+            }
+        }
+
+        public static void GameFoundRequest(List<int> _grupClients)
+        {
+            Console.WriteLine("Sending Game Found to clients:");
+            foreach (int _id in _grupClients)
+            {
+                Console.WriteLine(_id);
+            }
+            using (Packet _packet = new Packet((int)ServerPackets.gameFound))
+            {
+                SendTCPDataToAll(_grupClients, _packet);
+            }
+        }
+        public static void GroupCreated(int _toClient)
+        {
+            using (Packet _packet = new Packet((int)ServerPackets.groupCreated))
+            {
                 SendTCPData(_toClient, _packet);
             }
         }

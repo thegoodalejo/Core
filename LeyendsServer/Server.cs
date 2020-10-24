@@ -132,6 +132,8 @@ namespace LeyendsServer
                 { (int)ClientPackets.welcomeReceived, ServerHandle.WelcomeReceived },
                 { (int)ClientPackets.queueRequestForRandomMatch, ServerHandle.QueueRequestForRandomMatch },
                 { (int)ClientPackets.test, ServerHandle.ClientTrashRequest },
+                { (int)ClientPackets.quitQueue, ServerHandle.QuitQueueRequest },
+                { (int)ClientPackets.groupRequest, ServerHandle.GroupRequest },
             };
             Console.WriteLine("Initialized packets.");
         }

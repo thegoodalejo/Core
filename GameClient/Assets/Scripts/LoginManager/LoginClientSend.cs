@@ -29,25 +29,44 @@ public class LoginClientSend : MonoBehaviour
             SendTCPData(_packet);
         }
     }
-
-    /// <summary>Queue server for a MatchFinder.</summary>
-    public static void QueueForRandomMatch()
-    {
-        using (Packet _packet = new Packet((int)LoginClientPackets.queueRequestForRandomMatch))
-        {
-            _packet.Write(LoginClient.instance.myId);
-            MenuUIManager.instance.queue.interactable = false;
-            SendTCPData(_packet);
-        }
-    }
-
+    /// <summary>TrashRequest for test.</summary>
     public static void TrashRequest()
     {
-        Debug.Log("Trash request");
         using (Packet _packet = new Packet((int)LoginClientPackets.trashRequest))
         {
             _packet.Write(LoginClient.instance.myId);
             SendTCPData(_packet);
         }
     }
+    /// <summary>Queue server for a MatchFinder.</summary>
+    public static void QueueForRandomMatch()
+    {
+        using (Packet _packet = new Packet((int)LoginClientPackets.queueRequestForRandomMatch))
+        {
+            _packet.Write(LoginClient.instance.myId);
+            UIFindGame.instance.btnQueueGame.interactable = false;
+            SendTCPData(_packet);
+        }
+    }
+    /// <summary>Cancel queue in server.</summary>
+    public static void QuitQueue()
+    {
+        using (Packet _packet = new Packet((int)LoginClientPackets.quitQueue))
+        {
+            _packet.Write(LoginClient.instance.myId);
+            UIFindGame.instance.btnQueueGame.interactable = false;
+            SendTCPData(_packet);
+        }
+    }
+    /// <summary>Cancel queue in server.</summary>
+    public static void GroupRequest()
+    {
+        using (Packet _packet = new Packet((int)LoginClientPackets.groupRequest))
+        {
+            SendTCPData(_packet);
+        }
+    }
+    
+
+    
 }

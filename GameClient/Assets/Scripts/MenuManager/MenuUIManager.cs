@@ -1,8 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-using MongoDB.Driver;
 using System.Data.Common;
 
 public class MenuUIManager : MonoBehaviour
@@ -10,12 +8,20 @@ public class MenuUIManager : MonoBehaviour
 
     public static MenuUIManager instance;
 
-    public GameObject mainMenu;
-    public Text playerNickName;
-    public Text queueSize;
-    public Button queue;
+    [SerializeField]
+    private GameObject mainMenu;
+    [SerializeField]
+    private GameObject principalPanel;
+    [SerializeField]
+    private GameObject shortProfile;
+    [SerializeField]
+    private GameObject friends;
+    [SerializeField]
+    private GameObject findGameMenu;
+    [SerializeField]
+    private GameObject homeMenu;
+    
 
-    public static string userNickName;
 
 
     private void Awake()
@@ -34,19 +40,18 @@ public class MenuUIManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        instance.playerNickName.text = userNickName;
-        Debug.Log($"UserToken {LoginClient.instance.token}");
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        
-    }
 
-    public static void FindGame()
-    {
-        Debug.Log("QueueForRandomMatch");
-        LoginClientSend.QueueForRandomMatch();
+    }
+    public static void LoadPlayGame(){
+        UIPrincipalPanel.instance.btnPlayGame.enabled = false;
+        LoginClientSend.GroupRequest();
+        MenuUIManager.instance.homeMenu.SetActive(false);
+        MenuUIManager.instance.findGameMenu.SetActive(true);
     }
 }

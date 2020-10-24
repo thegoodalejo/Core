@@ -28,12 +28,16 @@ namespace LeyendsServer
             string _pass = _packet.ReadString();
             ServerSend.AuthState(_fromClient, DbManager.Auth(_fromClient, _username, _pass));
         }
-
+        public static void ClientTrashRequest(int _fromClient, Packet _packet)
+        {
+            Console.WriteLine($"Incoming trash request from player {_fromClient} .");
+            ServerSend.SendTrash(_fromClient);
+        }
         public static void QueueRequestForRandomMatch(int _fromClient, Packet _packet)
         {
             int _clientIdCheck = _packet.ReadInt();
             Console.WriteLine($"Incoming queue request from player {_clientIdCheck}.");
-            if (!Server.clients[_fromClient].queueStatus)
+            if (!Server.clients[_fromClient].queueStatus && _fromClient != _clientIdCheck)
             {
                 Server.clients[_fromClient].queueStatus = true;
                 Server.clients[_fromClient].queueType = QueueType.RANDOM;
@@ -41,13 +45,21 @@ namespace LeyendsServer
             }
             ServerSend.QueueAcepted(_fromClient);
         }
-
-        public static void ClientTrashRequest(int _fromClient, Packet _packet)
+        public static void QuitQueueRequest(int _fromClient, Packet _packet)
         {
-            Console.WriteLine($"Incoming trash request from player {_fromClient} .");
-            ServerSend.SendTrash(_fromClient);
+            Console.WriteLine($"Player {_fromClient} quit queue .");
+            ServerSend.QueueCancel(_fromClient);
         }
-
+        public static void GroupRequest(int _fromClient, Packet _packet)
+        {
+            Console.WriteLine($"Group creation request  {_fromClient} .");
+            PlayerQueue _newLeaderGrup = new PlayerQueue(_fromClient);
+            List<PlayerQueue> _newGrup= new List<PlayerQueue>();
+            _newGrup.Add(_newLeaderGrup);
+            QueueGroup _newQueueGroup = new QueueGroup(QueueType.NON, _newGrup);
+            QueueManager.preMadeGroups.Add(_fromClient,_newQueueGroup);
+            ServerSend.GroupCreated(_fromClient);
+        }
 
     }
 }

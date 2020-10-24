@@ -10,7 +10,9 @@ public enum LoginServerPackets
     welcome = 1,
     test,
     auth,
-    queueUpdate
+    queueUpdate,
+    gameFound,
+    groupCreated
 }
 
 /// <summary>Sent from client to server.</summary>
@@ -18,7 +20,9 @@ public enum LoginClientPackets
 {
     welcomeReceived = 1,
     queueRequestForRandomMatch,
-    trashRequest
+    trashRequest,
+    quitQueue,
+    groupRequest
 }
 
 

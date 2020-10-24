@@ -58,6 +58,8 @@ public partial class LoginClient : MonoBehaviour
             { (int)LoginServerPackets.auth, LoginHandler.AuthResponse },
             { (int)LoginServerPackets.test, LoginHandler.TrashRecived },
             { (int)LoginServerPackets.queueUpdate, LoginHandler.QueueRecived },
+            { (int)LoginServerPackets.gameFound, LoginHandler.GameFound },
+            { (int)LoginServerPackets.groupCreated, LoginHandler.GrupCreated },
         };
         Debug.Log("Initialized packets.");
     }
@@ -69,7 +71,7 @@ public partial class LoginClient : MonoBehaviour
         {
             isConnected = false;
             tcp.socket.Close();
-            udp.socket.Close();
+            //udp.socket.Close();
 
             Debug.Log("Disconnected from login server.");
         }

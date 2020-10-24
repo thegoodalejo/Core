@@ -230,7 +230,7 @@ namespace LeyendsServer
             if (this.queueStatus)
             {
                 Console.WriteLine($"Player {this.token} was in queue.");
-                QueueManager.Remove(id);
+                QueueManager.RemoveByPlayer(id);
             }
             ResetSlotPlayer();
             tcp.Disconnect();
