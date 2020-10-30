@@ -30,6 +30,7 @@ namespace LeyendsServer
                 if (userResponse.user_pass == _pass && userResponse.acc_Status != (int)Status.Online)
                 {
                     Server.clients[_toClient].token = userResponse._id;
+                    Server.clients[_toClient].nickName = userResponse.user_legends_nick;
                     Server.clients[_toClient].user_friends = userResponse.user_friends;
                     UpdateState(userResponse._id, (int)Status.Online, _toClient);
                     return userResponse;

@@ -70,5 +70,6 @@ public class LoginHandler : MonoBehaviour
         GameInfo.user_friends = _packet.ReadFriendReference();
         Debug.Log($"FriendsList size {GameInfo.user_friends.Count}");
         GameInfo.isLoadFriends = true;
+        AlertManager.HandleAlert(1,"LOL");
     }
 }

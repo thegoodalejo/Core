@@ -16,7 +16,9 @@ namespace LeyendsServer
         gameFound,
         groupCreated,
         groupDisolved,
-        friendList
+        friendList,
+        groupInvited,
+        groupInvitedResponse
     }
 
     /// <summary>Sent from client to server.</summary>

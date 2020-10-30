@@ -13,6 +13,7 @@ namespace LeyendsServer
         public static int dataBufferSize = 4096;
         public int id;
         public ObjectId token;
+        public string nickName;
         public bool queueStatus;
         public string queueType;
         public int groupLeader;
@@ -24,6 +25,7 @@ namespace LeyendsServer
         {
             id = _clientId;
             token = _token;
+            nickName = null;
             queueStatus = false;
             queueType = null;
             groupLeader = 0;
@@ -276,6 +278,7 @@ namespace LeyendsServer
         private void ResetSlotPlayer()
         {
             this.token = ObjectId.Empty;
+            this.nickName = null;
             this.queueType = null;
             this.queueStatus = false;
         }

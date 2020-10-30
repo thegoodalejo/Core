@@ -28,5 +28,9 @@ public enum LoginClientPackets
     disolveGroupRequest,
     inviteFriendToGroup
 }
+public enum AlertServerPackets
+{
+    error = 1,
+}
 
 

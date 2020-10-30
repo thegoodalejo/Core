@@ -77,8 +77,20 @@ namespace LeyendsServer
 
         public static void InviteFriendToGroup(int _fromClient, Packet _packet)
         {
-            int friend = _packet.ReadInt();
-            Console.WriteLine($"Player {_fromClient} InviteFriendToGroup  {friend} .");
+            int _toFriend = _packet.ReadInt();
+            Console.WriteLine($"Player {_fromClient} InviteFriendToGroup  {_toFriend} .");
+            ServerSend.GroupInvited(_toFriend,_fromClient);
+        }
+        public static void GroupInvitedResponse(int _fromClient, Packet _packet)
+        {
+            int _toFriend = _packet.ReadInt();
+            bool _response = _packet.ReadBool();
+            Console.WriteLine($"Player {_fromClient} GroupInvitedResponse  {_response} .");
+            if(_response){
+                
+            }
+            ServerSend.GroupInvitedResponse(_toFriend,_fromClient,_response);
+            
         }
 
     }

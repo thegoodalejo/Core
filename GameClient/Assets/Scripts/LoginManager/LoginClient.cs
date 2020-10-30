@@ -40,9 +40,11 @@ public partial class LoginClient : MonoBehaviour
     public void ConnectToServer()
     {
         LoginUIManager.instance.logIn.interactable = false;
+
         tcp = new TCP();
         udp = new UDP();
-
+        
+        AlertManager.InitializeAlertData();
         InitializeClientData();
 
         isConnected = true;

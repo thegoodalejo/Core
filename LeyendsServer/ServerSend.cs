@@ -176,11 +176,32 @@ namespace LeyendsServer
                 foreach (User item in DbManager.FriendList(_toClient))
                 {
                     _packet.Write(item.GetFriendReference());
-                }                
+                }
                 SendTCPData(_toClient, _packet);
             }
-            
+
         }
+        public static void GroupInvited(int _toClient, int _fromFriend)
+        {
+            Console.WriteLine($"Sending group invite to {_toClient} from {_fromFriend}");
+            using (Packet _packet = new Packet((int)ServerPackets.groupInvited))
+            {
+                _packet.Write($"{Server.clients[_fromFriend].nickName} grouop request");
+                SendTCPData(_toClient, _packet);
+            }
+        }
+        
+        internal static void GroupInvitedResponse(int _toFriend, int _fromClient, bool _response)
+        {
+            Console.WriteLine($"Sending GroupInvitedResponse {_toFriend} from {_fromClient} {_response}");
+            using (Packet _packet = new Packet((int)ServerPackets.groupInvitedResponse))
+            {
+                _packet.Write(_fromClient);
+                _packet.Write(_response);
+                SendTCPData(_toFriend, _packet);
+            }
+        }
+
 
         #endregion
     }
