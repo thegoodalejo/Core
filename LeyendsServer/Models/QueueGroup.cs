@@ -10,5 +10,9 @@ namespace LeyendsServer
             matchType = _matchType;
             groupMembers = _groupMembers;
         }
+
+        public int GroupSize(){
+            return groupMembers.Count;
+        }
     }
 }

@@ -16,11 +16,11 @@ public class MenuUIManager : MonoBehaviour
     private GameObject shortProfile;
     [SerializeField]
     private GameObject friends;
-    [SerializeField]
-    private GameObject findGameMenu;
-    [SerializeField]
-    private GameObject homeMenu;
-    
+
+    //Panel Buttons
+    public GameObject findGameMenu;
+    public GameObject homeMenu;
+
 
 
 
@@ -32,7 +32,7 @@ public class MenuUIManager : MonoBehaviour
         }
         else if (instance != this)
         {
-            Debug.Log("Instance MENU already exists, destroying object!");
+            Debug.Log("Instance MenuUIManager already exists, destroying object!");
             Destroy(this);
         }
     }
@@ -40,7 +40,7 @@ public class MenuUIManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        LoadHome();
     }
 
     // Update is called once per frame
@@ -48,10 +48,25 @@ public class MenuUIManager : MonoBehaviour
     {
 
     }
-    public static void LoadPlayGame(){
-        UIPrincipalPanel.instance.btnPlayGame.enabled = false;
-        LoginClientSend.GroupRequest();
-        MenuUIManager.instance.homeMenu.SetActive(false);
-        MenuUIManager.instance.findGameMenu.SetActive(true);
+    public static void LoadHome()
+    {
+        UIPrincipalPanel.instance.btnHome.interactable = false;
+        UIPrincipalPanel.instance.btnPlayGame.interactable = true;
+        MenuUIManager.instance.findGameMenu.SetActive(false);
+        MenuUIManager.instance.homeMenu.SetActive(true);
+    }
+    public static void LoadPlayGame()
+    {
+        if (!GameInfo.isGrouped)
+        {
+            LoginClientSend.GroupRequest();
+        }
+        else
+        {
+            UIPrincipalPanel.instance.btnHome.interactable = true;
+            UIPrincipalPanel.instance.btnPlayGame.interactable = false;
+            MenuUIManager.instance.findGameMenu.SetActive(true);
+            MenuUIManager.instance.homeMenu.SetActive(false);
+        }
     }
 }

@@ -15,8 +15,10 @@ namespace LeyendsServer
         public ObjectId token;
         public bool queueStatus;
         public string queueType;
+        public int groupLeader;
         public TCP tcp;
         public UDP udp;
+        public List<ObjectId> user_friends;
 
         public Client(int _clientId, ObjectId _token)
         {
@@ -24,13 +26,23 @@ namespace LeyendsServer
             token = _token;
             queueStatus = false;
             queueType = null;
+            groupLeader = 0;
             tcp = new TCP(id, _token);
             udp = new UDP(id);
+
         }
 
         public override string ToString()
         {
             return "Client ID: " + id + " - Token: " + token + " - OnQueue: " + queueStatus + " - QueueType: " + queueType;
+        }
+
+        public void FriendList(List<FriendReference> _user_friends)
+        {
+            foreach (FriendReference item in _user_friends)
+            {
+                Console.WriteLine($"Player {item._oid} in the slot {item.server_slot} : {item.user_legends_nick}");
+            }
         }
 
         public class TCP
@@ -137,7 +149,17 @@ namespace LeyendsServer
                         using (Packet _packet = new Packet(_packetBytes))
                         {
                             int _packetId = _packet.ReadInt();
-                            Server.packetHandlers[_packetId](id, _packet); // Call appropriate method to handle the packet
+                            try
+                            {
+                                Server.packetHandlers[_packetId](id, _packet); // Call appropriate method to handle the packet 
+                            }
+                            catch (System.Exception)
+                            {
+                                Console.WriteLine($"Unhandled MESSAGE ID ERROR {_packetId}");
+                                ServerSend.SendTrash(id);
+                                throw;
+                            }
+
                         }
                     });
 
@@ -226,10 +248,23 @@ namespace LeyendsServer
         private void Disconnect()
         {
             Console.WriteLine($"{tcp.socket.Client.RemoteEndPoint} has disconnected.");
-            DbManager.UpdateState(token, (Int32)Status.Offline);
+            DbManager.UpdateState(token, (Int32)Status.Offline, (Int32)Status.Offline);
+            if (groupLeader != 0)
+            {
+                if (groupLeader == id)
+                {
+                    Console.WriteLine($"Player {id} was leade group.");
+                    //TODO notificar cada uno de los integrantes del grupo que el lider se fue y disolver el grupo
+                }
+                QueueManager.preMadeGroups.Remove(id);
+                groupLeader = 0;
+            }
+
+
             if (this.queueStatus)
             {
-                Console.WriteLine($"Player {this.token} was in queue.");
+
+                CheckQueuePlayer();
                 QueueManager.RemoveByPlayer(id);
             }
             ResetSlotPlayer();
@@ -239,6 +274,12 @@ namespace LeyendsServer
         }
 
         private void ResetSlotPlayer()
+        {
+            this.token = ObjectId.Empty;
+            this.queueType = null;
+            this.queueStatus = false;
+        }
+        private void CheckQueuePlayer()
         {
             this.token = ObjectId.Empty;
             this.queueType = null;

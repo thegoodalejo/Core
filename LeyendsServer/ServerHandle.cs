@@ -19,7 +19,9 @@ namespace LeyendsServer
             }
 
             User _user = DbManager.Auth(_fromClient, _username, _pass);
+            ServerSend.FriendList(_fromClient);
             ServerSend.AuthState(_fromClient, _user);
+            
         }
 
         public static void AuthRequest(int _fromClient, Packet _packet)
@@ -27,6 +29,7 @@ namespace LeyendsServer
             string _username = _packet.ReadString();
             string _pass = _packet.ReadString();
             ServerSend.AuthState(_fromClient, DbManager.Auth(_fromClient, _username, _pass));
+            ServerSend.FriendList(_fromClient);
         }
         public static void ClientTrashRequest(int _fromClient, Packet _packet)
         {
@@ -58,7 +61,24 @@ namespace LeyendsServer
             _newGrup.Add(_newLeaderGrup);
             QueueGroup _newQueueGroup = new QueueGroup(QueueType.NON, _newGrup);
             QueueManager.preMadeGroups.Add(_fromClient,_newQueueGroup);
+            Server.clients[_fromClient].groupLeader = _fromClient;
             ServerSend.GroupCreated(_fromClient);
+        }
+        public static void GroupDisolve(int _fromClient, Packet _packet)
+        {
+            Console.WriteLine($"Group disolve request  {_fromClient} .");
+            Server.clients[_fromClient].groupLeader = 0;
+            QueueManager.preMadeGroups.Remove(_fromClient);
+            if(QueueManager.preMadeGroups[_fromClient]!=null){
+                Console.WriteLine($"Group slot  player {QueueManager.preMadeGroups[_fromClient].groupMembers[0].id} .");
+            }
+            ServerSend.GroupDisolved(_fromClient);
+        }
+
+        public static void InviteFriendToGroup(int _fromClient, Packet _packet)
+        {
+            int friend = _packet.ReadInt();
+            Console.WriteLine($"Player {_fromClient} InviteFriendToGroup  {friend} .");
         }
 
     }

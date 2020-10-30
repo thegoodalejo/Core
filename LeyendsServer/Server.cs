@@ -37,6 +37,8 @@ namespace LeyendsServer
             udpListener.BeginReceive(UDPReceiveCallback, null);
 
             Console.WriteLine($"Server started on port {Port}.");
+
+            DbManager.UpdateStateAll();
         }
 
         /// <summary>Handles new TCP connections.</summary>
@@ -134,15 +136,15 @@ namespace LeyendsServer
                 { (int)ClientPackets.test, ServerHandle.ClientTrashRequest },
                 { (int)ClientPackets.quitQueue, ServerHandle.QuitQueueRequest },
                 { (int)ClientPackets.groupRequest, ServerHandle.GroupRequest },
+                { (int)ClientPackets.groupDisolve, ServerHandle.GroupDisolve },
+                { (int)ClientPackets.inviteFriendToGroup, ServerHandle.InviteFriendToGroup },
             };
             Console.WriteLine("Initialized packets.");
         }
 
         public static void Stop()
         {
-            Console.WriteLine("Server Stop TCP.");
             tcpListener.Stop();
-            Console.WriteLine("Server Stop UDP.");
             udpListener.Close();
         }
     }

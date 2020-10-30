@@ -14,7 +14,9 @@ namespace LeyendsServer
         auth,
         queueUpdate,
         gameFound,
-        groupCreated
+        groupCreated,
+        groupDisolved,
+        friendList
     }
 
     /// <summary>Sent from client to server.</summary>
@@ -24,7 +26,9 @@ namespace LeyendsServer
         queueRequestForRandomMatch,
         test,
         quitQueue,
-        groupRequest
+        groupRequest,
+        groupDisolve,
+        inviteFriendToGroup
     }
 
     public class Packet : IDisposable
@@ -194,6 +198,20 @@ namespace LeyendsServer
             Write(_value.acc_aviable);
             
         }
+        /// <summary>Adds a ObjectId to the packet.</summary>
+        /// <param name="_value">The ObjectId to add as String.</param>
+        public void Write(ObjectId _value){
+            Write(_value.ToString());
+        }
+        /// <summary>Adds a List<> of FriendReference to the packet.</summary>
+        /// <param name="_value">The list of Objects to add.</param>
+        public void Write(FriendReference _value)
+        {
+            Write(_value._oid);
+            Write(_value.server_slot);
+            Write(_value.user_legends_nick);
+        }
+        
         #endregion
 
         #region Read Data

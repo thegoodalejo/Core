@@ -20,7 +20,7 @@ public class LoginHandler : MonoBehaviour
         if (_userResponse.acc_aviable)
         {
             LoginClient.instance.udp.Connect(((IPEndPoint)LoginClient.instance.tcp.socket.Client.LocalEndPoint).Port);
-            GameInfo.StrPlayerName = _userResponse.userNickName;
+            GameInfo.strPlayerName = _userResponse.userNickName;
             LoginClient.instance.token = _userResponse.id;
             SceneManager.LoadScene("Menu");
         }
@@ -42,8 +42,10 @@ public class LoginHandler : MonoBehaviour
     }
     public static void QueueRecived(Packet _packet)
     {
+        Debug.Log("QueueRecived");
         UIFindGame.instance.txtQueueStatus.text = "On Queue...";
-        UIFindGame.instance.btnQuitQueue.enabled = true;
+        GameInfo.isQueued = true;
+        UIFindGame.instance.btnQuitQueue.SetActive(true);
     }
     public static void GameFound(Packet _packet)
     {
@@ -52,6 +54,21 @@ public class LoginHandler : MonoBehaviour
     public static void GrupCreated(Packet _packet)
     {
         UIFindGame.instance.txtMessageServer.enabled = false;
-        UIFindGame.instance.btnQueueGame.enabled = true;
+        GameInfo.isGrouped = true;
+        UIFindGame.instance.btnQueueGame.SetActive(true);
+    }
+    public static void GrupDisolved(Packet _packet)
+    {
+        UIPrincipalPanel.instance.btnHome.interactable = false;
+        UIPrincipalPanel.instance.btnPlayGame.interactable = true;
+        GameInfo.isGrouped = false;
+        MenuUIManager.instance.findGameMenu.SetActive(false);
+        MenuUIManager.instance.homeMenu.SetActive(true);
+    }
+    public static void FriendsList(Packet _packet)
+    {
+        GameInfo.user_friends = _packet.ReadFriendReference();
+        Debug.Log($"FriendsList size {GameInfo.user_friends.Count}");
+        GameInfo.isLoadFriends = true;
     }
 }

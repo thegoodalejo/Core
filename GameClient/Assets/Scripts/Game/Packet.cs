@@ -386,6 +386,19 @@ public class Packet : IDisposable
     {
         return new UserProfile(ReadString(_moveReadPos), ReadString(_moveReadPos), ReadBool(_moveReadPos));
     }
+    /// <summary>Reads a FriendList from the packet.</summary>
+    /// <param name="_moveReadPos">Whether or not to move the buffer's read position.</param>
+    public List<FriendReference> ReadFriendReference(bool _moveReadPos = true)
+    {
+        List<FriendReference> response = new List<FriendReference>();
+        int size = ReadInt(_moveReadPos);
+        for (int i = 0; i < size; i++)
+        {
+            FriendReference _friend = new FriendReference(ReadString(_moveReadPos), ReadInt(_moveReadPos), ReadString(_moveReadPos));
+            response.Add(_friend);
+        }
+        return response;
+    }
     #endregion
 
     private bool disposed = false;

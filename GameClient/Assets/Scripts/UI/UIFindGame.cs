@@ -9,24 +9,25 @@ public class UIFindGame : MonoBehaviour
     public Text txtQueueStatus;
     public Text txtMessageServer;
     public Text txtPlayersInGroup;
-    public Button btnQueueGame;
-    public Button btnAceptQueue;
-    public Button btnQuitQueue;
+    public GameObject btnQueueGame;
+    public GameObject btnAceptQueue;
+    public GameObject btnQuitQueue;
     private void Awake()
     {
+        Debug.Log("Awake UIFindGame");
         if (instance == null)
         {
             instance = this;
         }
         else if (instance != this)
         {
-            Debug.Log("Instance MENU already exists, destroying object!");
+            Debug.Log("Instance UIFindGame already exists, destroying object!");
             Destroy(this);
         }
     }
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame

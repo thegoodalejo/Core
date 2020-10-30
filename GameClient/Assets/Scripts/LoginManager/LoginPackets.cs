@@ -12,7 +12,9 @@ public enum LoginServerPackets
     auth,
     queueUpdate,
     gameFound,
-    groupCreated
+    groupCreated,
+    groupDisolved,
+    friendList
 }
 
 /// <summary>Sent from client to server.</summary>
@@ -22,7 +24,9 @@ public enum LoginClientPackets
     queueRequestForRandomMatch,
     trashRequest,
     quitQueue,
-    groupRequest
+    groupRequest,
+    disolveGroupRequest,
+    inviteFriendToGroup
 }
 
 

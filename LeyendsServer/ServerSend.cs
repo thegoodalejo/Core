@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using MongoDB.Bson;
 
 namespace LeyendsServer
 {
@@ -157,6 +158,28 @@ namespace LeyendsServer
             {
                 SendTCPData(_toClient, _packet);
             }
+        }
+        public static void GroupDisolved(int _toClient)
+        {
+            using (Packet _packet = new Packet((int)ServerPackets.groupDisolved))
+            {
+                SendTCPData(_toClient, _packet);
+            }
+        }
+        public static void FriendList(int _toClient)
+        {
+            Console.WriteLine($"Sending Friends.... {Server.clients[_toClient].user_friends.Count}");
+            using (Packet _packet = new Packet((int)ServerPackets.friendList))
+            {
+                List<User> usersList = DbManager.FriendList(_toClient);
+                _packet.Write(usersList.Count);
+                foreach (User item in DbManager.FriendList(_toClient))
+                {
+                    _packet.Write(item.GetFriendReference());
+                }                
+                SendTCPData(_toClient, _packet);
+            }
+            
         }
 
         #endregion

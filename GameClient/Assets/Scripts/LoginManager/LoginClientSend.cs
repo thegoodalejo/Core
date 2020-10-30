@@ -44,7 +44,7 @@ public class LoginClientSend : MonoBehaviour
         using (Packet _packet = new Packet((int)LoginClientPackets.queueRequestForRandomMatch))
         {
             _packet.Write(LoginClient.instance.myId);
-            UIFindGame.instance.btnQueueGame.interactable = false;
+            //UIFindGame.instance.btnQueueGame.interactable = false;
             SendTCPData(_packet);
         }
     }
@@ -54,19 +54,42 @@ public class LoginClientSend : MonoBehaviour
         using (Packet _packet = new Packet((int)LoginClientPackets.quitQueue))
         {
             _packet.Write(LoginClient.instance.myId);
-            UIFindGame.instance.btnQueueGame.interactable = false;
+            //UIFindGame.instance.btnQueueGame.interactable = false;
             SendTCPData(_packet);
         }
     }
-    /// <summary>Cancel queue in server.</summary>
+    /// <summary>Send request to create group in server.</summary>
     public static void GroupRequest()
     {
+        UIPrincipalPanel.instance.btnHome.interactable = true;
+        UIPrincipalPanel.instance.btnPlayGame.interactable = false;
+        MenuUIManager.instance.findGameMenu.SetActive(true);
+        MenuUIManager.instance.homeMenu.SetActive(false);
         using (Packet _packet = new Packet((int)LoginClientPackets.groupRequest))
         {
             SendTCPData(_packet);
         }
     }
+    /// <summary>Send request to disolve group in server.</summary>
+    public static void DisolveGroupRequest()
+    {
+        Debug.Log("DisolveGroupRequest");
+        using (Packet _packet = new Packet((int)LoginClientPackets.disolveGroupRequest))
+        {
+            SendTCPData(_packet);
+        }
+    }
+    public static void InviteFriendToGroup(int _toFriend)
+    {
+        Debug.Log("InviteFriendToGroup");
+        using (Packet _packet = new Packet((int)LoginClientPackets.inviteFriendToGroup))
+        {
+            _packet.Write(_toFriend);
+            SendTCPData(_packet);
+        }
+    }
     
 
-    
+
+
 }

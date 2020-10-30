@@ -24,7 +24,6 @@ namespace LeyendsServer
 
         private static void LoginThread()
         {
-            Console.WriteLine("Login thread started");
             DateTime _nextLoop = DateTime.Now;
 
             while (isRunning)
@@ -47,7 +46,6 @@ namespace LeyendsServer
 
         private static void StartKeyboardListener()
         {
-            Console.WriteLine("Commands thread started");
             DateTime _nextLoop = DateTime.Now;
             while (isRunning)
             {
@@ -69,7 +67,6 @@ namespace LeyendsServer
 
         private static void QueueListener()
         {
-            Console.WriteLine("Queue thread started");
             DateTime _nextLoop = DateTime.Now;
             while (isRunning)
             {

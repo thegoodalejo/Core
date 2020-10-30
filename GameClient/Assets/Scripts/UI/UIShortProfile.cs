@@ -21,7 +21,7 @@ public class UIShortProfile : MonoBehaviour
     }
     void Start()
     {
-        txtPlayerName.text = GameInfo.StrPlayerName;
+        txtPlayerName.text = GameInfo.strPlayerName;
     }
     void Update()
     {

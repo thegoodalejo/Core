@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class UIPrincipalPanel : MonoBehaviour
 {
     public static UIPrincipalPanel instance;
+    public Button btnHome;
     public Button btnPlayGame;
     private void Awake()
     {

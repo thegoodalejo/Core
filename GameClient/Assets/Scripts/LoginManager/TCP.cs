@@ -1,6 +1,8 @@
 using UnityEngine;
 using System.Net.Sockets;
 using System;
+using System.Threading.Tasks;
+using System.Threading;
 
 public partial class LoginClient
 {
@@ -22,6 +24,11 @@ public partial class LoginClient
             };
             receiveBuffer = new byte[dataBufferSize];
             socket.BeginConnect(instance.ip, instance.port, ConnectCallback, socket);
+            if (!socket.Connected)
+            {
+                LoginUIManager.instance.text.text = "No se pudo conectar";
+                LoginUIManager.instance.logIn.interactable = true;
+            }
         }
 
         /// <summary>Initializes the newly connected client's TCP-related info.</summary>

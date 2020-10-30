@@ -60,8 +60,9 @@ public partial class LoginClient : MonoBehaviour
             { (int)LoginServerPackets.queueUpdate, LoginHandler.QueueRecived },
             { (int)LoginServerPackets.gameFound, LoginHandler.GameFound },
             { (int)LoginServerPackets.groupCreated, LoginHandler.GrupCreated },
+            { (int)LoginServerPackets.groupDisolved, LoginHandler.GrupDisolved },
+            { (int)LoginServerPackets.friendList, LoginHandler.FriendsList },
         };
-        Debug.Log("Initialized packets.");
     }
 
     /// <summary>Disconnects from the server and stops all network traffic.</summary>
