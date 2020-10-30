@@ -4,24 +4,45 @@ using System.Text;
 using System.Net;
 using System.Net.Sockets;
 using System.Numerics;
+using MongoDB.Bson;
 
 namespace LeyendsServer
 {
     class Client
     {
         public static int dataBufferSize = 4096;
-
         public int id;
-        public string token;
+        public ObjectId token;
+        public bool queueStatus;
+        public string queueType;
+        public int groupLeader;
         public TCP tcp;
         public UDP udp;
+        public List<ObjectId> user_friends;
 
-        public Client(int _clientId)
+        public Client(int _clientId, ObjectId _token)
         {
             id = _clientId;
-            token = "";
-            tcp = new TCP(id);
+            token = _token;
+            queueStatus = false;
+            queueType = null;
+            groupLeader = 0;
+            tcp = new TCP(id, _token);
             udp = new UDP(id);
+
+        }
+
+        public override string ToString()
+        {
+            return "Client ID: " + id + " - Token: " + token + " - OnQueue: " + queueStatus + " - QueueType: " + queueType;
+        }
+
+        public void FriendList(List<FriendReference> _user_friends)
+        {
+            foreach (FriendReference item in _user_friends)
+            {
+                Console.WriteLine($"Player {item._oid} in the slot {item.server_slot} : {item.user_legends_nick}");
+            }
         }
 
         public class TCP
@@ -29,13 +50,15 @@ namespace LeyendsServer
             public TcpClient socket;
 
             private readonly int id;
+            private readonly ObjectId token;
             private NetworkStream stream;
             private Packet receivedData;
             private byte[] receiveBuffer;
 
-            public TCP(int _id)
+            public TCP(int _id, ObjectId _token)
             {
                 id = _id;
+                token = _token;
             }
 
             /// <summary>Initializes the newly connected client's TCP-related info.</summary>
@@ -126,7 +149,17 @@ namespace LeyendsServer
                         using (Packet _packet = new Packet(_packetBytes))
                         {
                             int _packetId = _packet.ReadInt();
-                            Server.packetHandlers[_packetId](id, _packet); // Call appropriate method to handle the packet
+                            try
+                            {
+                                Server.packetHandlers[_packetId](id, _packet); // Call appropriate method to handle the packet 
+                            }
+                            catch (System.Exception)
+                            {
+                                Console.WriteLine($"Unhandled MESSAGE ID ERROR {_packetId}");
+                                ServerSend.SendTrash(id);
+                                throw;
+                            }
+
                         }
                     });
 
@@ -215,9 +248,42 @@ namespace LeyendsServer
         private void Disconnect()
         {
             Console.WriteLine($"{tcp.socket.Client.RemoteEndPoint} has disconnected.");
+            DbManager.UpdateState(token, (Int32)Status.Offline, (Int32)Status.Offline);
+            if (groupLeader != 0)
+            {
+                if (groupLeader == id)
+                {
+                    Console.WriteLine($"Player {id} was leade group.");
+                    //TODO notificar cada uno de los integrantes del grupo que el lider se fue y disolver el grupo
+                }
+                QueueManager.preMadeGroups.Remove(id);
+                groupLeader = 0;
+            }
 
+
+            if (this.queueStatus)
+            {
+
+                CheckQueuePlayer();
+                QueueManager.RemoveByPlayer(id);
+            }
+            ResetSlotPlayer();
             tcp.Disconnect();
             udp.Disconnect();
+
+        }
+
+        private void ResetSlotPlayer()
+        {
+            this.token = ObjectId.Empty;
+            this.queueType = null;
+            this.queueStatus = false;
+        }
+        private void CheckQueuePlayer()
+        {
+            this.token = ObjectId.Empty;
+            this.queueType = null;
+            this.queueStatus = false;
         }
     }
 }

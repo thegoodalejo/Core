@@ -34,3 +34,4 @@ D:\Legends\LeyendsServer\bin\Debug\netcoreapp3.1\runtimes\win\native\libzstd.dll
 D:\Legends\LeyendsServer\bin\Debug\netcoreapp3.1\runtimes\win\native\snappy32.dll
 D:\Legends\LeyendsServer\bin\Debug\netcoreapp3.1\runtimes\win\native\snappy64.dll
 D:\Legends\LeyendsServer\obj\Debug\netcoreapp3.1\LeyendsServer.csproj.CopyComplete
+D:\Legends\LeyendsServer\bin\Debug\netcoreapp3.1\Newtonsoft.Json.dll

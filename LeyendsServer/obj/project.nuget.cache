@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "79fn+kx4W29/mgEsEegBrbl7/TOdn83sRnNFdQ6zzEtRxa6F/JZ+qcI2WOlTWXVA71CXwf1VLR83RfT0xCNMvA==",
+  "dgSpecHash": "Or2Jt7cfrFm8D3+9Xdtu55WgNcUrLHWTXfFxxw5qZRsqdriyxrcz+vSB1bcHnGl1Y1/gElV8aLMxsJkWDXojwQ==",
   "success": true,
   "projectFilePath": "D:\\Legends\\LeyendsServer\\LeyendsServer.csproj",
   "expectedPackageFiles": [
@@ -13,6 +13,7 @@
     "C:\\Users\\Alejo\\.nuget\\packages\\mongodb.driver.core\\2.11.2\\mongodb.driver.core.2.11.2.nupkg.sha512",
     "C:\\Users\\Alejo\\.nuget\\packages\\mongodb.libmongocrypt\\1.0.0\\mongodb.libmongocrypt.1.0.0.nupkg.sha512",
     "C:\\Users\\Alejo\\.nuget\\packages\\netstandard.library\\1.6.1\\netstandard.library.1.6.1.nupkg.sha512",
+    "C:\\Users\\Alejo\\.nuget\\packages\\newtonsoft.json\\12.0.3\\newtonsoft.json.12.0.3.nupkg.sha512",
     "C:\\Users\\Alejo\\.nuget\\packages\\runtime.debian.8-x64.runtime.native.system.security.cryptography.openssl\\4.3.0\\runtime.debian.8-x64.runtime.native.system.security.cryptography.openssl.4.3.0.nupkg.sha512",
     "C:\\Users\\Alejo\\.nuget\\packages\\runtime.fedora.23-x64.runtime.native.system.security.cryptography.openssl\\4.3.0\\runtime.fedora.23-x64.runtime.native.system.security.cryptography.openssl.4.3.0.nupkg.sha512",
     "C:\\Users\\Alejo\\.nuget\\packages\\runtime.fedora.24-x64.runtime.native.system.security.cryptography.openssl\\4.3.0\\runtime.fedora.24-x64.runtime.native.system.security.cryptography.openssl.4.3.0.nupkg.sha512",

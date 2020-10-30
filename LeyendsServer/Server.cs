@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Net;
 using System.Net.Sockets;
+using MongoDB.Bson;
 
 namespace LeyendsServer
 {
@@ -36,6 +37,8 @@ namespace LeyendsServer
             udpListener.BeginReceive(UDPReceiveCallback, null);
 
             Console.WriteLine($"Server started on port {Port}.");
+
+            DbManager.UpdateStateAll();
         }
 
         /// <summary>Handles new TCP connections.</summary>
@@ -96,7 +99,7 @@ namespace LeyendsServer
             }
             catch (Exception _ex)
             {
-                Console.WriteLine($"Error receiving UDP data: {_ex}");
+               Console.WriteLine($"Error receiving UDP data: {_ex}");
             }
         }
 
@@ -123,18 +126,22 @@ namespace LeyendsServer
         {
             for (int i = 1; i <= MaxPlayers; i++)
             {
-                clients.Add(i, new Client(i));
+                clients.Add(i, new Client(i, ObjectId.Empty));
             }
 
             packetHandlers = new Dictionary<int, PacketHandler>()
             {
                 { (int)ClientPackets.welcomeReceived, ServerHandle.WelcomeReceived },
-                { (int)ClientPackets.queueForRandomMatch, ServerHandle.QueueForRandomMatch },
-               // { (int)ClientPackets.userAuth, ServerHandle.UserAuth },
+                { (int)ClientPackets.queueRequestForRandomMatch, ServerHandle.QueueRequestForRandomMatch },
+                { (int)ClientPackets.test, ServerHandle.ClientTrashRequest },
+                { (int)ClientPackets.quitQueue, ServerHandle.QuitQueueRequest },
+                { (int)ClientPackets.groupRequest, ServerHandle.GroupRequest },
+                { (int)ClientPackets.groupDisolve, ServerHandle.GroupDisolve },
+                { (int)ClientPackets.inviteFriendToGroup, ServerHandle.InviteFriendToGroup },
             };
             Console.WriteLine("Initialized packets.");
         }
-        
+
         public static void Stop()
         {
             tcpListener.Stop();

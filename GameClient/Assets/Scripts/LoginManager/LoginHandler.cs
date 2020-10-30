@@ -8,24 +8,19 @@ public class LoginHandler : MonoBehaviour
     {
         string _msg = _packet.ReadString();
         int _myId = _packet.ReadInt();
-
         Debug.Log($"Message from server: {_msg}");
         LoginClient.instance.myId = _myId;
-        LoginUIManager.instance.text.text = "auth";
+        LoginUIManager.instance.text.text = "Auth";
         LoginClientSend.WelcomeReceived();
     }
     public static void AuthResponse(Packet _packet)
     {
         UserProfile _userResponse = _packet.ReadUser();
-
-        Debug.Log($"Message from Auth server: {_userResponse.userAuthState}");
-        Debug.Log($"Message from Auth server: {_userResponse.id}");
-        Debug.Log($"Message from Auth server: {_userResponse.userNickName}");
-        // Now that we have the client's id, connect UDP
-        if (_userResponse.userAuthState)
+        LoginUIManager.instance.logIn.interactable = true;
+        if (_userResponse.acc_aviable)
         {
             LoginClient.instance.udp.Connect(((IPEndPoint)LoginClient.instance.tcp.socket.Client.LocalEndPoint).Port);
-            MenuUIManager.userNickName = _userResponse.userNickName;
+            GameInfo.strPlayerName = _userResponse.userNickName;
             LoginClient.instance.token = _userResponse.id;
             SceneManager.LoadScene("Menu");
         }
@@ -36,5 +31,44 @@ public class LoginHandler : MonoBehaviour
             LoginUIManager.instance.usernameField.interactable = true;
             LoginUIManager.instance.passwordField.interactable = true;
         }
+        //LoginClient.instance.udp.Connect(((IPEndPoint)LoginClient.instance.tcp.socket.Client.LocalEndPoint).Port);
+        //SceneManager.LoadScene("Menu");
+    }
+    public static void TrashRecived(Packet _packet)
+    {
+        string _trash = _packet.ReadString();
+        Debug.Log($"TrashRecived {_trash}");
+
+    }
+    public static void QueueRecived(Packet _packet)
+    {
+        Debug.Log("QueueRecived");
+        UIFindGame.instance.txtQueueStatus.text = "On Queue...";
+        GameInfo.isQueued = true;
+        UIFindGame.instance.btnQuitQueue.SetActive(true);
+    }
+    public static void GameFound(Packet _packet)
+    {
+        UIFindGame.instance.txtQueueStatus.text = "InGame";
+    }
+    public static void GrupCreated(Packet _packet)
+    {
+        UIFindGame.instance.txtMessageServer.enabled = false;
+        GameInfo.isGrouped = true;
+        UIFindGame.instance.btnQueueGame.SetActive(true);
+    }
+    public static void GrupDisolved(Packet _packet)
+    {
+        UIPrincipalPanel.instance.btnHome.interactable = false;
+        UIPrincipalPanel.instance.btnPlayGame.interactable = true;
+        GameInfo.isGrouped = false;
+        MenuUIManager.instance.findGameMenu.SetActive(false);
+        MenuUIManager.instance.homeMenu.SetActive(true);
+    }
+    public static void FriendsList(Packet _packet)
+    {
+        GameInfo.user_friends = _packet.ReadFriendReference();
+        Debug.Log($"FriendsList size {GameInfo.user_friends.Count}");
+        GameInfo.isLoadFriends = true;
     }
 }

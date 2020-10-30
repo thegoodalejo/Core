@@ -1,8 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-using MongoDB.Driver;
 using System.Data.Common;
 
 public class MenuUIManager : MonoBehaviour
@@ -10,13 +8,20 @@ public class MenuUIManager : MonoBehaviour
 
     public static MenuUIManager instance;
 
-    public GameObject mainMenu;
-    public InputField usernameField;
-    public Text text;
+    [SerializeField]
+    private GameObject mainMenu;
+    [SerializeField]
+    private GameObject principalPanel;
+    [SerializeField]
+    private GameObject shortProfile;
+    [SerializeField]
+    private GameObject friends;
 
-    public static string userNickName;
+    //Panel Buttons
+    public GameObject findGameMenu;
+    public GameObject homeMenu;
 
-    public string queuePlayers;
+
 
 
     private void Awake()
@@ -27,7 +32,7 @@ public class MenuUIManager : MonoBehaviour
         }
         else if (instance != this)
         {
-            Debug.Log("Instance MENU already exists, destroying object!");
+            Debug.Log("Instance MenuUIManager already exists, destroying object!");
             Destroy(this);
         }
     }
@@ -35,19 +40,33 @@ public class MenuUIManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        text.text = userNickName;
-        Debug.Log($"UserToken {LoginClient.instance.token}");
+        LoadHome();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
-    }
 
-    public static void FindGame()
+    }
+    public static void LoadHome()
     {
-        Debug.Log($"UserToken {LoginClient.instance.token} in Queue");
-        LoginClientSend.QueueForRandomMatch();
+        UIPrincipalPanel.instance.btnHome.interactable = false;
+        UIPrincipalPanel.instance.btnPlayGame.interactable = true;
+        MenuUIManager.instance.findGameMenu.SetActive(false);
+        MenuUIManager.instance.homeMenu.SetActive(true);
+    }
+    public static void LoadPlayGame()
+    {
+        if (!GameInfo.isGrouped)
+        {
+            LoginClientSend.GroupRequest();
+        }
+        else
+        {
+            UIPrincipalPanel.instance.btnHome.interactable = true;
+            UIPrincipalPanel.instance.btnPlayGame.interactable = false;
+            MenuUIManager.instance.findGameMenu.SetActive(true);
+            MenuUIManager.instance.homeMenu.SetActive(false);
+        }
     }
 }

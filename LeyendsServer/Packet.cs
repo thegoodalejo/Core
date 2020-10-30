@@ -10,14 +10,25 @@ namespace LeyendsServer
     public enum ServerPackets
     {
         welcome = 1,
-        auth
+        test,
+        auth,
+        queueUpdate,
+        gameFound,
+        groupCreated,
+        groupDisolved,
+        friendList
     }
 
     /// <summary>Sent from client to server.</summary>
     public enum ClientPackets
     {
         welcomeReceived = 1,
-        queueForRandomMatch
+        queueRequestForRandomMatch,
+        test,
+        quitQueue,
+        groupRequest,
+        groupDisolve,
+        inviteFriendToGroup
     }
 
     public class Packet : IDisposable
@@ -184,9 +195,23 @@ namespace LeyendsServer
         {
             Write(_value._id.ToString());
             Write(_value.user_legends_nick);
-            Write(_value.authState);
+            Write(_value.acc_aviable);
             
         }
+        /// <summary>Adds a ObjectId to the packet.</summary>
+        /// <param name="_value">The ObjectId to add as String.</param>
+        public void Write(ObjectId _value){
+            Write(_value.ToString());
+        }
+        /// <summary>Adds a List<> of FriendReference to the packet.</summary>
+        /// <param name="_value">The list of Objects to add.</param>
+        public void Write(FriendReference _value)
+        {
+            Write(_value._oid);
+            Write(_value.server_slot);
+            Write(_value.user_legends_nick);
+        }
+        
         #endregion
 
         #region Read Data

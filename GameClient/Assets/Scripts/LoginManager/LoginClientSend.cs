@@ -29,16 +29,67 @@ public class LoginClientSend : MonoBehaviour
             SendTCPData(_packet);
         }
     }
-
-    /// <summary>Queue server for a MatchFinder.</summary>
-    public static void QueueForRandomMatch()
+    /// <summary>TrashRequest for test.</summary>
+    public static void TrashRequest()
     {
-        using (Packet _packet = new Packet((int)LoginClientPackets.queueForRandomMatch))
+        using (Packet _packet = new Packet((int)LoginClientPackets.trashRequest))
         {
             _packet.Write(LoginClient.instance.myId);
-            _packet.Write(LoginClient.instance.token);
-
             SendTCPData(_packet);
         }
     }
+    /// <summary>Queue server for a MatchFinder.</summary>
+    public static void QueueForRandomMatch()
+    {
+        using (Packet _packet = new Packet((int)LoginClientPackets.queueRequestForRandomMatch))
+        {
+            _packet.Write(LoginClient.instance.myId);
+            //UIFindGame.instance.btnQueueGame.interactable = false;
+            SendTCPData(_packet);
+        }
+    }
+    /// <summary>Cancel queue in server.</summary>
+    public static void QuitQueue()
+    {
+        using (Packet _packet = new Packet((int)LoginClientPackets.quitQueue))
+        {
+            _packet.Write(LoginClient.instance.myId);
+            //UIFindGame.instance.btnQueueGame.interactable = false;
+            SendTCPData(_packet);
+        }
+    }
+    /// <summary>Send request to create group in server.</summary>
+    public static void GroupRequest()
+    {
+        UIPrincipalPanel.instance.btnHome.interactable = true;
+        UIPrincipalPanel.instance.btnPlayGame.interactable = false;
+        MenuUIManager.instance.findGameMenu.SetActive(true);
+        MenuUIManager.instance.homeMenu.SetActive(false);
+        using (Packet _packet = new Packet((int)LoginClientPackets.groupRequest))
+        {
+            SendTCPData(_packet);
+        }
+    }
+    /// <summary>Send request to disolve group in server.</summary>
+    public static void DisolveGroupRequest()
+    {
+        Debug.Log("DisolveGroupRequest");
+        using (Packet _packet = new Packet((int)LoginClientPackets.disolveGroupRequest))
+        {
+            SendTCPData(_packet);
+        }
+    }
+    public static void InviteFriendToGroup(int _toFriend)
+    {
+        Debug.Log("InviteFriendToGroup");
+        using (Packet _packet = new Packet((int)LoginClientPackets.inviteFriendToGroup))
+        {
+            _packet.Write(_toFriend);
+            SendTCPData(_packet);
+        }
+    }
+    
+
+
+
 }

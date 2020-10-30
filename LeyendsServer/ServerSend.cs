@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using MongoDB.Bson;
 
 namespace LeyendsServer
 {
@@ -48,6 +49,17 @@ namespace LeyendsServer
                 }
             }
         }
+        /// <summary>Sends a packet to all clients in certain grup via TCP.</summary>
+        /// <param name="_grupClients">The grup of clients to send the data to.</param>
+        /// <param name="_packet">The packet to send.</param>
+        private static void SendTCPDataToAll(List<int> _grupClients, Packet _packet)
+        {
+            _packet.WriteLength();
+            foreach (int _id in _grupClients)
+            {
+                Server.clients[_id].tcp.SendData(_packet);
+            }
+        }
 
         /// <summary>Sends a packet to all clients via UDP.</summary>
         /// <param name="_packet">The packet to send.</param>
@@ -88,17 +100,88 @@ namespace LeyendsServer
                 SendTCPData(_toClient, _packet);
             }
         }
-
+        /// <summary>Sends a welcome message to the given client.</summary>
+        /// <param name="_toClient">The client to send the packet to.</param>
+        /// <param name="_msg">The message to send.</param>
         public static void AuthState(int _toClient, User _user)
         {
-            Console.WriteLine("Sending Auth Response  {"+_user.authState+"} to Client {"+_toClient+"} ");
+            Console.WriteLine("Sending Auth Response  {" + _user.acc_aviable + "} to Client {" + _toClient + "} ");
             using (Packet _packet = new Packet((int)ServerPackets.auth))
             {
                 _packet.Write(_user);
-
                 SendTCPData(_toClient, _packet);
             }
         }
+
+        public static void SendTrash(int _toClient)
+        {
+            Console.WriteLine($"Sending Trash Package to Client {_toClient} ");
+            using (Packet _packet = new Packet((int)ServerPackets.test))
+            {
+                _packet.Write("Trash");
+                SendTCPData(_toClient, _packet);
+            }
+        }
+
+        public static void QueueAcepted(int _toClient)
+        {
+            Console.WriteLine($"Sending Queue Response to client {_toClient}");
+            using (Packet _packet = new Packet((int)ServerPackets.queueUpdate))
+            {
+                SendTCPData(_toClient, _packet);
+            }
+        }
+        public static void QueueCancel(int _toClient)
+        {
+            Console.WriteLine($"Sending Queue canceled response to client {_toClient}");
+            using (Packet _packet = new Packet((int)ServerPackets.queueUpdate))
+            {
+                SendTCPData(_toClient, _packet);
+            }
+        }
+
+        public static void GameFoundRequest(List<int> _grupClients)
+        {
+            Console.WriteLine("Sending Game Found to clients:");
+            foreach (int _id in _grupClients)
+            {
+                Console.WriteLine(_id);
+            }
+            using (Packet _packet = new Packet((int)ServerPackets.gameFound))
+            {
+                SendTCPDataToAll(_grupClients, _packet);
+            }
+        }
+        public static void GroupCreated(int _toClient)
+        {
+            using (Packet _packet = new Packet((int)ServerPackets.groupCreated))
+            {
+                SendTCPData(_toClient, _packet);
+            }
+        }
+        public static void GroupDisolved(int _toClient)
+        {
+            using (Packet _packet = new Packet((int)ServerPackets.groupDisolved))
+            {
+                SendTCPData(_toClient, _packet);
+            }
+        }
+        public static void FriendList(int _toClient)
+        {
+            Console.WriteLine($"Sending Friends.... {Server.clients[_toClient].user_friends.Count}");
+            using (Packet _packet = new Packet((int)ServerPackets.friendList))
+            {
+                List<User> usersList = DbManager.FriendList(_toClient);
+                _packet.Write(usersList.Count);
+                foreach (User item in DbManager.FriendList(_toClient))
+                {
+                    _packet.Write(item.GetFriendReference());
+                }                
+                SendTCPData(_toClient, _packet);
+            }
+            
+        }
+
         #endregion
     }
 }
