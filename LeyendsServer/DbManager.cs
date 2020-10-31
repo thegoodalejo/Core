@@ -29,9 +29,14 @@ namespace LeyendsServer
                 //Aca ya tengo la respuesta de base de datos
                 if (userResponse.user_pass == _pass && userResponse.acc_Status != (int)Status.Online)
                 {
+                    List<FriendReference> userFriends = new List<FriendReference>();
+                    foreach (ObjectId item in userResponse.user_friends)
+                    {
+                        userFriends.Add(new FriendReference(item));
+                    }
                     Server.clients[_toClient].token = userResponse._id;
                     Server.clients[_toClient].nickName = userResponse.user_legends_nick;
-                    Server.clients[_toClient].user_friends = userResponse.user_friends;
+                    Server.clients[_toClient].user_friends = userFriends;
                     UpdateState(userResponse._id, (int)Status.Online, _toClient);
                     return userResponse;
                 }
@@ -64,8 +69,8 @@ namespace LeyendsServer
             var result = collection.UpdateMany(FilterDefinition<User>.Empty, update);
         }
         public static List<User> FriendList(int _toClient)
-        {
-            var filterFriends = Builders<User>.Filter.In(x => x._id, Server.clients[_toClient].user_friends);
+        { 
+            var filterFriends = Builders<User>.Filter.In(x => x._id, Server.clients[_toClient].GetFriendsKeys());
             MongoClient dbClient = new MongoClient(DB_CONNECTION);
             var database = dbClient.GetDatabase(LEYENDS_DB);
             var collection = database.GetCollection<User>(COLLECTION_USERS);

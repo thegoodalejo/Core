@@ -8,6 +8,10 @@ namespace LeyendsServer
         public int server_slot { get; set; }
         public string user_legends_nick { get; set; }
 
+        public FriendReference(ObjectId oid)
+        {
+            _oid = oid;
+        }
         public FriendReference(ObjectId oid, int _server_slot, string _user_legends_nick)
         {
             _oid = oid;

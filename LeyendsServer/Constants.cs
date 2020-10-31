@@ -11,6 +11,12 @@ namespace LeyendsServer
         Away
     }
 
+    public enum ErrorCode
+    {
+        General = 1,
+        NoGroup,
+    }
+
     class Constants
     {
         private const int TICKS_PER_SEC_LOGIN = 5;

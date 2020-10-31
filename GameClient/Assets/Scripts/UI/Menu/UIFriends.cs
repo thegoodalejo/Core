@@ -31,6 +31,7 @@ public class UIFriends : MonoBehaviour
     void Update()
     {
         if (!GameInfo.isLoadFriends) { return; }
+        ResetFriends();
         AddFriends();
         Debug.Log("UpdatingCuzFriendsFinish");
 
@@ -49,13 +50,24 @@ public class UIFriends : MonoBehaviour
     {
         foreach (FriendReference item in GameInfo.user_friends)
         {
-            Debug.Log($"F {item.id} {item.server_slot} {item.user_legends_nick}");
-            GameObject friendsPrefab = Instantiate(itemTemplate, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
-            friendsPrefab.transform.SetParent(content.transform);
-            FriendsDetails controller = friendsPrefab.GetComponent<FriendsDetails>();
-            controller.txtName.text = item.user_legends_nick;
-            controller.btnInvite.onClick.AddListener(() => { LoginClientSend.InviteFriendToGroup(item.server_slot); });
+            if (item.server_slot != 0)
+            {
+                Debug.Log($"F {item.id} {item.server_slot} {item.user_legends_nick}");
+                GameObject friendsPrefab = Instantiate(itemTemplate, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
+                friendsPrefab.transform.SetParent(content.transform);
+                FriendsDetails controller = friendsPrefab.GetComponent<FriendsDetails>();
+                controller.txtName.text = item.user_legends_nick;
+                controller.btnInvite.onClick.AddListener(() => { LoginClientSend.InviteFriendToGroup(item.server_slot); });
+            }
         }
         GameInfo.isLoadFriends = false;
     }
+    private void ResetFriends()
+    {
+        foreach (Transform item in content.transform)
+        {
+            GameObject.Destroy(item.gameObject);
+        }
+    }
+
 }

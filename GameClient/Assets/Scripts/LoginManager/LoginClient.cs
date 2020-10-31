@@ -44,7 +44,6 @@ public partial class LoginClient : MonoBehaviour
         tcp = new TCP();
         udp = new UDP();
         
-        AlertManager.InitializeAlertData();
         InitializeClientData();
 
         isConnected = true;
@@ -64,8 +63,12 @@ public partial class LoginClient : MonoBehaviour
             { (int)LoginServerPackets.groupCreated, LoginHandler.GrupCreated },
             { (int)LoginServerPackets.groupDisolved, LoginHandler.GrupDisolved },
             { (int)LoginServerPackets.friendList, LoginHandler.FriendsList },
+            { (int)LoginServerPackets.groupInvited, LoginHandler.GroupInvited },
+            { (int)LoginServerPackets.groupInvitedResponse, LoginHandler.GroupInvitedResponse },
+            { (int)LoginServerPackets.updateFriendStatus, LoginHandler.UpdateFriendStatus },
         };
     }
+    
 
     /// <summary>Disconnects from the server and stops all network traffic.</summary>
     private void Disconnect()

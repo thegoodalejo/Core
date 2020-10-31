@@ -19,7 +19,7 @@ namespace LeyendsServer
         public int groupLeader;
         public TCP tcp;
         public UDP udp;
-        public List<ObjectId> user_friends;
+        public List<FriendReference> user_friends;
 
         public Client(int _clientId, ObjectId _token)
         {
@@ -33,7 +33,24 @@ namespace LeyendsServer
             udp = new UDP(id);
 
         }
-
+        public List<ObjectId> GetFriendsKeys()
+        {
+            List<ObjectId> friendsKey = new List<ObjectId>();
+            foreach (FriendReference item in user_friends)
+            {
+                friendsKey.Add(item._oid);
+            }
+            return friendsKey;
+        }
+        public List<int> GetFriendsSlots()
+        {
+            List<int> friendsSlot = new List<int>();
+            foreach (FriendReference item in user_friends)
+            {
+                friendsSlot.Add(item.server_slot);
+            }
+            return friendsSlot;
+        }
         public override string ToString()
         {
             return "Client ID: " + id + " - Token: " + token + " - OnQueue: " + queueStatus + " - QueueType: " + queueType;
@@ -62,7 +79,6 @@ namespace LeyendsServer
                 id = _id;
                 token = _token;
             }
-
             /// <summary>Initializes the newly connected client's TCP-related info.</summary>
             /// <param name="_socket">The TcpClient instance of the newly connected client.</param>
             public void Connect(TcpClient _socket)
@@ -158,7 +174,7 @@ namespace LeyendsServer
                             catch (System.Exception)
                             {
                                 Console.WriteLine($"Unhandled MESSAGE ID ERROR {_packetId}");
-                                ServerSend.SendTrash(id);
+                                ServerSend.SendTrash(id,(int)ErrorCode.General);
                                 throw;
                             }
 
@@ -251,6 +267,7 @@ namespace LeyendsServer
         {
             Console.WriteLine($"{tcp.socket.Client.RemoteEndPoint} has disconnected.");
             DbManager.UpdateState(token, (Int32)Status.Offline, (Int32)Status.Offline);
+            ServerSend.UpdateFriendStatus(id,Server.clients[id].token.ToString(),false);
             if (groupLeader != 0)
             {
                 if (groupLeader == id)

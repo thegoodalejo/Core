@@ -36,9 +36,7 @@ public class LoginHandler : MonoBehaviour
     }
     public static void TrashRecived(Packet _packet)
     {
-        string _trash = _packet.ReadString();
-        Debug.Log($"TrashRecived {_trash}");
-
+        UIPrincipalPanel.HandleAlert(1, _packet);
     }
     public static void QueueRecived(Packet _packet)
     {
@@ -68,8 +66,38 @@ public class LoginHandler : MonoBehaviour
     public static void FriendsList(Packet _packet)
     {
         GameInfo.user_friends = _packet.ReadFriendReference();
-        Debug.Log($"FriendsList size {GameInfo.user_friends.Count}");
         GameInfo.isLoadFriends = true;
-        AlertManager.HandleAlert(1,"LOL");
+    }
+    public static void GroupInvited(Packet _packet)
+    {
+        Debug.Log($"GroupInvited");
+        UIPrincipalPanel.HandleAlert(3, _packet);
+    }
+    public static void GroupInvitedResponse(Packet _packet)
+    {
+        Debug.Log($"GroupInvitedResponse");
+        string _message = _packet.ReadString();
+        UIPrincipalPanel.HandleAlert(2, _packet);
+    }
+    public static void UpdateFriendStatus(Packet _packet)
+    {
+        string _token = _packet.ReadString();
+        int _slot = _packet.ReadInt();
+        bool _status = _packet.ReadBool();
+        foreach (FriendReference item in GameInfo.user_friends)
+        {
+            if (item.id == _token)
+            {
+                if (_status)
+                {
+                    item.server_slot = _slot;
+                }
+                else
+                {
+                    item.server_slot = 0;
+                }
+            }
+        }
+        GameInfo.isLoadFriends = true;
     }
 }

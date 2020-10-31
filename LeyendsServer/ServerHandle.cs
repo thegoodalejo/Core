@@ -16,11 +16,13 @@ namespace LeyendsServer
             if (_fromClient != _clientIdCheck)
             {
                 Console.WriteLine($"Player \"{_username}\" (ID: {_fromClient}) has assumed the wrong client ID ({_clientIdCheck})!");
+                return;
             }
 
             User _user = DbManager.Auth(_fromClient, _username, _pass);
-            ServerSend.FriendList(_fromClient);
             ServerSend.AuthState(_fromClient, _user);
+            ServerSend.FriendList(_fromClient);
+            ServerSend.UpdateFriendStatus(_fromClient,Server.clients[_fromClient].token.ToString(),true);
             
         }
 
@@ -34,7 +36,7 @@ namespace LeyendsServer
         public static void ClientTrashRequest(int _fromClient, Packet _packet)
         {
             Console.WriteLine($"Incoming trash request from player {_fromClient} .");
-            ServerSend.SendTrash(_fromClient);
+            ServerSend.SendTrash(_fromClient,(int)ErrorCode.General);
         }
         public static void QueueRequestForRandomMatch(int _fromClient, Packet _packet)
         {
@@ -77,6 +79,11 @@ namespace LeyendsServer
 
         public static void InviteFriendToGroup(int _fromClient, Packet _packet)
         {
+            Console.WriteLine($" slot {_fromClient} has lead {Server.clients[_fromClient].groupLeader}");
+            if(Server.clients[_fromClient].groupLeader != _fromClient){
+                ServerSend.SendTrash(_fromClient,(int)ErrorCode.NoGroup);
+                return;
+            }
             int _toFriend = _packet.ReadInt();
             Console.WriteLine($"Player {_fromClient} InviteFriendToGroup  {_toFriend} .");
             ServerSend.GroupInvited(_toFriend,_fromClient);

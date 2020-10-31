@@ -9,13 +9,13 @@ public class GameInfo
     public static bool isLoadFriends;
     public static List<FriendReference> user_friends { get; set; }
 
-        // Static constructor initializes NumMembers
-        static GameInfo()
-        {
-            strPlayerName = "Loading...";
-            isGrouped = false;
-            isQueued = false;
-            isLoadFriends = false;
-            user_friends = new List<FriendReference>();
-        }
+    // Static constructor initializes NumMembers
+    static GameInfo()
+    {
+        strPlayerName = "Loading...";
+        isGrouped = false;
+        isQueued = false;
+        isLoadFriends = false;
+        user_friends = new List<FriendReference>();
+    }
 }

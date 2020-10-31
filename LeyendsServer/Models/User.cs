@@ -31,7 +31,6 @@ namespace LeyendsServer
         {
             return new FriendReference(_id, server_slot, user_legends_nick);
         }
-
         public override string ToString()
         {
             return $"User: {_id.ToString()} {server_slot} {user_legends_nick}.";

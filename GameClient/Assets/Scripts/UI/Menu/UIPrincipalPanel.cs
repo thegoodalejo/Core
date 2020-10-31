@@ -8,6 +8,9 @@ public class UIPrincipalPanel : MonoBehaviour
     public static UIPrincipalPanel instance;
     public Button btnHome;
     public Button btnPlayGame;
+    private delegate void MessageHandler(Packet _packet);
+    private static Dictionary<int, MessageHandler> messageHandlers;
+    public static Dictionary<int, string> errorCodes;
     private void Awake()
     {
         if (instance == null)
@@ -19,16 +22,29 @@ public class UIPrincipalPanel : MonoBehaviour
             Debug.Log("Instance MENU already exists, destroying object!");
             Destroy(this);
         }
+        InitializeAlertData();
+        InitializeErrorCodes();
     }
-    // Start is called before the first frame update
-    void Start()
+    public static void HandleAlert(int _id, Packet _packet)
     {
-        
+        messageHandlers[_id](_packet);
     }
-
-    // Update is called once per frame
-    void Update()
+    /// <summary>Initializes all necessary alert data.</summary>
+    private void InitializeAlertData()
     {
-        
+        messageHandlers = new Dictionary<int, MessageHandler>()
+        {
+            { (int)AlertServerPackets.error, AlertManager.Error },
+            { (int)AlertServerPackets.friendRequest, AlertManager.FriendRequest },
+            { (int)AlertServerPackets.groupRequest, AlertManager.GroupRequest },
+        };
+    }
+    private void InitializeErrorCodes()
+    {
+        errorCodes = new Dictionary<int, string>()
+        {
+            { (int)ErrorCodes.General, "AlertManager.Error" },
+            { (int)ErrorCodes.NoGroup, "No eres lider de un grupo" },
+        };
     }
 }

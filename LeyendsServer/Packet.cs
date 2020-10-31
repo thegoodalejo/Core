@@ -18,7 +18,8 @@ namespace LeyendsServer
         groupDisolved,
         friendList,
         groupInvited,
-        groupInvitedResponse
+        groupInvitedResponse,
+        updateFriendStatus
     }
 
     /// <summary>Sent from client to server.</summary>

@@ -14,7 +14,10 @@ public enum LoginServerPackets
     gameFound,
     groupCreated,
     groupDisolved,
-    friendList
+    friendList,
+    groupInvited,
+    groupInvitedResponse,
+    updateFriendStatus
 }
 
 /// <summary>Sent from client to server.</summary>
@@ -31,6 +34,13 @@ public enum LoginClientPackets
 public enum AlertServerPackets
 {
     error = 1,
+    friendRequest,
+    groupRequest
+}
+public enum ErrorCodes
+{
+    General = 1,
+    NoGroup,
 }
 
 

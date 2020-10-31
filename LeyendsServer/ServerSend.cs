@@ -57,7 +57,15 @@ namespace LeyendsServer
             _packet.WriteLength();
             foreach (int _id in _grupClients)
             {
-                Server.clients[_id].tcp.SendData(_packet);
+                if (_id != 0)
+                {
+                    Server.clients[_id].tcp.SendData(_packet);
+                }
+                else
+                {
+                    Console.WriteLine("Sending data to 0 slot client ... ERROR");
+                }
+
             }
         }
 
@@ -113,12 +121,12 @@ namespace LeyendsServer
             }
         }
 
-        public static void SendTrash(int _toClient)
+        public static void SendTrash(int _toClient, int _errorCode)
         {
-            Console.WriteLine($"Sending Trash Package to Client {_toClient} ");
+            Console.WriteLine($"Sending Trash # {_errorCode} to Client {_toClient} ");
             using (Packet _packet = new Packet((int)ServerPackets.test))
             {
-                _packet.Write("Trash");
+                _packet.Write(_errorCode);
                 SendTCPData(_toClient, _packet);
             }
         }
@@ -173,25 +181,26 @@ namespace LeyendsServer
             {
                 List<User> usersList = DbManager.FriendList(_toClient);
                 _packet.Write(usersList.Count);
-                foreach (User item in DbManager.FriendList(_toClient))
+                foreach (User item in usersList)
                 {
                     _packet.Write(item.GetFriendReference());
                 }
                 SendTCPData(_toClient, _packet);
             }
-
         }
         public static void GroupInvited(int _toClient, int _fromFriend)
         {
-            Console.WriteLine($"Sending group invite to {_toClient} from {_fromFriend}");
+            if (_toClient == 0) return;
+            Console.WriteLine($"Sending group invite to {Server.clients[_toClient].nickName} from {Server.clients[_fromFriend].nickName}");
             using (Packet _packet = new Packet((int)ServerPackets.groupInvited))
             {
+                _packet.Write(_fromFriend);
                 _packet.Write($"{Server.clients[_fromFriend].nickName} grouop request");
                 SendTCPData(_toClient, _packet);
             }
         }
-        
-        internal static void GroupInvitedResponse(int _toFriend, int _fromClient, bool _response)
+
+        public static void GroupInvitedResponse(int _toFriend, int _fromClient, bool _response)
         {
             Console.WriteLine($"Sending GroupInvitedResponse {_toFriend} from {_fromClient} {_response}");
             using (Packet _packet = new Packet((int)ServerPackets.groupInvitedResponse))
@@ -199,6 +208,27 @@ namespace LeyendsServer
                 _packet.Write(_fromClient);
                 _packet.Write(_response);
                 SendTCPData(_toFriend, _packet);
+            }
+        }
+        public static void UpdateFriendStatus(int _fromClient, string _token, bool _status)
+        {
+            Console.WriteLine($"Refreshing Friends.... ");
+            using (Packet _packet = new Packet((int)ServerPackets.updateFriendStatus))
+            {
+                List<int> _toFriends = new List<int>();
+                List<User> usersList = DbManager.FriendList(_fromClient);
+                _packet.Write(_token);
+                _packet.Write(_fromClient);
+                _packet.Write(_status);
+                foreach (User item in usersList)
+                {
+                    _packet.Write(item.GetFriendReference());
+                    if (item.server_slot != 0)
+                    {
+                        _toFriends.Add(item.server_slot);
+                    }
+                }
+                SendTCPDataToAll(_toFriends, _packet);
             }
         }
 
