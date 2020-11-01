@@ -24,10 +24,8 @@ public class UIFriends : MonoBehaviour
     }
     void Start()
     {
-        //StartCoroutine(UpdateFriends());
-    }
 
-    // Update is called once per frame
+    }
     void Update()
     {
         if (!GameInfo.isLoadFriends) { return; }
@@ -36,16 +34,6 @@ public class UIFriends : MonoBehaviour
         Debug.Log("UpdatingCuzFriendsFinish");
 
     }
-    /*private IEnumerator UpdateFriends()
-    {
-        while (true)
-        {
-            loadFriends = true;
-            Debug.Log("SpawnCoroutine");
-            yield return new WaitForSeconds(10f);
-        }
-
-    }*/
     private void AddFriends()
     {
         foreach (FriendReference item in GameInfo.user_friends)
@@ -57,7 +45,12 @@ public class UIFriends : MonoBehaviour
                 friendsPrefab.transform.SetParent(content.transform);
                 FriendsDetails controller = friendsPrefab.GetComponent<FriendsDetails>();
                 controller.txtName.text = item.user_legends_nick;
-                controller.btnInvite.onClick.AddListener(() => { LoginClientSend.InviteFriendToGroup(item.server_slot); });
+                controller.btnInvite.GetComponent<Button>().onClick.AddListener
+                (() =>
+                    {
+                        LoginClientSend.InviteFriendToGroup(item.server_slot);
+                    }
+                );
             }
         }
         GameInfo.isLoadFriends = false;

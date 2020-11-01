@@ -40,7 +40,7 @@ namespace LeyendsServer
                     break;
                 case "-listAllGroups":
                     int queueSize = QueueManager.preMadeGroups.Count;
-                    Console.WriteLine($"Groups size : {queueSize}");
+                    Console.WriteLine($"Groups : {queueSize}");
                     foreach(KeyValuePair<int, QueueGroup> entry in QueueManager.preMadeGroups)
                     {
                         Console.WriteLine("Group Leader is Player: " + entry.Key);

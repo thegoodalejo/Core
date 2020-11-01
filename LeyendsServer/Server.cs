@@ -138,6 +138,7 @@ namespace LeyendsServer
                 { (int)ClientPackets.groupRequest, ServerHandle.GroupRequest },
                 { (int)ClientPackets.groupDisolve, ServerHandle.GroupDisolve },
                 { (int)ClientPackets.inviteFriendToGroup, ServerHandle.InviteFriendToGroup },
+                { (int)ClientPackets.inviteFriendToGroupResponse, ServerHandle.InviteFriendToGroupResponse },
             };
             Console.WriteLine("Initialized packets.");
         }

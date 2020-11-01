@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,6 +9,8 @@ public class AlertManager : MonoBehaviour
     public static AlertManager instance;
     public GameObject alertContainer;
     public GameObject alertPrefab;
+
+    public bool alertResponse;
     private void Awake()
     {
         if (instance == null)
@@ -18,47 +22,72 @@ public class AlertManager : MonoBehaviour
             Debug.Log("Instance MENU already exists, destroying object!");
             Destroy(this);
         }
+        alertResponse = false;
     }
     private static GameObject InitAlert()
     {
-        GameObject friendsPrefab;
-        friendsPrefab = Instantiate(instance.alertPrefab, instance.alertContainer.transform.position, Quaternion.identity) as GameObject;
-        friendsPrefab.transform.SetParent(instance.alertContainer.transform);
-        friendsPrefab.SetActive(true);
-        return friendsPrefab;
+        GameObject _alerPrefab;
+        _alerPrefab = Instantiate(instance.alertPrefab, instance.alertContainer.transform.position, Quaternion.identity) as GameObject;
+        _alerPrefab.transform.SetParent(instance.alertContainer.transform);
+        _alerPrefab.SetActive(true);
+        return _alerPrefab;
     }
-    public static void Error(Packet _packet)
+    public static async void Error(Packet _packet)
     {
         int _errCode = _packet.ReadInt();
         Debug.Log($"Error: {UIPrincipalPanel.errorCodes[_errCode]}");
-        GameObject friendsPrefab = InitAlert();
-        AlertDetail controller = friendsPrefab.GetComponent<AlertDetail>();
+        GameObject _alerPrefab = InitAlert();
+        AlertDetail controller = _alerPrefab.GetComponent<AlertDetail>();
         controller.txtMessage.text = UIPrincipalPanel.errorCodes[_errCode];
-        controller.btnAcept.SetActive(false);
-        controller.btnCancel.SetActive(false);
         controller.btnConfirm.SetActive(false);
-        friendsPrefab.SetActive(true);
+        _alerPrefab.SetActive(true);
+        await Task.Delay(5000);
+        Destroy(_alerPrefab);
     }
-    public static void FriendRequest(Packet _packet)
+    public static async void GroupRequestResponse(Packet _packet)
     {
-        string _message = _packet.ReadString();
-        GameObject friendsPrefab = InitAlert();
-        AlertDetail controller = instance.alertPrefab.GetComponent<AlertDetail>();
-        controller.txtMessage.text = _message;
-        friendsPrefab.SetActive(true);
+        Debug.Log("GroupRequestResponse");
+        List<FriendReference> _newGroup = new List<FriendReference>();
+        int _fromFriend = _packet.ReadInt();
+        int _groupSize = _packet.ReadInt();
+        for (int i = 0; i < _groupSize; i++)
+        {
+            _newGroup.Add(new FriendReference(_packet.ReadInt(),_packet.ReadString()));
+        }
+        GameInfo.friends_in_group = _newGroup;
+        //------------------------------------
+        GameObject _alerPrefab = InitAlert();
+        AlertDetail controller = _alerPrefab.GetComponent<AlertDetail>();
+        controller.txtMessage.text = $"{_fromFriend} join group";
+        controller.btnConfirm.SetActive(false);
+        _alerPrefab.SetActive(true);
+        GameInfo.groupSize++;
+        GameInfo.isLoadGroups = true;
+        await Task.Delay(5000);
+        Destroy(_alerPrefab);
     }
-    public static void GroupRequest(Packet _packet)
+    public static async void GroupRequest(Packet _packet)
     {
         int _fromFriend = _packet.ReadInt();
         string _message = _packet.ReadString();
-        Debug.Log($"ID Slot {_fromFriend} : {_message}");
-        GameObject friendsPrefab = InitAlert();
-        AlertDetail controller = friendsPrefab.GetComponent<AlertDetail>();
+        GameObject _alerPrefab = InitAlert();
+        AlertDetail controller = _alerPrefab.GetComponent<AlertDetail>();
         controller.txtMessage.text = _message;
-        controller.btnConfirm.SetActive(false);
-        friendsPrefab.SetActive(true);
+        controller.btnConfirm.GetComponent<Button>().onClick.AddListener(
+            () =>
+            {
+                LoginClientSend.InviteFriendToGroupResponse(_fromFriend);
+                DestroyImmediate(_alerPrefab);
+            });
+        controller.btnConfirm.SetActive(true);
+        _alerPrefab.SetActive(true);
+        await Task.Delay(10000);
+        if (!instance.alertResponse)
+        {
+            Debug.Log($"Destroy");
+            Destroy(_alerPrefab);
+        }
     }
-
 }
 
 

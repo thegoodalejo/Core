@@ -11,7 +11,7 @@ namespace LeyendsServer
             newQueue = new List<PlayerQueue>();
             foreach (int _id in _newQueue)
             {
-                newQueue.Add(new PlayerQueue(_id));
+                newQueue.Add(new PlayerQueue(_id,Server.clients[_id].nickName));
             }
         }
 

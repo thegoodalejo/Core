@@ -19,7 +19,8 @@ namespace LeyendsServer
         friendList,
         groupInvited,
         groupInvitedResponse,
-        updateFriendStatus
+        updateFriendStatus,
+        updateGroupStatus
     }
 
     /// <summary>Sent from client to server.</summary>
@@ -31,7 +32,8 @@ namespace LeyendsServer
         quitQueue,
         groupRequest,
         groupDisolve,
-        inviteFriendToGroup
+        inviteFriendToGroup,
+        inviteFriendToGroupResponse
     }
 
     public class Packet : IDisposable
@@ -213,6 +215,11 @@ namespace LeyendsServer
             Write(_value._oid);
             Write(_value.server_slot);
             Write(_value.user_legends_nick);
+        }
+        public void Write(PlayerQueue _value)
+        {
+            Write(_value.id);
+            Write(_value.nick_name);
         }
         
         #endregion

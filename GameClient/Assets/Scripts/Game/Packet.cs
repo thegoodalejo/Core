@@ -394,7 +394,7 @@ public class Packet : IDisposable
         int size = ReadInt(_moveReadPos);
         for (int i = 0; i < size; i++)
         {
-            FriendReference _friend = new FriendReference(ReadString(_moveReadPos), ReadInt(_moveReadPos), ReadString(_moveReadPos));
+            FriendReference _friend = new FriendReference(ReadString(_moveReadPos), ReadInt(_moveReadPos), ReadString(_moveReadPos),false);
             response.Add(_friend);
         }
         return response;

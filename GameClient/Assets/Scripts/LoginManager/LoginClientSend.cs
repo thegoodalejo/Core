@@ -88,6 +88,16 @@ public class LoginClientSend : MonoBehaviour
             SendTCPData(_packet);
         }
     }
+    public static void InviteFriendToGroupResponse(int _toFriend)
+    {
+        Debug.Log("InviteFriendToGroup");
+        using (Packet _packet = new Packet((int)LoginClientPackets.inviteFriendToGroupResponse))
+        {
+            _packet.Write(_toFriend);
+            SendTCPData(_packet);
+        }
+        AlertManager.instance.alertResponse = true;
+    }
 }
 
 

@@ -53,6 +53,8 @@ public class LoginHandler : MonoBehaviour
     {
         UIFindGame.instance.txtMessageServer.enabled = false;
         GameInfo.isGrouped = true;
+        GameInfo.friends_in_group.Add(new FriendReference(LoginClient.instance.myId, GameInfo.strPlayerName));
+        GameInfo.isLoadGroups = true;
         UIFindGame.instance.btnQueueGame.SetActive(true);
     }
     public static void GrupDisolved(Packet _packet)
@@ -60,6 +62,7 @@ public class LoginHandler : MonoBehaviour
         UIPrincipalPanel.instance.btnHome.interactable = false;
         UIPrincipalPanel.instance.btnPlayGame.interactable = true;
         GameInfo.isGrouped = false;
+        GameInfo.friends_in_group.Clear();
         MenuUIManager.instance.findGameMenu.SetActive(false);
         MenuUIManager.instance.homeMenu.SetActive(true);
     }
@@ -70,14 +73,20 @@ public class LoginHandler : MonoBehaviour
     }
     public static void GroupInvited(Packet _packet)
     {
-        Debug.Log($"GroupInvited");
         UIPrincipalPanel.HandleAlert(3, _packet);
     }
     public static void GroupInvitedResponse(Packet _packet)
     {
-        Debug.Log($"GroupInvitedResponse");
-        string _message = _packet.ReadString();
-        UIPrincipalPanel.HandleAlert(2, _packet);
+        if (GameInfo.isGrouped)
+        {
+            UIPrincipalPanel.HandleAlert(2, _packet);
+        }
+        else
+        {
+            MenuUIManager.LoadGroupGame();
+            GameInfo.isLoadGroups = true;
+        }
+
     }
     public static void UpdateFriendStatus(Packet _packet)
     {
@@ -95,6 +104,8 @@ public class LoginHandler : MonoBehaviour
                 else
                 {
                     item.server_slot = 0;
+                    item.on_my_group = false;
+                    GameInfo.isLoadGroups = true;
                 }
             }
         }

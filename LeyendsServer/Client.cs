@@ -42,28 +42,10 @@ namespace LeyendsServer
             }
             return friendsKey;
         }
-        public List<int> GetFriendsSlots()
-        {
-            List<int> friendsSlot = new List<int>();
-            foreach (FriendReference item in user_friends)
-            {
-                friendsSlot.Add(item.server_slot);
-            }
-            return friendsSlot;
-        }
         public override string ToString()
         {
             return "Client ID: " + id + " - Token: " + token + " - OnQueue: " + queueStatus + " - QueueType: " + queueType;
         }
-
-        public void FriendList(List<FriendReference> _user_friends)
-        {
-            foreach (FriendReference item in _user_friends)
-            {
-                Console.WriteLine($"Player {item._oid} in the slot {item.server_slot} : {item.user_legends_nick}");
-            }
-        }
-
         public class TCP
         {
             public TcpClient socket;
@@ -276,14 +258,12 @@ namespace LeyendsServer
                     //TODO notificar cada uno de los integrantes del grupo que el lider se fue y disolver el grupo
                 }
                 QueueManager.preMadeGroups.Remove(id);
+                //ServerSend.UpdateGroupStatus(id);
                 groupLeader = 0;
             }
 
-
             if (this.queueStatus)
             {
-
-                CheckQueuePlayer();
                 QueueManager.RemoveByPlayer(id);
             }
             ResetSlotPlayer();
@@ -296,12 +276,6 @@ namespace LeyendsServer
         {
             this.token = ObjectId.Empty;
             this.nickName = null;
-            this.queueType = null;
-            this.queueStatus = false;
-        }
-        private void CheckQueuePlayer()
-        {
-            this.token = ObjectId.Empty;
             this.queueType = null;
             this.queueStatus = false;
         }

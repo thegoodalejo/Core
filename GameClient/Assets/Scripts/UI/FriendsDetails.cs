@@ -6,5 +6,5 @@ using UnityEngine.UI;
 public class FriendsDetails : MonoBehaviour
 {
     public Text txtName;
-    public Button btnInvite;
+    public GameObject btnInvite;
 }

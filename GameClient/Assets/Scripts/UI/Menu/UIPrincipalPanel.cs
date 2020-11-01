@@ -35,7 +35,7 @@ public class UIPrincipalPanel : MonoBehaviour
         messageHandlers = new Dictionary<int, MessageHandler>()
         {
             { (int)AlertServerPackets.error, AlertManager.Error },
-            { (int)AlertServerPackets.friendRequest, AlertManager.FriendRequest },
+            { (int)AlertServerPackets.groupRequestResponse, AlertManager.GroupRequestResponse },
             { (int)AlertServerPackets.groupRequest, AlertManager.GroupRequest },
         };
     }

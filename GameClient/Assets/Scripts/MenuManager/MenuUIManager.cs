@@ -69,4 +69,12 @@ public class MenuUIManager : MonoBehaviour
             MenuUIManager.instance.homeMenu.SetActive(false);
         }
     }
+    public static void LoadGroupGame()
+    {
+        UIPrincipalPanel.instance.btnHome.interactable = true;
+        UIPrincipalPanel.instance.btnPlayGame.interactable = false;
+        MenuUIManager.instance.findGameMenu.SetActive(true);
+        MenuUIManager.instance.homeMenu.SetActive(false);
+        UIFindGame.instance.btnQueueGame.SetActive(false);
+    }
 }

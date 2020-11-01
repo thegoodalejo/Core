@@ -200,14 +200,19 @@ namespace LeyendsServer
             }
         }
 
-        public static void GroupInvitedResponse(int _toFriend, int _fromClient, bool _response)
+        public static void GroupInvitedResponse(int _toFriend, int _fromClient)
         {
-            Console.WriteLine($"Sending GroupInvitedResponse {_toFriend} from {_fromClient} {_response}");
+            Console.WriteLine($"Sending GroupInvitedResponse to {_toFriend} from {_fromClient}");
             using (Packet _packet = new Packet((int)ServerPackets.groupInvitedResponse))
             {
                 _packet.Write(_fromClient);
-                _packet.Write(_response);
-                SendTCPData(_toFriend, _packet);
+                _packet.Write(QueueManager.preMadeGroups[_toFriend].GroupSize());
+                foreach (PlayerQueue item in QueueManager.preMadeGroups[_toFriend].groupMembers)
+                {
+                    Console.WriteLine($"P {item.id} {item.nick_name}");
+                    _packet.Write(item);
+                }
+                SendTCPDataToAll(QueueManager.preMadeGroups[_toFriend].GroupMembers(), _packet);
             }
         }
         public static void UpdateFriendStatus(int _fromClient, string _token, bool _status)
@@ -231,8 +236,16 @@ namespace LeyendsServer
                 SendTCPDataToAll(_toFriends, _packet);
             }
         }
-
-
+        public static void UpdateGroupStatus(int _fromClient)
+        {
+            Console.WriteLine($"Sending UpdateGroupStatus disconect to {_fromClient} group members");
+            /*using (Packet _packet = new Packet((int)ServerPackets.updateGroupStatus))
+            {
+                _packet.Write(_fromClient);
+                List<int> groupMembers = QueueManager.preMadeGroups[Server.clients[_fromClient].groupLeader].GroupMembers(_fromClient);
+                SendTCPDataToAll(groupMembers, _packet);
+            }*/
+        }
         #endregion
     }
 }

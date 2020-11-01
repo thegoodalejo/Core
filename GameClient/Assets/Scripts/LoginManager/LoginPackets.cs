@@ -29,12 +29,13 @@ public enum LoginClientPackets
     quitQueue,
     groupRequest,
     disolveGroupRequest,
-    inviteFriendToGroup
+    inviteFriendToGroup,
+    inviteFriendToGroupResponse
 }
 public enum AlertServerPackets
 {
     error = 1,
-    friendRequest,
+    groupRequestResponse,
     groupRequest
 }
 public enum ErrorCodes

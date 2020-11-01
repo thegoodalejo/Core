@@ -7,6 +7,6 @@ public class AlertDetail : MonoBehaviour
 {
     public GameObject goBackground;
     public Text txtMessage;
-    public GameObject btnAcept, btnCancel, btnConfirm;
+    public GameObject btnConfirm;
     public Image iconAlert;
 }
