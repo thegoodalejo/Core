@@ -77,15 +77,11 @@ public class LoginHandler : MonoBehaviour
     }
     public static void GroupInvitedResponse(Packet _packet)
     {
-        if (GameInfo.isGrouped)
-        {
-            UIPrincipalPanel.HandleAlert(2, _packet);
-        }
-        else
+        if (!GameInfo.isGrouped)
         {
             MenuUIManager.LoadGroupGame();
-            GameInfo.isLoadGroups = true;
         }
+        UIPrincipalPanel.HandleAlert(2, _packet);
 
     }
     public static void UpdateFriendStatus(Packet _packet)

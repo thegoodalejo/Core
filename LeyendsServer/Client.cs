@@ -156,7 +156,7 @@ namespace LeyendsServer
                             catch (System.Exception)
                             {
                                 Console.WriteLine($"Unhandled MESSAGE ID ERROR {_packetId}");
-                                ServerSend.SendTrash(id,(int)ErrorCode.General);
+                                ServerSend.SendTrash(id, (int)ErrorCode.General);
                                 throw;
                             }
 
@@ -249,16 +249,29 @@ namespace LeyendsServer
         {
             Console.WriteLine($"{tcp.socket.Client.RemoteEndPoint} has disconnected.");
             DbManager.UpdateState(token, (Int32)Status.Offline, (Int32)Status.Offline);
-            ServerSend.UpdateFriendStatus(id,Server.clients[id].token.ToString(),false);
+            ServerSend.UpdateFriendStatus(id, Server.clients[id].token.ToString(), false);
             if (groupLeader != 0)
             {
                 if (groupLeader == id)
                 {
+                    QueueManager.preMadeGroups.Remove(id);
                     Console.WriteLine($"Player {id} was leade group.");
-                    //TODO notificar cada uno de los integrantes del grupo que el lider se fue y disolver el grupo
+                    //QueueManager.preMadeGroups[groupLeader].groupMembers.Clear();
+                    //TODO: ServerSend.GroupDisolved();
                 }
-                QueueManager.preMadeGroups.Remove(id);
-                //ServerSend.UpdateGroupStatus(id);
+                else
+                {
+                    Console.WriteLine($"Player {id} was in group.");
+                    foreach (PlayerQueue item in QueueManager.preMadeGroups[groupLeader].groupMembers)
+                    {
+                        if (item.id == id)
+                        {
+                            QueueManager.preMadeGroups[groupLeader].groupMembers.Remove(item);
+                            ServerSend.GroupInvitedResponse(groupLeader, id);
+                            break;
+                        }
+                    }
+                }
                 groupLeader = 0;
             }
 

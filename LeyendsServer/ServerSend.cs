@@ -200,19 +200,19 @@ namespace LeyendsServer
             }
         }
 
-        public static void GroupInvitedResponse(int _toFriend, int _fromClient)
+        public static void GroupInvitedResponse(int _groupLead, int _fromClient)
         {
-            Console.WriteLine($"Sending GroupInvitedResponse to {_toFriend} from {_fromClient}");
+            Console.WriteLine($"Sending GroupInvitedResponse to {_groupLead} from {_fromClient}");
             using (Packet _packet = new Packet((int)ServerPackets.groupInvitedResponse))
             {
                 _packet.Write(_fromClient);
-                _packet.Write(QueueManager.preMadeGroups[_toFriend].GroupSize());
-                foreach (PlayerQueue item in QueueManager.preMadeGroups[_toFriend].groupMembers)
+                _packet.Write(QueueManager.preMadeGroups[_groupLead].GroupSize());
+                foreach (PlayerQueue item in QueueManager.preMadeGroups[_groupLead].groupMembers)
                 {
                     Console.WriteLine($"P {item.id} {item.nick_name}");
                     _packet.Write(item);
                 }
-                SendTCPDataToAll(QueueManager.preMadeGroups[_toFriend].GroupMembers(), _packet);
+                SendTCPDataToAll(QueueManager.preMadeGroups[_groupLead].GroupMembers(), _packet);
             }
         }
         public static void UpdateFriendStatus(int _fromClient, string _token, bool _status)

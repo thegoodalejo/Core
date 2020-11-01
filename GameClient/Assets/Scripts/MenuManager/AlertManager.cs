@@ -50,15 +50,23 @@ public class AlertManager : MonoBehaviour
         List<FriendReference> _newGroup = new List<FriendReference>();
         int _fromFriend = _packet.ReadInt();
         int _groupSize = _packet.ReadInt();
+        string _message;
+        if (_groupSize < GameInfo.friends_in_group.Count)
+        {
+            _message = $"{_fromFriend} leaves group";
+        }else{
+            _message = $"{_fromFriend} join group";
+        }
+
         for (int i = 0; i < _groupSize; i++)
         {
-            _newGroup.Add(new FriendReference(_packet.ReadInt(),_packet.ReadString()));
+            _newGroup.Add(new FriendReference(_packet.ReadInt(), _packet.ReadString()));
         }
         GameInfo.friends_in_group = _newGroup;
         //------------------------------------
         GameObject _alerPrefab = InitAlert();
         AlertDetail controller = _alerPrefab.GetComponent<AlertDetail>();
-        controller.txtMessage.text = $"{_fromFriend} join group";
+        controller.txtMessage.text = _message;
         controller.btnConfirm.SetActive(false);
         _alerPrefab.SetActive(true);
         GameInfo.groupSize++;
