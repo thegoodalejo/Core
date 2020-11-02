@@ -179,6 +179,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7046bb5c99cc7604fb07eb56a087e5fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  strPlayerName: 
+  strUID: 
+  isGrouped: 0
+  groupSize: 0
+  isQueued: 0
+  isLoadFriends: 0
+  isLoadGroups: 0
   ip: 127.0.0.1
   token: 
   port: 26940
@@ -1223,9 +1230,7 @@ MonoBehaviour:
   startMenu: {fileID: 1382442373}
   usernameField: {fileID: 2052828588}
   passwordField: {fileID: 1085487283}
-  logIn: {fileID: 921641976}
-  trash: {fileID: 0}
-  queueMe: {fileID: 0}
+  logIn: {fileID: 921641973}
   dialogueBox: {fileID: 632452077}
   text: {fileID: 1415938102}
 --- !u!1 &1415938100

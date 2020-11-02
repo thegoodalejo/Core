@@ -34,7 +34,7 @@ public class UIPrincipalPanel : MonoBehaviour
     {
         messageHandlers = new Dictionary<int, MessageHandler>()
         {
-            { (int)AlertServerPackets.error, AlertManager.Error },
+            { (int)AlertServerPackets.message, AlertManager.Message },
             { (int)AlertServerPackets.groupRequestResponse, AlertManager.GroupRequestResponse },
             { (int)AlertServerPackets.groupRequest, AlertManager.GroupRequest },
         };
@@ -45,6 +45,7 @@ public class UIPrincipalPanel : MonoBehaviour
         {
             { (int)ErrorCodes.General, "AlertManager.Error" },
             { (int)ErrorCodes.NoGroup, "No eres lider de un grupo" },
+            { (int)ErrorCodes.GroupDisolved, "Grupo disuelto" },
         };
     }
 }

@@ -247,30 +247,36 @@ namespace LeyendsServer
         /// <summary>Disconnects the client and stops all network traffic.</summary>
         private void Disconnect()
         {
-            Console.WriteLine($"{tcp.socket.Client.RemoteEndPoint} has disconnected.");
+            Console.WriteLine($"{nickName} has disconnected, {tcp.socket.Client.RemoteEndPoint} ");
             DbManager.UpdateState(token, (Int32)Status.Offline, (Int32)Status.Offline);
             ServerSend.UpdateFriendStatus(id, Server.clients[id].token.ToString(), false);
             if (groupLeader != 0)
             {
                 if (groupLeader == id)
                 {
-                    QueueManager.preMadeGroups.Remove(id);
-                    Console.WriteLine($"Player {id} was leade group.");
-                    //QueueManager.preMadeGroups[groupLeader].groupMembers.Clear();
-                    //TODO: ServerSend.GroupDisolved();
+                    Console.WriteLine($"Player {id} was group lead.");
+                    ServerSend.GroupDisolved(id);
                 }
                 else
                 {
                     Console.WriteLine($"Player {id} was in group.");
-                    foreach (PlayerQueue item in QueueManager.preMadeGroups[groupLeader].groupMembers)
+                    try
                     {
-                        if (item.id == id)
+                        foreach (PlayerQueue item in QueueManager.preMadeGroups[groupLeader].groupMembers)
                         {
-                            QueueManager.preMadeGroups[groupLeader].groupMembers.Remove(item);
-                            ServerSend.GroupInvitedResponse(groupLeader, id);
-                            break;
+                            if (item.id == id)
+                            {
+                                QueueManager.preMadeGroups[groupLeader].groupMembers.Remove(item);
+                                ServerSend.GroupInvitedResponse(groupLeader, id);
+                                break;
+                            }
                         }
                     }
+                    catch (System.Exception)
+                    {
+                        Console.WriteLine("Grupo ya disuelto");
+                    }
+
                 }
                 groupLeader = 0;
             }
@@ -290,6 +296,7 @@ namespace LeyendsServer
             this.token = ObjectId.Empty;
             this.nickName = null;
             this.queueType = null;
+            this.groupLeader = 0;
             this.queueStatus = false;
         }
     }

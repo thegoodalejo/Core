@@ -34,17 +34,17 @@ public class UIFindGame : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!GameInfo.isLoadGroups) { return; }
-        txtPlayersInGroup.text = GameInfo.friends_in_group.Count.ToString();
+        if (!LoginClient.instance.isLoadGroups) { return; }
+        txtPlayersInGroup.text = LoginClient.instance.friends_in_group.Count.ToString();
         Debug.Log("UpdatingCuzGroupsFinish");
-        GameInfo.isLoadGroups = false;
+        LoginClient.instance.isLoadGroups = false;
         ResetFriends();
         AddFriends();
 
     }
     private void AddFriends()
     {
-        foreach (FriendReference item in GameInfo.friends_in_group)
+        foreach (FriendReference item in LoginClient.instance.friends_in_group)
         {
             Debug.Log($"F {item.id} {item.server_slot} {item.user_legends_nick}");
             GameObject friendsPrefab = Instantiate(itemTemplate, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
@@ -53,7 +53,7 @@ public class UIFindGame : MonoBehaviour
             controller.txtName.text = item.user_legends_nick;
             controller.btnInvite.SetActive(false);
         }
-        GameInfo.isLoadGroups = false;
+        LoginClient.instance.isLoadGroups = false;
     }
     private void ResetFriends()
     {

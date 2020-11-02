@@ -8,10 +8,7 @@ public class LoginUIManager : MonoBehaviour
     public GameObject startMenu;
     public InputField usernameField;
     public InputField passwordField;
-    public Button logIn;
-    public Button trash;
-    public Button queueMe;
-
+    public GameObject logIn;
     public GameObject dialogueBox;
     public Text text;
 
@@ -37,6 +34,7 @@ public class LoginUIManager : MonoBehaviour
         //startMenu.SetActive(false);
         usernameField.interactable = false;
         passwordField.interactable = false;
+        LoginUIManager.instance.logIn.SetActive(false);
         SetUserName(usernameField.text);
         dialogueBox.SetActive(true);
         text.text = "Connecting to game ...";

@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class LoginHandler : MonoBehaviour
 {
@@ -16,11 +17,10 @@ public class LoginHandler : MonoBehaviour
     public static void AuthResponse(Packet _packet)
     {
         UserProfile _userResponse = _packet.ReadUser();
-        LoginUIManager.instance.logIn.interactable = true;
         if (_userResponse.acc_aviable)
         {
             LoginClient.instance.udp.Connect(((IPEndPoint)LoginClient.instance.tcp.socket.Client.LocalEndPoint).Port);
-            GameInfo.strPlayerName = _userResponse.userNickName;
+            LoginClient.instance.strPlayerName = _userResponse.userNickName;
             LoginClient.instance.token = _userResponse.id;
             SceneManager.LoadScene("Menu");
         }
@@ -32,7 +32,7 @@ public class LoginHandler : MonoBehaviour
             LoginUIManager.instance.passwordField.interactable = true;
         }
         //LoginClient.instance.udp.Connect(((IPEndPoint)LoginClient.instance.tcp.socket.Client.LocalEndPoint).Port);
-        //SceneManager.LoadScene("Menu");
+        LoginUIManager.instance.logIn.SetActive(true);
     }
     public static void TrashRecived(Packet _packet)
     {
@@ -42,7 +42,7 @@ public class LoginHandler : MonoBehaviour
     {
         Debug.Log("QueueRecived");
         UIFindGame.instance.txtQueueStatus.text = "On Queue...";
-        GameInfo.isQueued = true;
+        LoginClient.instance.isQueued = true;
         UIFindGame.instance.btnQuitQueue.SetActive(true);
     }
     public static void GameFound(Packet _packet)
@@ -52,24 +52,27 @@ public class LoginHandler : MonoBehaviour
     public static void GrupCreated(Packet _packet)
     {
         UIFindGame.instance.txtMessageServer.enabled = false;
-        GameInfo.isGrouped = true;
-        GameInfo.friends_in_group.Add(new FriendReference(LoginClient.instance.myId, GameInfo.strPlayerName));
-        GameInfo.isLoadGroups = true;
+        LoginClient.instance.isGrouped = true;
+        LoginClient.instance.friends_in_group.Add(new FriendReference(LoginClient.instance.myId, LoginClient.instance.strPlayerName));
+        LoginClient.instance.isLoadGroups = true;
         UIFindGame.instance.btnQueueGame.SetActive(true);
     }
     public static void GrupDisolved(Packet _packet)
     {
         UIPrincipalPanel.instance.btnHome.interactable = false;
         UIPrincipalPanel.instance.btnPlayGame.interactable = true;
-        GameInfo.isGrouped = false;
-        GameInfo.friends_in_group.Clear();
+        LoginClient.instance.isGrouped = false;
+        LoginClient.instance.isQueued = false;
+        LoginClient.instance.friends_in_group.Clear();
+        LoginClient.instance.isLoadGroups = true;
         MenuUIManager.instance.findGameMenu.SetActive(false);
         MenuUIManager.instance.homeMenu.SetActive(true);
+        UIPrincipalPanel.HandleAlert(1, _packet);
     }
     public static void FriendsList(Packet _packet)
     {
-        GameInfo.user_friends = _packet.ReadFriendReference();
-        GameInfo.isLoadFriends = true;
+        LoginClient.instance.user_friends = _packet.ReadFriendReference();
+        LoginClient.instance.isLoadFriends = true;
     }
     public static void GroupInvited(Packet _packet)
     {
@@ -77,7 +80,7 @@ public class LoginHandler : MonoBehaviour
     }
     public static void GroupInvitedResponse(Packet _packet)
     {
-        if (!GameInfo.isGrouped)
+        if (!LoginClient.instance.isGrouped)
         {
             MenuUIManager.LoadGroupGame();
         }
@@ -89,7 +92,7 @@ public class LoginHandler : MonoBehaviour
         string _token = _packet.ReadString();
         int _slot = _packet.ReadInt();
         bool _status = _packet.ReadBool();
-        foreach (FriendReference item in GameInfo.user_friends)
+        foreach (FriendReference item in LoginClient.instance.user_friends)
         {
             if (item.id == _token)
             {
@@ -101,10 +104,10 @@ public class LoginHandler : MonoBehaviour
                 {
                     item.server_slot = 0;
                     item.on_my_group = false;
-                    GameInfo.isLoadGroups = true;
+                    LoginClient.instance.isLoadGroups = true;
                 }
             }
         }
-        GameInfo.isLoadFriends = true;
+        LoginClient.instance.isLoadFriends = true;
     }
 }

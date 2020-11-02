@@ -1,10 +1,20 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public partial class LoginClient : MonoBehaviour
 {
+    public string strPlayerName;
+    public string strUID;
+    public bool isGrouped;
+    public int groupSize;
+    public bool isQueued;
+    public bool isLoadFriends;
+    public bool isLoadGroups;
+    public List<FriendReference> user_friends { get; set; }
+    public List<FriendReference> friends_in_group { get; set; }
 
     public static LoginClient instance;
     public static int dataBufferSize = 4096;
@@ -30,6 +40,18 @@ public partial class LoginClient : MonoBehaviour
             Debug.Log("Login instance already exists, destroying object!");
             Destroy(this);
         }
+        instance.strPlayerName = "Loading...";
+        instance.isGrouped = false;
+        instance.groupSize = 0;
+        instance.isQueued = false;
+        instance.isLoadFriends = false;
+        instance.isLoadGroups = false;
+        instance.user_friends = new List<FriendReference>();
+        instance.friends_in_group = new List<FriendReference>();
+    }
+
+    public void LogOut(){
+        Disconnect();
     }
 
     private void OnApplicationQuit()
@@ -39,8 +61,6 @@ public partial class LoginClient : MonoBehaviour
 
     public void ConnectToServer()
     {
-        LoginUIManager.instance.logIn.interactable = false;
-
         tcp = new TCP();
         udp = new UDP();
         
@@ -78,8 +98,8 @@ public partial class LoginClient : MonoBehaviour
             isConnected = false;
             tcp.socket.Close();
             //udp.socket.Close();
-
-            Debug.Log("Disconnected from login server.");
+            SceneManager.LoadScene("Login");
+            LoginUIManager.instance.text.text = "Disconected from server";
         }
     }
 }

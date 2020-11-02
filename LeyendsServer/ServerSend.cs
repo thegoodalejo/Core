@@ -167,16 +167,26 @@ namespace LeyendsServer
                 SendTCPData(_toClient, _packet);
             }
         }
-        public static void GroupDisolved(int _toClient)
+        public static void GroupDisolved(int _groupLead)
         {
             using (Packet _packet = new Packet((int)ServerPackets.groupDisolved))
             {
-                SendTCPData(_toClient, _packet);
+                List<int> _toMembers = new List<int>();
+                foreach (PlayerQueue item in QueueManager.preMadeGroups[_groupLead].groupMembers)
+                {
+                    Server.clients[item.id].groupLeader = 0;
+                    if (!item.isGroupLeader)
+                    {
+                        _toMembers.Add(item.id);
+                    }
+                }
+                QueueManager.preMadeGroups.Remove(_groupLead);
+                _packet.Write(3);
+                SendTCPDataToAll(_toMembers, _packet);
             }
         }
         public static void FriendList(int _toClient)
         {
-            Console.WriteLine($"Sending Friends.... {Server.clients[_toClient].user_friends.Count}");
             using (Packet _packet = new Packet((int)ServerPackets.friendList))
             {
                 List<User> usersList = DbManager.FriendList(_toClient);
@@ -191,7 +201,6 @@ namespace LeyendsServer
         public static void GroupInvited(int _toClient, int _fromFriend)
         {
             if (_toClient == 0) return;
-            Console.WriteLine($"Sending group invite to {Server.clients[_toClient].nickName} from {Server.clients[_fromFriend].nickName}");
             using (Packet _packet = new Packet((int)ServerPackets.groupInvited))
             {
                 _packet.Write(_fromFriend);
@@ -202,7 +211,6 @@ namespace LeyendsServer
 
         public static void GroupInvitedResponse(int _groupLead, int _fromClient)
         {
-            Console.WriteLine($"Sending GroupInvitedResponse to {_groupLead} from {_fromClient}");
             using (Packet _packet = new Packet((int)ServerPackets.groupInvitedResponse))
             {
                 _packet.Write(_fromClient);
@@ -217,7 +225,6 @@ namespace LeyendsServer
         }
         public static void UpdateFriendStatus(int _fromClient, string _token, bool _status)
         {
-            Console.WriteLine($"Refreshing Friends.... ");
             using (Packet _packet = new Packet((int)ServerPackets.updateFriendStatus))
             {
                 List<int> _toFriends = new List<int>();

@@ -59,7 +59,7 @@ namespace LeyendsServer
         public static void GroupRequest(int _fromClient, Packet _packet)
         {
             Console.WriteLine($"Group creation request  {_fromClient} .");
-            PlayerQueue _newLeaderGrup = new PlayerQueue(_fromClient,Server.clients[_fromClient].nickName);
+            PlayerQueue _newLeaderGrup = new PlayerQueue(_fromClient, Server.clients[_fromClient].nickName);
             List<PlayerQueue> _newGrup = new List<PlayerQueue>();
             _newGrup.Add(_newLeaderGrup);
             QueueGroup _newQueueGroup = new QueueGroup(QueueType.NON, _newGrup);
@@ -88,15 +88,19 @@ namespace LeyendsServer
                 return;
             }
             int _toFriend = _packet.ReadInt();
-            Console.WriteLine($"Player {_fromClient} InviteFriendToGroup  {_toFriend} .");
+            Console.WriteLine($"{Server.clients[_fromClient].nickName} InviteFriendToGroup  {Server.clients[_toFriend].nickName} .");
             ServerSend.GroupInvited(_toFriend, _fromClient);
         }
         public static void InviteFriendToGroupResponse(int _fromClient, Packet _packet)
         {
             int _toFriend = _packet.ReadInt();
-            Console.WriteLine($"Player {_fromClient} GroupInvitedResponse join .");
+            if (Server.clients[_fromClient].groupLeader != 0)
+            {
+                ServerSend.GroupDisolved(Server.clients[_fromClient].groupLeader);
+            }
+            Console.WriteLine($"{Server.clients[_fromClient].nickName} join {Server.clients[_toFriend].nickName} group .");
             Server.clients[_fromClient].groupLeader = _toFriend;
-            PlayerQueue _newGroupMember = new PlayerQueue(_fromClient,Server.clients[_fromClient].nickName);
+            PlayerQueue _newGroupMember = new PlayerQueue(_fromClient, Server.clients[_fromClient].nickName);
             QueueManager.preMadeGroups[_toFriend].groupMembers.Add(_newGroupMember);
             ServerSend.GroupInvitedResponse(_toFriend, _fromClient);
 

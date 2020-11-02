@@ -34,7 +34,7 @@ public enum LoginClientPackets
 }
 public enum AlertServerPackets
 {
-    error = 1,
+    message = 1,
     groupRequestResponse,
     groupRequest
 }
@@ -42,6 +42,7 @@ public enum ErrorCodes
 {
     General = 1,
     NoGroup,
+    GroupDisolved,
 }
 
 

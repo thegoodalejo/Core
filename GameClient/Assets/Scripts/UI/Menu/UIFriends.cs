@@ -28,7 +28,7 @@ public class UIFriends : MonoBehaviour
     }
     void Update()
     {
-        if (!GameInfo.isLoadFriends) { return; }
+        if (!LoginClient.instance.isLoadFriends) { return; }
         ResetFriends();
         AddFriends();
         Debug.Log("UpdatingCuzFriendsFinish");
@@ -36,7 +36,7 @@ public class UIFriends : MonoBehaviour
     }
     private void AddFriends()
     {
-        foreach (FriendReference item in GameInfo.user_friends)
+        foreach (FriendReference item in LoginClient.instance.user_friends)
         {
             if (item.server_slot != 0)
             {
@@ -53,7 +53,7 @@ public class UIFriends : MonoBehaviour
                 );
             }
         }
-        GameInfo.isLoadFriends = false;
+        LoginClient.instance.isLoadFriends = false;
     }
     private void ResetFriends()
     {

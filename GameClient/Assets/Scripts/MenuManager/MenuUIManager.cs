@@ -57,7 +57,7 @@ public class MenuUIManager : MonoBehaviour
     }
     public static void LoadPlayGame()
     {
-        if (!GameInfo.isGrouped)
+        if (!LoginClient.instance.isGrouped)
         {
             LoginClientSend.GroupRequest();
         }

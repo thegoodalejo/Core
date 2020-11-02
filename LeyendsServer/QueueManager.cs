@@ -16,7 +16,7 @@ namespace LeyendsServer
             preMadeGroups = new Dictionary<int, QueueGroup>();
             randomQueuesGrup = new List<QueueGroup>();
             randomQueue = new List<int>();
-            
+
         }
 
         public static void Update()
@@ -30,7 +30,7 @@ namespace LeyendsServer
                 List<int> _newQueue = new List<int>();
                 _newQueue.Add(randomQueue[0]);
                 _newQueue.Add(randomQueue[1]);
-                
+
                 randomQueue.RemoveAt(0);
                 foreach (int _id in randomQueue)
                 {

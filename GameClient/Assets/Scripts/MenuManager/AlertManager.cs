@@ -32,7 +32,7 @@ public class AlertManager : MonoBehaviour
         _alerPrefab.SetActive(true);
         return _alerPrefab;
     }
-    public static async void Error(Packet _packet)
+    public static async void Message(Packet _packet)
     {
         int _errCode = _packet.ReadInt();
         Debug.Log($"Error: {UIPrincipalPanel.errorCodes[_errCode]}");
@@ -51,7 +51,7 @@ public class AlertManager : MonoBehaviour
         int _fromFriend = _packet.ReadInt();
         int _groupSize = _packet.ReadInt();
         string _message;
-        if (_groupSize < GameInfo.friends_in_group.Count)
+        if (_groupSize < LoginClient.instance.friends_in_group.Count)
         {
             _message = $"{_fromFriend} leaves group";
         }else{
@@ -62,15 +62,15 @@ public class AlertManager : MonoBehaviour
         {
             _newGroup.Add(new FriendReference(_packet.ReadInt(), _packet.ReadString()));
         }
-        GameInfo.friends_in_group = _newGroup;
+        LoginClient.instance.friends_in_group = _newGroup;
         //------------------------------------
         GameObject _alerPrefab = InitAlert();
         AlertDetail controller = _alerPrefab.GetComponent<AlertDetail>();
         controller.txtMessage.text = _message;
         controller.btnConfirm.SetActive(false);
         _alerPrefab.SetActive(true);
-        GameInfo.groupSize++;
-        GameInfo.isLoadGroups = true;
+        LoginClient.instance.groupSize++;
+        LoginClient.instance.isLoadGroups = true;
         await Task.Delay(5000);
         Destroy(_alerPrefab);
     }

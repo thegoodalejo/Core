@@ -3,6 +3,7 @@ using System.Net.Sockets;
 using System;
 using System.Threading.Tasks;
 using System.Threading;
+using UnityEngine.UI;
 
 public partial class LoginClient
 {
@@ -27,7 +28,7 @@ public partial class LoginClient
             if (!socket.Connected)
             {
                 LoginUIManager.instance.text.text = "No se pudo conectar";
-                LoginUIManager.instance.logIn.interactable = true;
+                LoginUIManager.instance.logIn.GetComponent<Button>().interactable = true;
             }
         }
 
