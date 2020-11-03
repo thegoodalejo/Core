@@ -17,6 +17,7 @@ namespace LeyendsServer
 
         private static TcpListener tcpListener;
         private static UdpClient udpListener;
+        private static List<EndPoint> registredIPS;
 
         /// <summary>Starts the server.</summary>
         /// <param name="_maxPlayers">The maximum players that can be connected simultaneously.</param>
@@ -36,6 +37,8 @@ namespace LeyendsServer
             udpListener = new UdpClient(Port);
             udpListener.BeginReceive(UDPReceiveCallback, null);
 
+            registredIPS = new List<EndPoint>();
+
             Console.WriteLine($"Server started on port {Port}.");
 
             DbManager.UpdateStateAll();
@@ -47,11 +50,16 @@ namespace LeyendsServer
             TcpClient _client = tcpListener.EndAcceptTcpClient(_result);
             tcpListener.BeginAcceptTcpClient(TCPConnectCallback, null);
             Console.WriteLine($"Incoming connection from {_client.Client.RemoteEndPoint} ...");
+            
+            //TODO: despues del portforward hay q mirar como bloquear el multi account desde una misma ip, 
+            //este Console.WriteLine(((System.Net.IPEndPoint)_client.Client.RemoteEndPoint).Address); 
+            //retorna la IP entonces seria mas como mirar si desde el mismo cliente se podria iniciar doble cuenta 
 
             for (int i = 1; i <= MaxPlayers; i++)
             {
                 if (clients[i].tcp.socket == null)
                 {
+                    registredIPS.Add(_client.Client.RemoteEndPoint);
                     clients[i].tcp.Connect(_client);
                     return;
                 }
@@ -99,7 +107,7 @@ namespace LeyendsServer
             }
             catch (Exception _ex)
             {
-               Console.WriteLine($"Error receiving UDP data: {_ex}");
+                Console.WriteLine($"Error receiving UDP data: {_ex}");
             }
         }
 

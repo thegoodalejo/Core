@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 public class LoginClientSend : MonoBehaviour
 {
@@ -43,8 +44,7 @@ public class LoginClientSend : MonoBehaviour
     {
         using (Packet _packet = new Packet((int)LoginClientPackets.queueRequestForRandomMatch))
         {
-            _packet.Write(LoginClient.instance.myId);
-            //UIFindGame.instance.btnQueueGame.interactable = false;
+            UIFindGame.instance.btnQueueGame.GetComponent<Button>().interactable = false;
             SendTCPData(_packet);
         }
     }

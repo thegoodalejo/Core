@@ -22,7 +22,6 @@ namespace LeyendsServer
             User _user = DbManager.Auth(_fromClient, _username, _pass);
             ServerSend.AuthState(_fromClient, _user);
             ServerSend.FriendList(_fromClient);
-            Console.WriteLine($"UpdateFriendStatus..... {_fromClient} {Server.clients[_fromClient].token.ToString()}");
             ServerSend.UpdateFriendStatus(_fromClient, Server.clients[_fromClient].token.ToString(), true);
 
         }
@@ -41,13 +40,16 @@ namespace LeyendsServer
         }
         public static void QueueRequestForRandomMatch(int _fromClient, Packet _packet)
         {
-            int _clientIdCheck = _packet.ReadInt();
-            Console.WriteLine($"Incoming queue request from player {_clientIdCheck}.");
-            if (!Server.clients[_fromClient].queueStatus && _fromClient != _clientIdCheck)
+            Console.WriteLine($"Incoming queue request from player {_fromClient}.");
+            if (!Server.clients[_fromClient].queueStatus &&
+            QueueManager.preMadeGroups[_fromClient] != null)
             {
-                Server.clients[_fromClient].queueStatus = true;
-                Server.clients[_fromClient].queueType = QueueType.RANDOM;
-                QueueManager.Add(_fromClient);
+                foreach (int item in QueueManager.preMadeGroups[_fromClient].GroupMembers())
+                {
+                    Server.clients[item].queueStatus = true;
+                    Server.clients[item].queueType = QueueType.RANDOM;
+                }
+                QueueManager.randomQueuesGrup.Add(_fromClient,QueueManager.preMadeGroups[_fromClient]);
             }
             ServerSend.QueueAcepted(_fromClient);
         }

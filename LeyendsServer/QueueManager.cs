@@ -7,21 +7,21 @@ namespace LeyendsServer
     class QueueManager
     {
         public static Dictionary<int, QueueGroup> preMadeGroups;
-        public static List<QueueGroup> randomQueuesGrup;
-        static List<int> randomQueue;
+        public static Dictionary<int, QueueGroup> randomQueuesGrup;
+        //static List<int> randomQueue;
 
         // Static constructor initializes NumMembers
         static QueueManager()
         {
             preMadeGroups = new Dictionary<int, QueueGroup>();
-            randomQueuesGrup = new List<QueueGroup>();
-            randomQueue = new List<int>();
+            randomQueuesGrup = new Dictionary<int, QueueGroup>();
+            //randomQueue = new List<int>();
 
         }
 
         public static void Update()
         {
-            if (randomQueue.Count >= 3)
+            /*if (randomQueue.Count >= 3)
             {
                 foreach (int _id in randomQueue)
                 {
@@ -38,26 +38,12 @@ namespace LeyendsServer
                 }
                 randomQueue.RemoveAt(0);
                 ServerSend.GameFoundRequest(_newQueue);
-            }
+            }*/
         }
 
-        public static void Add(int _id)
-        {
-            randomQueue.Add(_id);
-        }
-        public static void RemoveByPlayer(int _index)
-        {
-            randomQueue.Remove(_index);
-        }
-        public static void RemoveByIndex(int _index)
-        {
-            randomQueue.RemoveAt(_index);
-        }
         public static void QueueStatus()
         {
-            int _randQueueSize = randomQueue.Count;
-            Console.WriteLine($"Random Match: {_randQueueSize}");
-            Console.WriteLine($"Total: {_randQueueSize} Players");
+            
         }
     }
 }

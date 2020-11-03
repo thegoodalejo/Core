@@ -2543,9 +2543,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 111905816}
-        m_TargetAssemblyTypeName: MenuUIManager, Assembly-CSharp
-        m_MethodName: AceptQueue
+      - m_Target: {fileID: 1971180159}
+        m_TargetAssemblyTypeName: UIFindGame, Assembly-CSharp
+        m_MethodName: FindGame
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

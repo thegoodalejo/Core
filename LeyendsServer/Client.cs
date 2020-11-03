@@ -36,6 +36,7 @@ namespace LeyendsServer
         public List<ObjectId> GetFriendsKeys()
         {
             List<ObjectId> friendsKey = new List<ObjectId>();
+            if (user_friends == null) return friendsKey;
             foreach (FriendReference item in user_friends)
             {
                 friendsKey.Add(item._oid);
@@ -44,7 +45,7 @@ namespace LeyendsServer
         }
         public override string ToString()
         {
-            return "Client ID: " + id + " - Token: " + token + " - OnQueue: " + queueStatus + " - QueueType: " + queueType;
+            return "Client ID: " + id + " - OnGroupOf: " + Server.clients[groupLeader].nickName + " - Nick: " + nickName + " - OnQueue: " + queueStatus + " - QueueType: " + queueType;
         }
         public class TCP
         {
@@ -75,7 +76,6 @@ namespace LeyendsServer
                 receiveBuffer = new byte[dataBufferSize];
 
                 stream.BeginRead(receiveBuffer, 0, dataBufferSize, ReceiveCallback, null);
-                Console.WriteLine("ServerSend.Welcome");
                 ServerSend.Welcome(id, "Welcome to Auth Server");
             }
 
@@ -283,7 +283,8 @@ namespace LeyendsServer
 
             if (this.queueStatus)
             {
-                QueueManager.RemoveByPlayer(id);
+                //QueueManager.RemoveByPlayer(id);
+                //TODO REMOVER EL JUGADOR SI ESTABA EN COLA
             }
             ResetSlotPlayer();
             tcp.Disconnect();

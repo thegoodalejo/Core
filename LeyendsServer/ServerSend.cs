@@ -136,7 +136,7 @@ namespace LeyendsServer
             Console.WriteLine($"Sending Queue Response to client {_toClient}");
             using (Packet _packet = new Packet((int)ServerPackets.queueUpdate))
             {
-                SendTCPData(_toClient, _packet);
+                SendTCPDataToAll(QueueManager.randomQueuesGrup[_toClient].GroupMembers(), _packet);
             }
         }
         public static void QueueCancel(int _toClient)
