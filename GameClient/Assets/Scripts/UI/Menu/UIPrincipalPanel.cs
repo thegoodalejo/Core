@@ -46,6 +46,7 @@ public class UIPrincipalPanel : MonoBehaviour
             { (int)ErrorCodes.General, "AlertManager.Error" },
             { (int)ErrorCodes.NoGroup, "No eres lider de un grupo" },
             { (int)ErrorCodes.GroupDisolved, "Grupo disuelto" },
+            { (int)ErrorCodes.PlayerInGroup, "Jugador ya esta en un grupo" },
         };
     }
 }

@@ -15,6 +15,8 @@ namespace LeyendsServer
     {
         General = 1,
         NoGroup,
+        GroupDisolved,
+        PlayerInGroup
     }
 
     class Constants

@@ -31,22 +31,26 @@ namespace LeyendsServer
                     Console.WriteLine($"Total Players: {players}");
                     break;
                 case "-listAllQueue":
-                    QueueManager.QueueStatus();
-                    foreach (Client _client in Server.clients.Values)
-                    {
-                        if (_client.token != ObjectId.Empty && _client.queueStatus)
-                            Console.WriteLine(_client.ToString());
-                    }
-                    break;
-                case "-listAllGroups":
-                    int queueSize = QueueManager.preMadeGroups.Count;
+                    int queueSize = QueueManager.randomQueuesGrup.Count;
                     Console.WriteLine($"Groups : {queueSize}");
-                    foreach(KeyValuePair<int, QueueGroup> entry in QueueManager.preMadeGroups)
+                    foreach(KeyValuePair<int, QueueGroup> entry in QueueManager.randomQueuesGrup)
                     {
-                        Console.WriteLine("Group Leader is Player: " + entry.Key);
+                        Console.WriteLine("Group Leader is Player: " + Server.clients[entry.Key].nickName);
                         foreach (PlayerQueue item in entry.Value.groupMembers)
                         {
-                            Console.WriteLine("Player: " + item.id);
+                            Console.WriteLine("Player: " + Server.clients[item.id].nickName);
+                        }
+                    }
+                    break;
+                case "-listAllGroup":
+                    int groupSize = QueueManager.preMadeGroups.Count;
+                    Console.WriteLine($"Groups : {groupSize}");
+                    foreach(KeyValuePair<int, QueueGroup> entry in QueueManager.preMadeGroups)
+                    {
+                        Console.WriteLine("Group Leader is Player: " + Server.clients[entry.Key].nickName);
+                        foreach (PlayerQueue item in entry.Value.groupMembers)
+                        {
+                            Console.WriteLine("Player: " + Server.clients[item.id].nickName);
                         }
                     }
                     break;

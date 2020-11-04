@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class LoginHandler : MonoBehaviour
 {
-    public static void Welcome(Packet _packet)
+    public static void Welcome(Packet _packet)//ID:1
     {
         string _msg = _packet.ReadString();
         int _myId = _packet.ReadInt();
@@ -14,7 +14,7 @@ public class LoginHandler : MonoBehaviour
         LoginUIManager.instance.text.text = "Auth";
         LoginClientSend.WelcomeReceived();
     }
-    public static void AuthResponse(Packet _packet)
+    public static void AuthResponse(Packet _packet)//ID:2
     {
         UserProfile _userResponse = _packet.ReadUser();
         if (_userResponse.acc_aviable)
@@ -34,7 +34,7 @@ public class LoginHandler : MonoBehaviour
         //LoginClient.instance.udp.Connect(((IPEndPoint)LoginClient.instance.tcp.socket.Client.LocalEndPoint).Port);
         LoginUIManager.instance.logIn.SetActive(true);
     }
-    public static void TrashRecived(Packet _packet)
+    public static void TrashRecived(Packet _packet)//ID:3
     {
         UIPrincipalPanel.HandleAlert(1, _packet);
     }

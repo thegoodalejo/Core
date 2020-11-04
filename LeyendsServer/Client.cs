@@ -45,12 +45,16 @@ namespace LeyendsServer
         }
         public override string ToString()
         {
-            return "Client ID: " + id + " - OnGroupOf: " + Server.clients[groupLeader].nickName + " - Nick: " + nickName + " - OnQueue: " + queueStatus + " - QueueType: " + queueType;
+            if(groupLeader == 0){
+                return "Client ID: " + id +" - Nick: " + nickName + " - OnQueue: " + queueStatus + " - QueueType: " + queueType;
+            }else{
+                return "Client ID: " + id + " - OnGroupOf: " + Server.clients[groupLeader].nickName + " - Nick: " + nickName + " - OnQueue: " + queueStatus + " - QueueType: " + queueType;
+            }
+            
         }
         public class TCP
         {
             public TcpClient socket;
-
             private readonly int id;
             private readonly ObjectId token;
             private NetworkStream stream;

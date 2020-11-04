@@ -43,6 +43,7 @@ public enum ErrorCodes
     General = 1,
     NoGroup,
     GroupDisolved,
+    PlayerInGroup,
 }
 
 
