@@ -36,7 +36,7 @@ namespace LeyendsServer
                     Server.clients[item].queueStatus = true;
                     Server.clients[item].queueType = QueueType.RANDOM;
                 }
-                QueueManager.randomQueuesGrup.Add(_fromClient,QueueManager.preMadeGroups[_fromClient]);
+                QueueManager.randomQueuesGrup.Add(_fromClient, QueueManager.preMadeGroups[_fromClient]);
             }
             QueueManager.preMadeGroups.Remove(_fromClient);
             ServerSend.QueueAcepted(_fromClient);
@@ -48,7 +48,15 @@ namespace LeyendsServer
         }
         public static void QuitQueueRequest(int _fromClient, Packet _packet)//ID:4
         {
+            if (!Server.clients[_fromClient].queueStatus) return;
             Console.WriteLine($"Player {_fromClient} quit queue .");
+            QueueManager.preMadeGroups.Add(Server.clients[_fromClient].groupLeader, QueueManager.randomQueuesGrup[_fromClient]);
+            foreach (int item in QueueManager.preMadeGroups[Server.clients[_fromClient].groupLeader].GroupMembers())
+            {
+                Server.clients[item].queueStatus = false;
+                Server.clients[item].queueType = QueueType.NON;
+            }
+            QueueManager.randomQueuesGrup.Remove(Server.clients[_fromClient].groupLeader);
             ServerSend.QueueCancel(_fromClient);
         }
         public static void GroupRequest(int _fromClient, Packet _packet)//ID:5
@@ -83,7 +91,8 @@ namespace LeyendsServer
                 return;
             }
             int _toFriend = _packet.ReadInt();
-            if(Server.clients[_toFriend].groupLeader != 0){
+            if (Server.clients[_toFriend].groupLeader != 0)
+            {
                 ServerSend.SendTrash(_fromClient, (int)ErrorCode.PlayerInGroup);
                 return;
             }

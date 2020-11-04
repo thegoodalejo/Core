@@ -38,18 +38,18 @@ public class LoginHandler : MonoBehaviour
     {
         UIPrincipalPanel.HandleAlert(1, _packet);
     }
-    public static void QueueRecived(Packet _packet)
+    public static void QueueRecived(Packet _packet)//ID:4
     {
         Debug.Log("QueueRecived");
         UIFindGame.instance.txtQueueStatus.text = "On Queue...";
         LoginClient.instance.isQueued = true;
         UIFindGame.instance.btnQuitQueue.SetActive(true);
     }
-    public static void GameFound(Packet _packet)
+    public static void GameFound(Packet _packet)//ID:5
     {
         UIFindGame.instance.txtQueueStatus.text = "InGame";
     }
-    public static void GrupCreated(Packet _packet)
+    public static void GrupCreated(Packet _packet)//ID:6
     {
         UIFindGame.instance.txtMessageServer.enabled = false;
         LoginClient.instance.isGrouped = true;
@@ -57,7 +57,7 @@ public class LoginHandler : MonoBehaviour
         LoginClient.instance.isLoadGroups = true;
         UIFindGame.instance.btnQueueGame.SetActive(true);
     }
-    public static void GrupDisolved(Packet _packet)
+    public static void GrupDisolved(Packet _packet)//ID:7
     {
         UIPrincipalPanel.instance.btnHome.interactable = false;
         UIPrincipalPanel.instance.btnPlayGame.interactable = true;
@@ -69,16 +69,16 @@ public class LoginHandler : MonoBehaviour
         MenuUIManager.instance.homeMenu.SetActive(true);
         UIPrincipalPanel.HandleAlert(1, _packet);
     }
-    public static void FriendsList(Packet _packet)
+    public static void FriendsList(Packet _packet)//ID:8
     {
         LoginClient.instance.user_friends = _packet.ReadFriendReference();
         LoginClient.instance.isLoadFriends = true;
     }
-    public static void GroupInvited(Packet _packet)
+    public static void GroupInvited(Packet _packet)//ID:9
     {
         UIPrincipalPanel.HandleAlert(3, _packet);
     }
-    public static void GroupInvitedResponse(Packet _packet)
+    public static void GroupInvitedResponse(Packet _packet)//ID:10
     {
         if (!LoginClient.instance.isGrouped)
         {
@@ -87,7 +87,7 @@ public class LoginHandler : MonoBehaviour
         UIPrincipalPanel.HandleAlert(2, _packet);
 
     }
-    public static void UpdateFriendStatus(Packet _packet)
+    public static void UpdateFriendStatus(Packet _packet)//ID:11
     {
         string _token = _packet.ReadString();
         int _slot = _packet.ReadInt();
@@ -109,5 +109,13 @@ public class LoginHandler : MonoBehaviour
             }
         }
         LoginClient.instance.isLoadFriends = true;
+    }
+    public static void QueueCanceled(Packet _packet)//ID:12
+    {
+        Debug.Log("QueueRecived");
+        UIFindGame.instance.txtQueueStatus.text = "On Group...";
+        LoginClient.instance.isQueued = false;
+        UIFindGame.instance.btnQuitQueue.SetActive(false);
+        
     }
 }

@@ -17,7 +17,9 @@ public enum LoginServerPackets
     friendList,
     groupInvited,
     groupInvitedResponse,
-    updateFriendStatus
+    updateFriendStatus,
+    updateGroupStatus,
+    queueCanceled,
 }
 
 /// <summary>Sent from client to server.</summary>

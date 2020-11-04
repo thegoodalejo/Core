@@ -20,7 +20,8 @@ namespace LeyendsServer
         groupInvited,
         groupInvitedResponse,
         updateFriendStatus,
-        updateGroupStatus
+        updateGroupStatus,
+        queueCanceled,
     }
 
     /// <summary>Sent from client to server.</summary>

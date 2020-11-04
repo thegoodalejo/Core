@@ -98,7 +98,7 @@ namespace LeyendsServer
         /// <summary>Sends a welcome message to the given client.</summary>
         /// <param name="_toClient">The client to send the packet to.</param>
         /// <param name="_msg">The message to send.</param>
-        public static void Welcome(int _toClient, string _msg)
+        public static void Welcome(int _toClient, string _msg)//ID:1
         {
             using (Packet _packet = new Packet((int)ServerPackets.welcome))
             {
@@ -108,10 +108,19 @@ namespace LeyendsServer
                 SendTCPData(_toClient, _packet);
             }
         }
+        public static void SendTrash(int _toClient, int _errorCode)//ID:2
+        {
+            Console.WriteLine($"Sending Trash # {_errorCode} to Client {_toClient} ");
+            using (Packet _packet = new Packet((int)ServerPackets.test))
+            {
+                _packet.Write(_errorCode);
+                SendTCPData(_toClient, _packet);
+            }
+        }
         /// <summary>Sends a welcome message to the given client.</summary>
         /// <param name="_toClient">The client to send the packet to.</param>
         /// <param name="_msg">The message to send.</param>
-        public static void AuthState(int _toClient, User _user)
+        public static void AuthState(int _toClient, User _user)//ID:3
         {
             Console.WriteLine("Sending Auth Response  {" + _user.acc_aviable + "} to Client {" + _toClient + "} ");
             using (Packet _packet = new Packet((int)ServerPackets.auth))
@@ -121,17 +130,9 @@ namespace LeyendsServer
             }
         }
 
-        public static void SendTrash(int _toClient, int _errorCode)
-        {
-            Console.WriteLine($"Sending Trash # {_errorCode} to Client {_toClient} ");
-            using (Packet _packet = new Packet((int)ServerPackets.test))
-            {
-                _packet.Write(_errorCode);
-                SendTCPData(_toClient, _packet);
-            }
-        }
+        
 
-        public static void QueueAcepted(int _toClient)
+        public static void QueueAcepted(int _toClient)//ID:4
         {
             Console.WriteLine($"Sending Queue Response to client {_toClient}");
             using (Packet _packet = new Packet((int)ServerPackets.queueUpdate))
@@ -139,16 +140,9 @@ namespace LeyendsServer
                 SendTCPDataToAll(QueueManager.randomQueuesGrup[_toClient].GroupMembers(), _packet);
             }
         }
-        public static void QueueCancel(int _toClient)
-        {
-            Console.WriteLine($"Sending Queue canceled response to client {_toClient}");
-            using (Packet _packet = new Packet((int)ServerPackets.queueUpdate))
-            {
-                SendTCPData(_toClient, _packet);
-            }
-        }
+        
 
-        public static void GameFoundRequest(List<int> _grupClients)
+        public static void GameFoundRequest(List<int> _grupClients)//ID:5
         {
             Console.WriteLine("Sending Game Found to clients:");
             foreach (int _id in _grupClients)
@@ -160,14 +154,14 @@ namespace LeyendsServer
                 SendTCPDataToAll(_grupClients, _packet);
             }
         }
-        public static void GroupCreated(int _toClient)
+        public static void GroupCreated(int _toClient)//ID:6
         {
             using (Packet _packet = new Packet((int)ServerPackets.groupCreated))
             {
                 SendTCPData(_toClient, _packet);
             }
         }
-        public static void GroupDisolved(int _groupLead)
+        public static void GroupDisolved(int _groupLead)//ID:7
         {
             using (Packet _packet = new Packet((int)ServerPackets.groupDisolved))
             {
@@ -185,7 +179,7 @@ namespace LeyendsServer
                 SendTCPDataToAll(_toMembers, _packet);
             }
         }
-        public static void FriendList(int _toClient)
+        public static void FriendList(int _toClient)//ID:8
         {
             using (Packet _packet = new Packet((int)ServerPackets.friendList))
             {
@@ -198,7 +192,7 @@ namespace LeyendsServer
                 SendTCPData(_toClient, _packet);
             }
         }
-        public static void GroupInvited(int _toClient, int _fromFriend)
+        public static void GroupInvited(int _toClient, int _fromFriend)//ID:9
         {
             if (_toClient == 0) return;
             using (Packet _packet = new Packet((int)ServerPackets.groupInvited))
@@ -209,7 +203,7 @@ namespace LeyendsServer
             }
         }
 
-        public static void GroupInvitedResponse(int _groupLead, int _fromClient)
+        public static void GroupInvitedResponse(int _groupLead, int _fromClient)//ID:10
         {
             using (Packet _packet = new Packet((int)ServerPackets.groupInvitedResponse))
             {
@@ -223,7 +217,7 @@ namespace LeyendsServer
                 SendTCPDataToAll(QueueManager.preMadeGroups[_groupLead].GroupMembers(), _packet);
             }
         }
-        public static void UpdateFriendStatus(int _fromClient, string _token, bool _status)
+        public static void UpdateFriendStatus(int _fromClient, string _token, bool _status)//ID:11
         {
             using (Packet _packet = new Packet((int)ServerPackets.updateFriendStatus))
             {
@@ -243,7 +237,7 @@ namespace LeyendsServer
                 SendTCPDataToAll(_toFriends, _packet);
             }
         }
-        public static void UpdateGroupStatus(int _fromClient)
+        public static void UpdateGroupStatus(int _fromClient)//ID:12
         {
             Console.WriteLine($"Sending UpdateGroupStatus disconect to {_fromClient} group members");
             /*using (Packet _packet = new Packet((int)ServerPackets.updateGroupStatus))
@@ -252,6 +246,14 @@ namespace LeyendsServer
                 List<int> groupMembers = QueueManager.preMadeGroups[Server.clients[_fromClient].groupLeader].GroupMembers(_fromClient);
                 SendTCPDataToAll(groupMembers, _packet);
             }*/
+        }
+        public static void QueueCancel(int _toClient)//ID:13
+        {
+            Console.WriteLine($"Sending Queue canceled response to client {_toClient}");
+            using (Packet _packet = new Packet((int)ServerPackets.queueCanceled))
+            {
+                SendTCPDataToAll(QueueManager.preMadeGroups[_toClient].GroupMembers(), _packet);
+            }
         }
         #endregion
     }

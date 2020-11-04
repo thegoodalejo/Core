@@ -86,6 +86,8 @@ public partial class LoginClient : MonoBehaviour
             { (int)LoginServerPackets.groupInvited, LoginHandler.GroupInvited },
             { (int)LoginServerPackets.groupInvitedResponse, LoginHandler.GroupInvitedResponse },
             { (int)LoginServerPackets.updateFriendStatus, LoginHandler.UpdateFriendStatus },
+            { (int)LoginServerPackets.updateGroupStatus, LoginHandler.UpdateFriendStatus },
+            { (int)LoginServerPackets.queueCanceled, LoginHandler.QueueCanceled },
         };
     }
     
