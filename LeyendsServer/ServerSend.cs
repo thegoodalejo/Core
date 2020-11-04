@@ -130,7 +130,7 @@ namespace LeyendsServer
             }
         }
 
-        
+
 
         public static void QueueAcepted(int _toClient)//ID:4
         {
@@ -140,7 +140,7 @@ namespace LeyendsServer
                 SendTCPDataToAll(QueueManager.randomQueuesGrup[_toClient].GroupMembers(), _packet);
             }
         }
-        
+
 
         public static void GameFoundRequest(List<int> _grupClients)//ID:5
         {
@@ -252,7 +252,7 @@ namespace LeyendsServer
             Console.WriteLine($"Sending Queue canceled response to client {_toClient}");
             using (Packet _packet = new Packet((int)ServerPackets.queueCanceled))
             {
-                SendTCPDataToAll(QueueManager.preMadeGroups[_toClient].GroupMembers(), _packet);
+                SendTCPDataToAll(QueueManager.preMadeGroups[Server.clients[_toClient].groupLeader].GroupMembers(), _packet);
             }
         }
         #endregion

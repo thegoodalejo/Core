@@ -53,6 +53,7 @@ public class LoginHandler : MonoBehaviour
     {
         UIFindGame.instance.txtMessageServer.enabled = false;
         LoginClient.instance.isGrouped = true;
+        LoginClient.instance.isGroupLead = true;
         LoginClient.instance.friends_in_group.Add(new FriendReference(LoginClient.instance.myId, LoginClient.instance.strPlayerName));
         LoginClient.instance.isLoadGroups = true;
         UIFindGame.instance.btnQueueGame.SetActive(true);
@@ -62,11 +63,13 @@ public class LoginHandler : MonoBehaviour
         UIPrincipalPanel.instance.btnHome.interactable = false;
         UIPrincipalPanel.instance.btnPlayGame.interactable = true;
         LoginClient.instance.isGrouped = false;
+        LoginClient.instance.isGroupLead = false;
         LoginClient.instance.isQueued = false;
         LoginClient.instance.friends_in_group.Clear();
         LoginClient.instance.isLoadGroups = true;
         MenuUIManager.instance.findGameMenu.SetActive(false);
         MenuUIManager.instance.homeMenu.SetActive(true);
+        UIFindGame.instance.btnQueueGame.GetComponent<Button>().interactable = true;
         UIPrincipalPanel.HandleAlert(1, _packet);
     }
     public static void FriendsList(Packet _packet)//ID:8
@@ -115,6 +118,7 @@ public class LoginHandler : MonoBehaviour
         Debug.Log("QueueRecived");
         UIFindGame.instance.txtQueueStatus.text = "On Group...";
         LoginClient.instance.isQueued = false;
+        UIFindGame.instance.btnQueueGame.GetComponent<Button>().interactable = true;
         UIFindGame.instance.btnQuitQueue.SetActive(false);
         
     }

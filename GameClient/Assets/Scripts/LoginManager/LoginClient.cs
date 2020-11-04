@@ -8,8 +8,9 @@ public partial class LoginClient : MonoBehaviour
 {
     public string strPlayerName;
     public string strUID;
-    public bool isGrouped;
     public int groupSize;
+    public bool isGroupLead;
+    public bool isGrouped;
     public bool isQueued;
     public bool isLoadFriends;
     public bool isLoadGroups;
@@ -41,8 +42,9 @@ public partial class LoginClient : MonoBehaviour
             Destroy(this);
         }
         instance.strPlayerName = "Loading...";
-        instance.isGrouped = false;
         instance.groupSize = 0;
+        instance.isGroupLead = false;
+        instance.isGrouped = false;
         instance.isQueued = false;
         instance.isLoadFriends = false;
         instance.isLoadGroups = false;

@@ -50,7 +50,7 @@ namespace LeyendsServer
         {
             if (!Server.clients[_fromClient].queueStatus) return;
             Console.WriteLine($"Player {_fromClient} quit queue .");
-            QueueManager.preMadeGroups.Add(Server.clients[_fromClient].groupLeader, QueueManager.randomQueuesGrup[_fromClient]);
+            QueueManager.preMadeGroups.Add(Server.clients[_fromClient].groupLeader, QueueManager.randomQueuesGrup[Server.clients[_fromClient].groupLeader]);
             foreach (int item in QueueManager.preMadeGroups[Server.clients[_fromClient].groupLeader].GroupMembers())
             {
                 Server.clients[item].queueStatus = false;
