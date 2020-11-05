@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.Collections.Generic;
+using System.Net;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -57,6 +58,7 @@ public class LoginHandler : MonoBehaviour
         LoginClient.instance.friends_in_group.Add(new FriendReference(LoginClient.instance.myId, LoginClient.instance.strPlayerName));
         LoginClient.instance.isLoadGroups = true;
         UIFindGame.instance.btnQueueGame.SetActive(true);
+        UIFindGame.instance.btnQuitGroup.SetActive(true);
     }
     public static void GrupDisolved(Packet _packet)//ID:7
     {
@@ -67,6 +69,8 @@ public class LoginHandler : MonoBehaviour
         LoginClient.instance.isQueued = false;
         LoginClient.instance.friends_in_group.Clear();
         LoginClient.instance.isLoadGroups = true;
+        UIFindGame.instance.btnQueueGame.SetActive(false);
+        UIFindGame.instance.btnQuitGroup.SetActive(false);
         MenuUIManager.instance.findGameMenu.SetActive(false);
         MenuUIManager.instance.homeMenu.SetActive(true);
         UIFindGame.instance.btnQueueGame.GetComponent<Button>().interactable = true;
@@ -113,13 +117,48 @@ public class LoginHandler : MonoBehaviour
         }
         LoginClient.instance.isLoadFriends = true;
     }
-    public static void QueueCanceled(Packet _packet)//ID:12
+    public static void SingleMemberLeave(Packet _packet)//ID:12
+    {
+        int _memberGone = _packet.ReadInt();
+        Debug.Log("SingleMemberLeave" + _memberGone);
+        if (LoginClient.instance.myId == _memberGone)
+        {
+            Debug.Log("SingleMemberLeave YOU");
+            UIPrincipalPanel.instance.btnHome.interactable = false;
+            UIPrincipalPanel.instance.btnPlayGame.interactable = true;
+            LoginClient.instance.isGrouped = false;
+            LoginClient.instance.isGroupLead = false;
+            LoginClient.instance.isQueued = false;
+            LoginClient.instance.friends_in_group.Clear();
+            LoginClient.instance.isLoadGroups = true;
+            UIFindGame.instance.btnQueueGame.SetActive(false);
+            UIFindGame.instance.btnQuitGroup.SetActive(false);
+            MenuUIManager.instance.findGameMenu.SetActive(false);
+            MenuUIManager.instance.homeMenu.SetActive(true);
+            UIFindGame.instance.btnQueueGame.GetComponent<Button>().interactable = true;
+        }
+        else
+        {
+            List<FriendReference> _newGroup = new List<FriendReference>();
+            int _groupSize = _packet.ReadInt();
+            Debug.Log("SingleMemberLeave ANOTHER");
+            for (int i = 0; i < _groupSize; i++)
+            {
+                _newGroup.Add(new FriendReference(_packet.ReadInt(), _packet.ReadString()));
+            }
+            LoginClient.instance.friends_in_group = _newGroup;
+            LoginClient.instance.isLoadGroups = true;
+        }
+
+    }
+    public static void QueueCanceled(Packet _packet)//ID:13
     {
         Debug.Log("QueueRecived");
         UIFindGame.instance.txtQueueStatus.text = "On Group...";
         LoginClient.instance.isQueued = false;
         UIFindGame.instance.btnQueueGame.GetComponent<Button>().interactable = true;
         UIFindGame.instance.btnQuitQueue.SetActive(false);
-        
+        UIPrincipalPanel.HandleAlert(4, _packet);
+
     }
 }

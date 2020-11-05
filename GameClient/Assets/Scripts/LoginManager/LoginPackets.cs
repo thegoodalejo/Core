@@ -18,7 +18,7 @@ public enum LoginServerPackets
     groupInvited,
     groupInvitedResponse,
     updateFriendStatus,
-    updateGroupStatus,
+    singleMemberLeave,
     queueCanceled,
 }
 
@@ -36,9 +36,10 @@ public enum LoginClientPackets
 }
 public enum AlertServerPackets
 {
-    message = 1,
+    alert = 1,
     groupRequestResponse,
-    groupRequest
+    groupRequest,
+    message
 }
 public enum ErrorCodes
 {
@@ -46,6 +47,7 @@ public enum ErrorCodes
     NoGroup,
     GroupDisolved,
     PlayerInGroup,
+    PlayerInQueue,
 }
 
 

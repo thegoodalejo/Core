@@ -32,10 +32,9 @@ public class AlertManager : MonoBehaviour
         _alerPrefab.SetActive(true);
         return _alerPrefab;
     }
-    public static async void Message(Packet _packet)
+    public static async void Alert(Packet _packet)
     {
         int _errCode = _packet.ReadInt();
-        Debug.Log($"Error: {UIPrincipalPanel.errorCodes[_errCode]}");
         GameObject _alerPrefab = InitAlert();
         AlertDetail controller = _alerPrefab.GetComponent<AlertDetail>();
         controller.txtMessage.text = UIPrincipalPanel.errorCodes[_errCode];
@@ -95,6 +94,18 @@ public class AlertManager : MonoBehaviour
             Debug.Log($"Destroy");
             Destroy(_alerPrefab);
         }
+    }
+    public static async void Message(Packet _packet)
+    {
+        string _message = _packet.ReadString();
+        Debug.Log(_message);
+        GameObject _alerPrefab = InitAlert();
+        AlertDetail controller = _alerPrefab.GetComponent<AlertDetail>();
+        controller.txtMessage.text = _message;
+        controller.btnConfirm.SetActive(false);
+        _alerPrefab.SetActive(true);
+        await Task.Delay(5000);
+        Destroy(_alerPrefab);
     }
 }
 

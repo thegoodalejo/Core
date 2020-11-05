@@ -14,6 +14,7 @@ public class UIFindGame : MonoBehaviour
     public GameObject btnQueueGame;
     public GameObject btnAceptQueue;
     public GameObject btnQuitQueue;
+    public GameObject btnQuitGroup;
     private void Awake()
     {
         if (instance == null)
@@ -64,19 +65,24 @@ public class UIFindGame : MonoBehaviour
     }
     public static void FindGame()
     {
-        Debug.Log("QueueForRandomMatch");
+        Debug.Log("FindGame");
         LoginClientSend.QueueForRandomMatch();
     }
 
     public static void AceptQueue()
     {
-        Debug.Log("QueueForRandomMatch");
+        Debug.Log("AceptQueue");
         LoginClientSend.QuitQueue();
     }
 
     public static void QuitQueue()
     {
-        Debug.Log("QueueForRandomMatch");
+        Debug.Log("QuitQueue");
         LoginClientSend.QuitQueue();
+    }
+    public static void QuitGroup()
+    {
+        Debug.Log("QuitGroup");
+        LoginClientSend.DisolveGroupRequest();
     }
 }

@@ -74,6 +74,7 @@ public class MenuUIManager : MonoBehaviour
         UIPrincipalPanel.instance.btnHome.interactable = true;
         UIPrincipalPanel.instance.btnPlayGame.interactable = false;
         MenuUIManager.instance.findGameMenu.SetActive(true);
+        UIFindGame.instance.btnQuitGroup.SetActive(true);
         MenuUIManager.instance.homeMenu.SetActive(false);
         UIFindGame.instance.btnQueueGame.SetActive(false);
     }

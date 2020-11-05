@@ -46,7 +46,7 @@ namespace LeyendsServer
         public override string ToString()
         {
             if(groupLeader == 0){
-                return "Client ID: " + id +" - Nick: " + nickName + " - OnQueue: " + queueStatus + " - QueueType: " + queueType;
+                return "Client ID: " + id +" - Nick: " + nickName;
             }else{
                 return "Client ID: " + id + " - OnGroupOf: " + Server.clients[groupLeader].nickName + " - Nick: " + nickName + " - OnQueue: " + queueStatus + " - QueueType: " + queueType;
             }
@@ -254,12 +254,15 @@ namespace LeyendsServer
             Console.WriteLine($"{nickName} has disconnected, {tcp.socket.Client.RemoteEndPoint} ");
             DbManager.UpdateState(token, (Int32)Status.Offline, (Int32)Status.Offline);
             ServerSend.UpdateFriendStatus(id, Server.clients[id].token.ToString(), false);
+            if(queueStatus){
+                ServerHandle.QuitQueueRequest(id,null);
+            }
             if (groupLeader != 0)
             {
                 if (groupLeader == id)
                 {
                     Console.WriteLine($"Player {id} was group lead.");
-                    ServerSend.GroupDisolved(id);
+                    ServerSend.GroupDisolved(id,true);
                 }
                 else
                 {
@@ -284,12 +287,7 @@ namespace LeyendsServer
                 }
                 groupLeader = 0;
             }
-
-            if (this.queueStatus)
-            {
-                //QueueManager.RemoveByPlayer(id);
-                //TODO REMOVER EL JUGADOR SI ESTABA EN COLA
-            }
+            
             ResetSlotPlayer();
             tcp.Disconnect();
             udp.Disconnect();

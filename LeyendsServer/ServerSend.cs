@@ -161,22 +161,48 @@ namespace LeyendsServer
                 SendTCPData(_toClient, _packet);
             }
         }
-        public static void GroupDisolved(int _groupLead)//ID:7
+        public static void GroupDisolved(int _groupLead, bool _forced)//ID:7
         {
             using (Packet _packet = new Packet((int)ServerPackets.groupDisolved))
             {
-                List<int> _toMembers = new List<int>();
-                foreach (PlayerQueue item in QueueManager.preMadeGroups[_groupLead].groupMembers)
+                if (QueueManager.preMadeGroups.ContainsKey(_groupLead))
                 {
-                    Server.clients[item.id].groupLeader = 0;
-                    if (!item.isGroupLeader)
+                    List<int> _toMembers = new List<int>();
+                    foreach (PlayerQueue item in QueueManager.preMadeGroups[_groupLead].groupMembers)
                     {
-                        _toMembers.Add(item.id);
+                        Server.clients[item.id].groupLeader = 0;
+                        if (!item.isGroupLeader)
+                        {
+                            _toMembers.Add(item.id);
+                        }
                     }
+                    QueueManager.preMadeGroups.Remove(_groupLead);
+                    _packet.Write(3);
+                    if (_forced)
+                    {
+                        _toMembers.Remove(_groupLead);
+                    }
+                    SendTCPDataToAll(_toMembers, _packet);
+                    return;
                 }
-                QueueManager.preMadeGroups.Remove(_groupLead);
-                _packet.Write(3);
-                SendTCPDataToAll(_toMembers, _packet);
+                if (QueueManager.randomQueuesGrup.ContainsKey(_groupLead))
+                {
+                    List<int> _toMembers = new List<int>();
+                    foreach (PlayerQueue item in QueueManager.randomQueuesGrup[_groupLead].groupMembers)
+                    {
+                        Server.clients[item.id].groupLeader = 0;
+                        if (!item.isGroupLeader)
+                        {
+                            _toMembers.Add(item.id);
+                        }
+                    }
+                    QueueManager.randomQueuesGrup.Remove(_groupLead);
+                    _packet.Write(3);
+                    SendTCPDataToAll(_toMembers, _packet);
+                    return;
+                }
+
+
             }
         }
         public static void FriendList(int _toClient)//ID:8
@@ -237,21 +263,29 @@ namespace LeyendsServer
                 SendTCPDataToAll(_toFriends, _packet);
             }
         }
-        public static void UpdateGroupStatus(int _fromClient)//ID:12
+        public static void SingleMemberLeave(int _grouopLead, int _memberGone)//ID:12
         {
-            Console.WriteLine($"Sending UpdateGroupStatus disconect to {_fromClient} group members");
-            /*using (Packet _packet = new Packet((int)ServerPackets.updateGroupStatus))
+            using (Packet _packet = new Packet((int)ServerPackets.updateGroupStatus))
             {
-                _packet.Write(_fromClient);
-                List<int> groupMembers = QueueManager.preMadeGroups[Server.clients[_fromClient].groupLeader].GroupMembers(_fromClient);
+                _packet.Write(_memberGone);
+                List<int> groupMembers = QueueManager.preMadeGroups[_grouopLead].GroupMembers();
+                QueueManager.preMadeGroups[_grouopLead].RemoveSingle(_memberGone);
+                _packet.Write(QueueManager.preMadeGroups[_grouopLead].GroupSize());
+                foreach (PlayerQueue item in QueueManager.preMadeGroups[_grouopLead].groupMembers)
+                {
+                    Console.WriteLine($"PG {item.id} {item.nick_name}");
+                    _packet.Write(item);
+                }
+                Server.clients[_memberGone].groupLeader = 0;
                 SendTCPDataToAll(groupMembers, _packet);
-            }*/
+            }
         }
         public static void QueueCancel(int _toClient)//ID:13
         {
             Console.WriteLine($"Sending Queue canceled response to client {_toClient}");
             using (Packet _packet = new Packet((int)ServerPackets.queueCanceled))
             {
+                _packet.Write($"{Server.clients[_toClient].nickName} cancel Queue");
                 SendTCPDataToAll(QueueManager.preMadeGroups[Server.clients[_toClient].groupLeader].GroupMembers(), _packet);
             }
         }

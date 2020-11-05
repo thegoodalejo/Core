@@ -72,14 +72,20 @@ namespace LeyendsServer
         }
         public static void GroupDisolve(int _fromClient, Packet _packet)//ID:6
         {
-            Console.WriteLine($"Group disolve request  {_fromClient} .");
-            Server.clients[_fromClient].groupLeader = 0;
-            QueueManager.preMadeGroups.Remove(_fromClient);
-            if (QueueManager.preMadeGroups[_fromClient] != null)
+            if (Server.clients[_fromClient].queueStatus)
             {
-                Console.WriteLine($"Group slot  player {QueueManager.preMadeGroups[_fromClient].groupMembers[0].id} .");
+                Console.WriteLine($"{Server.clients[_fromClient].nickName} Group leave request onqueue.");
+                QuitQueueRequest(_fromClient, null);
             }
-            ServerSend.GroupDisolved(_fromClient);
+            if (Server.clients[_fromClient].groupLeader == _fromClient)
+            {
+                Console.WriteLine($"{Server.clients[_fromClient].nickName} Group disolve request.");
+                ServerSend.GroupDisolved(_fromClient, false);
+            }
+            else
+            {
+                ServerSend.SingleMemberLeave(Server.clients[_fromClient].groupLeader, _fromClient);
+            }
         }
 
         public static void InviteFriendToGroup(int _fromClient, Packet _packet)//ID:7
@@ -96,15 +102,22 @@ namespace LeyendsServer
                 ServerSend.SendTrash(_fromClient, (int)ErrorCode.PlayerInGroup);
                 return;
             }
+            if (Server.clients[_fromClient].queueStatus)
+            {
+                ServerSend.SendTrash(_fromClient, (int)ErrorCode.PlayerInQueue);
+                return;
+            }
             Console.WriteLine($"{Server.clients[_fromClient].nickName} InviteFriendToGroup  {Server.clients[_toFriend].nickName} .");
             ServerSend.GroupInvited(_toFriend, _fromClient);
         }
         public static void InviteFriendToGroupResponse(int _fromClient, Packet _packet)//ID:8
         {
+
             int _toFriend = _packet.ReadInt();
+            if (!QueueManager.preMadeGroups.ContainsKey(_toFriend)) return;
             if (Server.clients[_fromClient].groupLeader != 0)
             {
-                ServerSend.GroupDisolved(Server.clients[_fromClient].groupLeader);
+                ServerSend.GroupDisolved(Server.clients[_fromClient].groupLeader, false);
             }
             Console.WriteLine($"{Server.clients[_fromClient].nickName} join {Server.clients[_toFriend].nickName} group .");
             Server.clients[_fromClient].groupLeader = _toFriend;

@@ -34,19 +34,21 @@ public class UIPrincipalPanel : MonoBehaviour
     {
         messageHandlers = new Dictionary<int, MessageHandler>()
         {
-            { (int)AlertServerPackets.message, AlertManager.Message },
+            { (int)AlertServerPackets.alert, AlertManager.Alert },
             { (int)AlertServerPackets.groupRequestResponse, AlertManager.GroupRequestResponse },
             { (int)AlertServerPackets.groupRequest, AlertManager.GroupRequest },
+            { (int)AlertServerPackets.message, AlertManager.Message },
         };
     }
     private void InitializeErrorCodes()
     {
         errorCodes = new Dictionary<int, string>()
         {
-            { (int)ErrorCodes.General, "AlertManager.Error" },
+            { (int)ErrorCodes.General, "Internal Server Error" },
             { (int)ErrorCodes.NoGroup, "No eres lider de un grupo" },
             { (int)ErrorCodes.GroupDisolved, "Grupo disuelto" },
-            { (int)ErrorCodes.PlayerInGroup, "Jugador ya esta en un grupo" },
+            { (int)ErrorCodes.PlayerInGroup, "Jugador en un grupo" },
+            { (int)ErrorCodes.PlayerInQueue, "Jugador en fila" },
         };
     }
 }

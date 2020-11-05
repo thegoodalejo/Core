@@ -25,5 +25,17 @@ namespace LeyendsServer
         {
             return groupMembers.Count;
         }
+
+        public void RemoveSingle(int _groupMember)
+        {
+            foreach (PlayerQueue item in groupMembers)
+            {
+                if (item.id == _groupMember)
+                {
+                    groupMembers.Remove(item);
+                    return;
+                }
+            }
+        }
     }
 }

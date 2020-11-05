@@ -19,7 +19,7 @@ public class LoginClientSend : MonoBehaviour
         LoginClient.instance.udp.SendData(_packet);
     }
 
-    public static void WelcomeReceived()
+    public static void WelcomeReceived()//ID:1
     {
         using (Packet _packet = new Packet((int)LoginClientPackets.welcomeReceived))
         {
@@ -30,8 +30,16 @@ public class LoginClientSend : MonoBehaviour
             SendTCPData(_packet);
         }
     }
+    public static void QueueForRandomMatch()//ID:2
+    {
+        using (Packet _packet = new Packet((int)LoginClientPackets.queueRequestForRandomMatch))
+        {
+            UIFindGame.instance.btnQueueGame.GetComponent<Button>().interactable = false;
+            SendTCPData(_packet);
+        }
+    }
     /// <summary>TrashRequest for test.</summary>
-    public static void TrashRequest()
+    public static void TrashRequest()//ID:3
     {
         using (Packet _packet = new Packet((int)LoginClientPackets.trashRequest))
         {
@@ -40,26 +48,18 @@ public class LoginClientSend : MonoBehaviour
         }
     }
     /// <summary>Queue server for a MatchFinder.</summary>
-    public static void QueueForRandomMatch()
-    {
-        using (Packet _packet = new Packet((int)LoginClientPackets.queueRequestForRandomMatch))
-        {
-            UIFindGame.instance.btnQueueGame.GetComponent<Button>().interactable = false;
-            SendTCPData(_packet);
-        }
-    }
+    
     /// <summary>Cancel queue in server.</summary>
-    public static void QuitQueue()
+    public static void QuitQueue()//ID:4
     {
         using (Packet _packet = new Packet((int)LoginClientPackets.quitQueue))
         {
             _packet.Write(LoginClient.instance.myId);
-            //UIFindGame.instance.btnQueueGame.interactable = false;
             SendTCPData(_packet);
         }
     }
     /// <summary>Send request to create group in server.</summary>
-    public static void GroupRequest()
+    public static void GroupRequest()//ID:5
     {
         UIPrincipalPanel.instance.btnHome.interactable = true;
         UIPrincipalPanel.instance.btnPlayGame.interactable = false;
@@ -71,7 +71,7 @@ public class LoginClientSend : MonoBehaviour
         }
     }
     /// <summary>Send request to disolve group in server.</summary>
-    public static void DisolveGroupRequest()
+    public static void DisolveGroupRequest()//ID:6
     {
         Debug.Log("DisolveGroupRequest");
         using (Packet _packet = new Packet((int)LoginClientPackets.disolveGroupRequest))
