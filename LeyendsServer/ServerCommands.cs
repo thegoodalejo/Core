@@ -55,7 +55,7 @@ namespace LeyendsServer
                     }
                     break;
                 case "-test":
-                    DbManager.FriendList(1);
+                    Console.WriteLine(DbManager.SearchFriend("VashEsawdtampida"));
                     break;
                 default:
                     Console.WriteLine("Wrong argument");

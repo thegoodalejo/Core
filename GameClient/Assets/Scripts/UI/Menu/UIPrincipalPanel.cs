@@ -38,6 +38,7 @@ public class UIPrincipalPanel : MonoBehaviour
             { (int)AlertServerPackets.groupRequestResponse, AlertManager.GroupRequestResponse },
             { (int)AlertServerPackets.groupRequest, AlertManager.GroupRequest },
             { (int)AlertServerPackets.message, AlertManager.Message },
+            { (int)AlertServerPackets.friendRequest, AlertManager.FriendRequest },
         };
     }
     private void InitializeErrorCodes()
@@ -49,6 +50,7 @@ public class UIPrincipalPanel : MonoBehaviour
             { (int)ErrorCodes.GroupDisolved, "Grupo disuelto" },
             { (int)ErrorCodes.PlayerInGroup, "Jugador en un grupo" },
             { (int)ErrorCodes.PlayerInQueue, "Jugador en fila" },
+            { (int)ErrorCodes.PlayerNotFound, "Jugador NoEncontrado/Offline" },
         };
     }
 }

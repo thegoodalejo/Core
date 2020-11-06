@@ -79,7 +79,7 @@ public class LoginClientSend : MonoBehaviour
             SendTCPData(_packet);
         }
     }
-    public static void InviteFriendToGroup(int _toFriend)
+    public static void InviteFriendToGroup(int _toFriend)//ID:7
     {
         Debug.Log("InviteFriendToGroup");
         using (Packet _packet = new Packet((int)LoginClientPackets.inviteFriendToGroup))
@@ -88,7 +88,7 @@ public class LoginClientSend : MonoBehaviour
             SendTCPData(_packet);
         }
     }
-    public static void InviteFriendToGroupResponse(int _toFriend)
+    public static void InviteFriendToGroupResponse(int _toFriend)//ID:8
     {
         Debug.Log("InviteFriendToGroup");
         using (Packet _packet = new Packet((int)LoginClientPackets.inviteFriendToGroupResponse))
@@ -97,6 +97,24 @@ public class LoginClientSend : MonoBehaviour
             SendTCPData(_packet);
         }
         AlertManager.instance.alertResponse = true;
+    }
+    public static void SearchFriend(string _friendName)//ID:9
+    {
+        Debug.Log($"SearchFriend {_friendName}");
+        using (Packet _packet = new Packet((int)LoginClientPackets.searchFriend))
+        {
+            _packet.Write(_friendName);
+            SendTCPData(_packet);
+        }
+    }
+    public static void FriendRequestResponse(int _toFriend)//ID:10
+    {
+        Debug.Log($"FriendRequestResponse");
+        using (Packet _packet = new Packet((int)LoginClientPackets.friendRequestResponse))
+        {
+            _packet.Write(_toFriend);
+            SendTCPData(_packet);
+        }
     }
 }
 

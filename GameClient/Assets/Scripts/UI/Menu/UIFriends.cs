@@ -6,8 +6,10 @@ using UnityEngine.UI;
 public class UIFriends : MonoBehaviour
 {
     public static UIFriends instance;
-    public GameObject itemTemplate;
-    public GameObject content;
+    public GameObject friendsPrefab;
+    public GameObject friendList;
+    public GameObject inptSearchFriend;
+    public GameObject btnSearchFriend;
 
     public bool loadFriends;
     private void Awake()
@@ -28,6 +30,7 @@ public class UIFriends : MonoBehaviour
     }
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.KeypadEnter)) { SearchFriend(); }
         if (!LoginClient.instance.isLoadFriends) { return; }
         ResetFriends();
         AddFriends();
@@ -41,9 +44,9 @@ public class UIFriends : MonoBehaviour
             if (item.server_slot != 0)
             {
                 Debug.Log($"F {item.id} {item.server_slot} {item.user_legends_nick}");
-                GameObject friendsPrefab = Instantiate(itemTemplate, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
-                friendsPrefab.transform.SetParent(content.transform);
-                FriendsDetails controller = friendsPrefab.GetComponent<FriendsDetails>();
+                GameObject _friendsPrefab = Instantiate(friendsPrefab, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
+                _friendsPrefab.transform.SetParent(friendList.transform);
+                FriendsDetails controller = _friendsPrefab.GetComponent<FriendsDetails>();
                 controller.txtName.text = item.user_legends_nick;
                 controller.btnInvite.GetComponent<Button>().onClick.AddListener
                 (() =>
@@ -57,9 +60,19 @@ public class UIFriends : MonoBehaviour
     }
     private void ResetFriends()
     {
-        foreach (Transform item in content.transform)
+        foreach (Transform item in friendList.transform)
         {
             GameObject.Destroy(item.gameObject);
+        }
+    }
+
+    public static void SearchFriend()
+    {
+        if (instance.inptSearchFriend.GetComponent<InputField>().text != "")
+        {
+            string _searchFriend = instance.inptSearchFriend.GetComponent<InputField>().text.Trim();
+            instance.inptSearchFriend.GetComponent<InputField>().text = "";
+            LoginClientSend.SearchFriend(_searchFriend);
         }
     }
 

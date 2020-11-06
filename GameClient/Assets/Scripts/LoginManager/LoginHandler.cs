@@ -161,4 +161,8 @@ public class LoginHandler : MonoBehaviour
         UIPrincipalPanel.HandleAlert(4, _packet);
 
     }
+    public static void FriendRequest(Packet _packet)//ID:14
+    {
+        UIPrincipalPanel.HandleAlert(5, _packet);
+    }
 }

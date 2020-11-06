@@ -14,6 +14,7 @@ namespace LeyendsServer
         private const string LEYENDS_DB = "LeyendsDb";
         private const string COLLECTION_USERS = "Users";
         private const string COLLECTION_USERS_USER_NAME = "user_name";
+        private const string COLLECTION_USERS_USER_NICK_NAME = "user_legends_nick";
         private const string COLLECTION_USERS_USER_OID = "_id";
         public static User Auth(int _toClient, string _userName, string _pass)
         {
@@ -69,12 +70,27 @@ namespace LeyendsServer
             var result = collection.UpdateMany(FilterDefinition<User>.Empty, update);
         }
         public static List<User> FriendList(int _toClient)
-        { 
+        {
             var filterFriends = Builders<User>.Filter.In(x => x._id, Server.clients[_toClient].GetFriendsKeys());
             MongoClient dbClient = new MongoClient(DB_CONNECTION);
             var database = dbClient.GetDatabase(LEYENDS_DB);
             var collection = database.GetCollection<User>(COLLECTION_USERS);
             return collection.Find(filterFriends).ToListAsync().Result;
+        }
+        public static ObjectId SearchFriend(string _name)
+        {
+            var filterUsers = Builders<BsonDocument>.Filter.Eq(COLLECTION_USERS_USER_NICK_NAME, _name);
+            MongoClient dbClient = new MongoClient(DB_CONNECTION);
+            var database = dbClient.GetDatabase(LEYENDS_DB);
+            var collection = database.GetCollection<BsonDocument>(COLLECTION_USERS);
+            var result = collection.Find(filterUsers).FirstOrDefault();
+            User userResponse = BsonSerializer.Deserialize<User>(result);
+            if(result != null){
+                return userResponse._id;
+            }else{
+                return ObjectId.Empty;
+            }
+            
         }
     }
 }

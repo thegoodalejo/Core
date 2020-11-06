@@ -43,14 +43,24 @@ namespace LeyendsServer
 
             DbManager.UpdateStateAll();
         }
-
+        public static Client SearchMemberByNick(string _nick)
+        {
+            foreach (Client item in clients.Values)
+            {
+                if (item.nickName == _nick)
+                {
+                    return item;
+                }
+            }
+            return null;
+        }
         /// <summary>Handles new TCP connections.</summary>
         private static void TCPConnectCallback(IAsyncResult _result)
         {
             TcpClient _client = tcpListener.EndAcceptTcpClient(_result);
             tcpListener.BeginAcceptTcpClient(TCPConnectCallback, null);
             Console.WriteLine($"Incoming connection from {_client.Client.RemoteEndPoint} ...");
-            
+
             //TODO: despues del portforward hay q mirar como bloquear el multi account desde una misma ip, 
             //este Console.WriteLine(((System.Net.IPEndPoint)_client.Client.RemoteEndPoint).Address); 
             //retorna la IP entonces seria mas como mirar si desde el mismo cliente se podria iniciar doble cuenta 
@@ -147,6 +157,8 @@ namespace LeyendsServer
                 { (int)ClientPackets.groupDisolve, ServerHandle.GroupDisolve },
                 { (int)ClientPackets.inviteFriendToGroup, ServerHandle.InviteFriendToGroup },
                 { (int)ClientPackets.inviteFriendToGroupResponse, ServerHandle.InviteFriendToGroupResponse },
+                { (int)ClientPackets.searchFriend, ServerHandle.SearchFriend },
+                { (int)ClientPackets.searchFriendResponse, ServerHandle.SearchFriendResponse },
             };
             Console.WriteLine("Initialized packets.");
         }

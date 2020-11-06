@@ -289,6 +289,16 @@ namespace LeyendsServer
                 SendTCPDataToAll(QueueManager.preMadeGroups[Server.clients[_toClient].groupLeader].GroupMembers(), _packet);
             }
         }
+        public static void FriendRequest(int _fromFriend, int _toFriend)//ID:14
+        {
+            Console.WriteLine($"Sending FriendRequest to client {_fromFriend}");
+            using (Packet _packet = new Packet((int)ServerPackets.friendRequest))
+            {
+                _packet.Write(_fromFriend);
+                _packet.Write($"{Server.clients[_fromFriend].nickName} friend request");
+                SendTCPData(_toFriend, _packet);
+            }
+        }
         #endregion
     }
 }

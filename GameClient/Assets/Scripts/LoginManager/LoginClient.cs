@@ -90,6 +90,7 @@ public partial class LoginClient : MonoBehaviour
             { (int)LoginServerPackets.updateFriendStatus, LoginHandler.UpdateFriendStatus },
             { (int)LoginServerPackets.singleMemberLeave, LoginHandler.SingleMemberLeave },
             { (int)LoginServerPackets.queueCanceled, LoginHandler.QueueCanceled },
+            { (int)LoginServerPackets.friendRequest, LoginHandler.FriendRequest },
         };
     }
     
@@ -103,7 +104,7 @@ public partial class LoginClient : MonoBehaviour
             tcp.socket.Close();
             //udp.socket.Close();
             SceneManager.LoadScene("Login");
-            LoginUIManager.instance.text.text = "Disconected from server";
+            //LoginUIManager.instance.text.text = "Disconected from server";
         }
     }
 }

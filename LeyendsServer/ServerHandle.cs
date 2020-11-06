@@ -126,6 +126,27 @@ namespace LeyendsServer
             ServerSend.GroupInvitedResponse(_toFriend, _fromClient);
 
         }
+        public static void SearchFriend(int _fromClient, Packet _packet)//ID:9
+        {
+            string _name = _packet.ReadString();
+            Console.WriteLine($"SearchFriend {_name}");
+            Client _client = Server.SearchMemberByNick(_name);
+            if (_client != null)
+            {
+                Console.WriteLine("SearchFriend SI");
+                ServerSend.FriendRequest(_fromClient, _client.id);
+            }
+            else
+            {
+                Console.WriteLine("SearchFriend NO");
+                ServerSend.SendTrash(_fromClient, (int)ErrorCode.PlayerNotFound);
+            }
+        }
+        public static void SearchFriendResponse(int _fromClient, Packet _packet)//ID:9
+        {
+            int _toClient = _packet.ReadInt();
+            Console.WriteLine($"SearchFriendResponse {Server.clients[_fromClient].nickName} es amigo de {Server.clients[_toClient].nickName} "); 
+        }
 
     }
 }
