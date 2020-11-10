@@ -17,6 +17,7 @@ namespace LeyendsServer
         public bool queueStatus;
         public string queueType;
         public int groupLeader;
+        public int roomId;
         public TCP tcp;
         public UDP udp;
         public List<FriendReference> user_friends;
@@ -29,9 +30,14 @@ namespace LeyendsServer
             queueStatus = false;
             queueType = null;
             groupLeader = 0;
+            roomId = 0;
             tcp = new TCP(id, _token);
             udp = new UDP(id);
 
+        }
+        public FriendReference GetFriendReference()
+        {
+            return new FriendReference(token, id, nickName);
         }
         public List<ObjectId> GetFriendsKeys()
         {
@@ -45,12 +51,15 @@ namespace LeyendsServer
         }
         public override string ToString()
         {
-            if(groupLeader == 0){
-                return "Client ID: " + id +" - Nick: " + nickName;
-            }else{
+            if (groupLeader == 0)
+            {
+                return "Client ID: " + id + " - Nick: " + nickName;
+            }
+            else
+            {
                 return "Client ID: " + id + " - OnGroupOf: " + Server.clients[groupLeader].nickName + " - Nick: " + nickName + " - OnQueue: " + queueStatus + " - QueueType: " + queueType;
             }
-            
+
         }
         public class TCP
         {
@@ -254,15 +263,16 @@ namespace LeyendsServer
             Console.WriteLine($"{nickName} has disconnected, {tcp.socket.Client.RemoteEndPoint} ");
             DbManager.UpdateState(token, (Int32)Status.Offline, (Int32)Status.Offline);
             ServerSend.UpdateFriendStatus(id, Server.clients[id].token.ToString(), false);
-            if(queueStatus){
-                ServerHandle.QuitQueueRequest(id,null);
+            if (queueStatus)
+            {
+                ServerHandle.QuitQueueRequest(id, null);
             }
             if (groupLeader != 0)
             {
                 if (groupLeader == id)
                 {
                     Console.WriteLine($"Player {id} was group lead.");
-                    ServerSend.GroupDisolved(id,true);
+                    ServerSend.GroupDisolved(id, true);
                 }
                 else
                 {
@@ -287,7 +297,7 @@ namespace LeyendsServer
                 }
                 groupLeader = 0;
             }
-            
+
             ResetSlotPlayer();
             tcp.Disconnect();
             udp.Disconnect();

@@ -129,6 +129,27 @@ public class AlertManager : MonoBehaviour
             Destroy(_alerPrefab);
         }
     }
+    public static async void GameRequest(Packet _packet)//ID:6
+    {
+        string _message = _packet.ReadString();
+        GameObject _alerPrefab = InitAlert();
+        AlertDetail controller = _alerPrefab.GetComponent<AlertDetail>();
+        controller.txtMessage.text = _message;
+        controller.btnConfirm.GetComponent<Button>().onClick.AddListener(
+            () =>
+            {
+                LoginClientSend.GameResponse();
+                DestroyImmediate(_alerPrefab);
+            });
+        controller.btnConfirm.SetActive(true);
+        _alerPrefab.SetActive(true);
+        await Task.Delay(9000);
+        if (!instance.alertResponse)
+        {
+            Debug.Log($"Destroy");
+            Destroy(_alerPrefab);
+        }
+    }
 }
 
 

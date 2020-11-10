@@ -23,6 +23,7 @@ namespace LeyendsServer
         updateGroupStatus,
         queueCanceled,
         friendRequest,
+        gameCall,
     }
 
     /// <summary>Sent from client to server.</summary>
@@ -37,7 +38,8 @@ namespace LeyendsServer
         inviteFriendToGroup,
         inviteFriendToGroupResponse,
         searchFriend,
-        searchFriendResponse
+        searchFriendResponse,
+        gameCallResponse
     }
 
     public class Packet : IDisposable

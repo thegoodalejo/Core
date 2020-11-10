@@ -144,13 +144,9 @@ namespace LeyendsServer
 
         public static void GameFoundRequest(List<int> _grupClients)//ID:5
         {
-            Console.WriteLine("Sending Game Found to clients:");
-            foreach (int _id in _grupClients)
-            {
-                Console.WriteLine(_id);
-            }
             using (Packet _packet = new Packet((int)ServerPackets.gameFound))
             {
+                _packet.Write($"Game finded");
                 SendTCPDataToAll(_grupClients, _packet);
             }
         }
@@ -207,6 +203,7 @@ namespace LeyendsServer
         }
         public static void FriendList(int _toClient)//ID:8
         {
+            Console.WriteLine("FriendList");
             using (Packet _packet = new Packet((int)ServerPackets.friendList))
             {
                 List<User> usersList = DbManager.FriendList(_toClient);
@@ -214,6 +211,7 @@ namespace LeyendsServer
                 foreach (User item in usersList)
                 {
                     _packet.Write(item.GetFriendReference());
+                    Console.WriteLine($"F {item.user_legends_nick}");
                 }
                 SendTCPData(_toClient, _packet);
             }
@@ -297,6 +295,15 @@ namespace LeyendsServer
                 _packet.Write(_fromFriend);
                 _packet.Write($"{Server.clients[_fromFriend].nickName} friend request");
                 SendTCPData(_toFriend, _packet);
+            }
+        }
+        public static void GameCall(int _fromFriend)//ID:15
+        {
+            Console.WriteLine($"Sending GameCall to client {_fromFriend}");
+            using (Packet _packet = new Packet((int)ServerPackets.gameCall))
+            {
+                _packet.Write($"{Server.clients[_fromFriend].nickName} grouop request");
+                //SendTCPData(_toFriend, _packet);
             }
         }
         #endregion

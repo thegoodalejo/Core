@@ -4,6 +4,7 @@ using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using System.Threading.Tasks;
 
 namespace LeyendsServer
 {
@@ -77,19 +78,20 @@ namespace LeyendsServer
             var collection = database.GetCollection<User>(COLLECTION_USERS);
             return collection.Find(filterFriends).ToListAsync().Result;
         }
-        public static ObjectId SearchFriend(string _name)
+        //Builders<User>.Filter.And es para varias condiciones ojo ahi se ponen separadas por comas, tipo lista de condiciones
+        public static async Task AddFriend(int _fromClient, int _toClient)
         {
-            var filterUsers = Builders<BsonDocument>.Filter.Eq(COLLECTION_USERS_USER_NICK_NAME, _name);
             MongoClient dbClient = new MongoClient(DB_CONNECTION);
             var database = dbClient.GetDatabase(LEYENDS_DB);
-            var collection = database.GetCollection<BsonDocument>(COLLECTION_USERS);
-            var result = collection.Find(filterUsers).FirstOrDefault();
-            User userResponse = BsonSerializer.Deserialize<User>(result);
-            if(result != null){
-                return userResponse._id;
-            }else{
-                return ObjectId.Empty;
-            }
+            var collection = database.GetCollection<User>(COLLECTION_USERS);
+            ObjectId _fromToken = Server.clients[_fromClient].token;
+            ObjectId _toToken = Server.clients[_toClient].token;
+            var filter1 = Builders<User>.Filter.Where(x => x._id == _fromToken);
+            var update1 = Builders<User>.Update.Push(x => x.user_friends, _toToken);
+            await collection.FindOneAndUpdateAsync(filter1, update1);
+            var filter2 = Builders<User>.Filter.Where(x => x._id == _toToken);
+            var update2 = Builders<User>.Update.Push(x => x.user_friends, _fromToken);
+            await collection.FindOneAndUpdateAsync(filter2, update2);
             
         }
     }

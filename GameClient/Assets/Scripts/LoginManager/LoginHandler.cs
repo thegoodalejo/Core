@@ -48,7 +48,8 @@ public class LoginHandler : MonoBehaviour
     }
     public static void GameFound(Packet _packet)//ID:5
     {
-        UIFindGame.instance.txtQueueStatus.text = "InGame";
+        UIFindGame.instance.txtQueueStatus.text = "Accept Game....";
+        UIPrincipalPanel.HandleAlert(6, _packet);
     }
     public static void GrupCreated(Packet _packet)//ID:6
     {
@@ -164,5 +165,9 @@ public class LoginHandler : MonoBehaviour
     public static void FriendRequest(Packet _packet)//ID:14
     {
         UIPrincipalPanel.HandleAlert(5, _packet);
+    }
+    public static void GameRequest(Packet _packet)//ID:15
+    {
+        UIFindGame.instance.txtQueueStatus.text = "InGame";
     }
 }

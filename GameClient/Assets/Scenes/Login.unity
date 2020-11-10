@@ -181,8 +181,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   strPlayerName: 
   strUID: 
-  isGrouped: 0
   groupSize: 0
+  isGroupLead: 0
+  isGrouped: 0
   isQueued: 0
   isLoadFriends: 0
   isLoadGroups: 0
@@ -1163,7 +1164,7 @@ MonoBehaviour:
   m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 1024, y: 720}
+  m_ReferenceResolution: {x: 1024, y: 1024}
   m_ScreenMatchMode: 0
   m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3

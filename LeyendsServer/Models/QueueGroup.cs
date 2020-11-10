@@ -4,11 +4,15 @@ namespace LeyendsServer
 {
     public class QueueGroup
     {
+        public int id { get; set; }
         public string matchType { get; set; }
+        public bool isOnRoom { get; set; }
         public List<PlayerQueue> groupMembers { get; set; }
         public QueueGroup(string _matchType, List<PlayerQueue> _groupMembers)
         {
+            id = _groupMembers[0].id;
             matchType = _matchType;
+            isOnRoom = false;
             groupMembers = _groupMembers;
         }
         public List<int> GroupMembers()

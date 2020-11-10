@@ -396,6 +396,7 @@ public class Packet : IDisposable
         {
             FriendReference _friend = new FriendReference(ReadString(_moveReadPos), ReadInt(_moveReadPos), ReadString(_moveReadPos),false);
             response.Add(_friend);
+            Debug.Log($"F {_friend.user_legends_nick}");
         }
         return response;
     }

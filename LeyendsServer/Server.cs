@@ -10,8 +10,10 @@ namespace LeyendsServer
     class Server
     {
         public static int MaxPlayers { get; private set; }
+        public static int MaxRooms { get; private set; }
         public static int Port { get; private set; }
         public static Dictionary<int, Client> clients = new Dictionary<int, Client>();
+        public static Dictionary<int, GameRoom> rooms = new Dictionary<int, GameRoom>();
         public delegate void PacketHandler(int _fromClient, Packet _packet);
         public static Dictionary<int, PacketHandler> packetHandlers;
 
@@ -22,9 +24,10 @@ namespace LeyendsServer
         /// <summary>Starts the server.</summary>
         /// <param name="_maxPlayers">The maximum players that can be connected simultaneously.</param>
         /// <param name="_port">The port to start the server on.</param>
-        public static void Start(int _maxPlayers, int _port)
+        public static void Start(int _maxPlayers, int _maxRooms, int _port)
         {
             MaxPlayers = _maxPlayers;
+            MaxRooms = _maxRooms;
             Port = _port;
 
             Console.WriteLine("Starting server...");
@@ -146,6 +149,12 @@ namespace LeyendsServer
             {
                 clients.Add(i, new Client(i, ObjectId.Empty));
             }
+            int _portCounter = 4500;
+            for (int i = 1; i <= MaxRooms; i++)
+            {
+                _portCounter++;
+                rooms.Add(i, new GameRoom(i, 4500));
+            }
 
             packetHandlers = new Dictionary<int, PacketHandler>()
             {
@@ -159,6 +168,7 @@ namespace LeyendsServer
                 { (int)ClientPackets.inviteFriendToGroupResponse, ServerHandle.InviteFriendToGroupResponse },
                 { (int)ClientPackets.searchFriend, ServerHandle.SearchFriend },
                 { (int)ClientPackets.searchFriendResponse, ServerHandle.SearchFriendResponse },
+                { (int)ClientPackets.gameCallResponse, ServerHandle.GameCallResponse },
             };
             Console.WriteLine("Initialized packets.");
         }

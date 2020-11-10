@@ -91,6 +91,7 @@ public partial class LoginClient : MonoBehaviour
             { (int)LoginServerPackets.singleMemberLeave, LoginHandler.SingleMemberLeave },
             { (int)LoginServerPackets.queueCanceled, LoginHandler.QueueCanceled },
             { (int)LoginServerPackets.friendRequest, LoginHandler.FriendRequest },
+            { (int)LoginServerPackets.gameRequest, LoginHandler.GameRequest },
         };
     }
     

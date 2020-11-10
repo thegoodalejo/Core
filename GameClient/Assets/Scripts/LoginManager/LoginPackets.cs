@@ -21,6 +21,7 @@ public enum LoginServerPackets
     singleMemberLeave,
     queueCanceled,
     friendRequest,
+    gameRequest,
 }
 
 /// <summary>Sent from client to server.</summary>
@@ -36,6 +37,7 @@ public enum LoginClientPackets
     inviteFriendToGroupResponse,
     searchFriend,
     friendRequestResponse,
+    gameResponse,
 }
 public enum AlertServerPackets
 {
@@ -43,7 +45,8 @@ public enum AlertServerPackets
     groupRequestResponse,
     groupRequest,
     message,
-    friendRequest
+    friendRequest,
+    gameRequest
 }
 public enum ErrorCodes
 {

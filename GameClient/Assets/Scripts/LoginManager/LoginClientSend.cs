@@ -116,6 +116,14 @@ public class LoginClientSend : MonoBehaviour
             SendTCPData(_packet);
         }
     }
+    public static void GameResponse()//ID:11
+    {
+        Debug.Log($"GameResponse");
+        using (Packet _packet = new Packet((int)LoginClientPackets.gameResponse))
+        {
+            SendTCPData(_packet);
+        }
+    }
 }
 
 

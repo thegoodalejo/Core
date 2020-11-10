@@ -50,8 +50,19 @@ namespace LeyendsServer
         {
             if (!Server.clients[_fromClient].queueStatus) return;
             Console.WriteLine($"Player {_fromClient} quit queue .");
-            QueueManager.preMadeGroups.Add(Server.clients[_fromClient].groupLeader, QueueManager.randomQueuesGrup[Server.clients[_fromClient].groupLeader]);
-            foreach (int item in QueueManager.preMadeGroups[Server.clients[_fromClient].groupLeader].GroupMembers())
+            if (Server.clients[_fromClient].roomId != 0)
+            {
+                Server.rooms[
+                    Server.clients[_fromClient].roomId].RemoveGroupMember(
+                        QueueManager.randomQueuesGrup[
+                            Server.clients[_fromClient].groupLeader]);
+            }
+            QueueManager.preMadeGroups.Add(
+                Server.clients[_fromClient].groupLeader, 
+                QueueManager.randomQueuesGrup[
+                    Server.clients[_fromClient].groupLeader]);
+            foreach (int item in QueueManager.preMadeGroups[Server.clients
+            [_fromClient].groupLeader].GroupMembers())
             {
                 Server.clients[item].queueStatus = false;
                 Server.clients[item].queueType = QueueType.NON;
@@ -72,6 +83,13 @@ namespace LeyendsServer
         }
         public static void GroupDisolve(int _fromClient, Packet _packet)//ID:6
         {
+            if (Server.clients[_fromClient].roomId != 0)
+            {
+                Server.rooms[
+                    Server.clients[_fromClient].roomId].RemoveGroupMember(
+                        QueueManager.randomQueuesGrup[
+                            Server.clients[_fromClient].groupLeader]);
+            }
             if (Server.clients[_fromClient].queueStatus)
             {
                 Console.WriteLine($"{Server.clients[_fromClient].nickName} Group leave request onqueue.");
@@ -131,7 +149,7 @@ namespace LeyendsServer
             string _name = _packet.ReadString();
             Console.WriteLine($"SearchFriend {_name}");
             Client _client = Server.SearchMemberByNick(_name);
-            if (_client != null)
+            if (_client != null && _name != Server.clients[_fromClient].nickName)
             {
                 Console.WriteLine("SearchFriend SI");
                 ServerSend.FriendRequest(_fromClient, _client.id);
@@ -142,11 +160,20 @@ namespace LeyendsServer
                 ServerSend.SendTrash(_fromClient, (int)ErrorCode.PlayerNotFound);
             }
         }
-        public static void SearchFriendResponse(int _fromClient, Packet _packet)//ID:9
+        public static async void SearchFriendResponse(int _fromClient, Packet _packet)//ID:10
         {
             int _toClient = _packet.ReadInt();
-            Console.WriteLine($"SearchFriendResponse {Server.clients[_fromClient].nickName} es amigo de {Server.clients[_toClient].nickName} "); 
+            Console.WriteLine($"SearchFriendResponse {Server.clients[_fromClient].nickName} es amigo de {Server.clients[_toClient].nickName} ");
+            await DbManager.AddFriend(_fromClient, _toClient);
+            Server.clients[_fromClient].user_friends.Add(Server.clients[_toClient].GetFriendReference());
+            Server.clients[_toClient].user_friends.Add(Server.clients[_fromClient].GetFriendReference());
+            ServerSend.FriendList(_fromClient);
+            ServerSend.FriendList(_toClient);
         }
-
+        public static void GameCallResponse(int _fromClient, Packet _packet)//ID:11
+        {
+            //TODO aca cambiar el estado a que si acepto la partida
+            Console.WriteLine($"GameCallResponse");
+        }
     }
 }

@@ -39,6 +39,7 @@ public class UIPrincipalPanel : MonoBehaviour
             { (int)AlertServerPackets.groupRequest, AlertManager.GroupRequest },
             { (int)AlertServerPackets.message, AlertManager.Message },
             { (int)AlertServerPackets.friendRequest, AlertManager.FriendRequest },
+            { (int)AlertServerPackets.gameRequest, AlertManager.GameRequest },
         };
     }
     private void InitializeErrorCodes()

@@ -12,14 +12,13 @@ namespace LeyendsServer
         {
             Console.Title = "Game Server";
             isRunning = true;
+            Server.Start(50, 10, 26940);
             Thread logInThread = new Thread(new ThreadStart(LoginThread));
             Thread startKeyboardListener = new Thread(new ThreadStart(StartKeyboardListener));
             Thread queueListener = new Thread(new ThreadStart(QueueListener));
             logInThread.Start();
             startKeyboardListener.Start();
             queueListener.Start();
-            //26940 reservado para logica de Auth
-            Server.Start(50, 26940);
         }
 
         private static void LoginThread()
@@ -85,7 +84,7 @@ namespace LeyendsServer
             }
         }
 
-        
+
 
         static void OnProcessExit()
         {
