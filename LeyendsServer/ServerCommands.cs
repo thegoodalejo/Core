@@ -18,7 +18,7 @@ namespace LeyendsServer
                 case "-clear":
                     Console.Clear();
                     break;
-                case "-listAll":
+                case "-Players":
                     int players = 0;
                     foreach (Client _client in Server.clients.Values)
                     {
@@ -30,7 +30,7 @@ namespace LeyendsServer
                     }
                     Console.WriteLine($"Total Players: {players}");
                     break;
-                case "-listGames":
+                case "-Games":
                     int games = 0;
                     foreach (GameRoom _room in Server.rooms.Values)
                     {
@@ -42,7 +42,7 @@ namespace LeyendsServer
                     }
                     Console.WriteLine($"Total Rooms: {games}");
                     break;
-                case "-listAllQueue":
+                case "-listQueues":
                     int queueSize = QueueManager.randomQueuesGrup.Count;
                     Console.WriteLine($"Queues : {queueSize}");
                     foreach (KeyValuePair<int, QueueGroup> entry in QueueManager.randomQueuesGrup)
@@ -54,7 +54,7 @@ namespace LeyendsServer
                         }
                     }
                     break;
-                case "-listAllGroup":
+                case "-listGroups":
                     int groupSize = QueueManager.preMadeGroups.Count;
                     Console.WriteLine($"Groups : {groupSize}");
                     foreach (KeyValuePair<int, QueueGroup> entry in QueueManager.preMadeGroups)
@@ -62,7 +62,7 @@ namespace LeyendsServer
                         Console.WriteLine("Group Leader is Player: " + Server.clients[entry.Key].nickName);
                         foreach (PlayerQueue item in entry.Value.groupMembers)
                         {
-                            Console.WriteLine("Player: " + Server.clients[item.id].nickName);
+                            Console.WriteLine($"Player:{Server.clients[item.id].nickName} OnQueue{Server.clients[item.id].queueStatus} acept ? {item.queueAcepted}");
                         }
                     }
                     break;

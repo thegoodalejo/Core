@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,24 +10,25 @@ public class NetworkManager : MonoBehaviour
     public GameObject playerPrefab;
     public GameObject enemyPrefab;
     public GameObject projectilePrefab;
+    private int port = 0;
 
     private void Awake()
     {
         string[] args = System.Environment.GetCommandLineArgs();
-        string input = "";
+
         for (int i = 0; i < args.Length; i++)
         {
             Debug.Log("ARG " + i + ": " + args[i]);
-            if (args[i] == "-exit")
+            if (args[i] == "-port")
             {
-                input = args[i + 1];
+                port = Int32.Parse(args[i + 1]);
             }
         }
 
-        if (input == "Y")
-        {
-            Application.Quit();
-        }
+        // if (port == "Y")
+        // {
+        //     Application.Quit();
+        // }
 
         if (instance == null)
         {
@@ -44,7 +46,7 @@ public class NetworkManager : MonoBehaviour
         QualitySettings.vSyncCount = 0;
         Application.targetFrameRate = 30;
 
-        Server.Start(10, 26950);
+        Server.Start(10, port);
     }
 
     private void OnApplicationQuit()

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using MongoDB.Bson;
 
@@ -14,7 +15,7 @@ namespace LeyendsServer
         public static Dictionary<int, QueueGroup> randomQueuesGrup;
         static QueueManager()
         {
-            isBuilding = false;
+            isBuilding = true;
             isCalling = false;
             preMadeGroups = new Dictionary<int, QueueGroup>();
             randomQueuesGrup = new Dictionary<int, QueueGroup>();
@@ -22,7 +23,7 @@ namespace LeyendsServer
 
         public static void Update()
         {
-            if (!isBuilding)
+            if (isBuilding)
             {
                 BuildNewRoom();
             }
@@ -32,20 +33,28 @@ namespace LeyendsServer
             if (Server.rooms[targetRoom].playersInGroup <= Server.rooms[targetRoom].groupSize &&
             QueueManager.randomQueuesGrup.Count > 0)
             {
-                Console.WriteLine($"LF Members {Server.rooms[targetRoom].playersInGroup} of {Server.rooms[targetRoom].groupSize}");
-                foreach (QueueGroup item in randomQueuesGrup.Values)
+                try
                 {
-                    Console.WriteLine($"{item.id}, isOnRoom {item.isOnRoom}");
-                    if (!item.isOnRoom)
+                    // Console.WriteLine($"LF Members {Server.rooms[targetRoom].playersInGroup} of {Server.rooms[targetRoom].groupSize}");
+                    foreach (QueueGroup item in randomQueuesGrup.Values)
                     {
-                        Console.WriteLine($"{item.id} is {item.GroupSize()} members, need {Server.rooms[targetRoom].groupSize - Server.rooms[targetRoom].playersInGroup}");
-                        if (item.GroupSize() <= (Server.rooms[targetRoom].groupSize - Server.rooms[targetRoom].playersInGroup))
+                        // Console.WriteLine($"{item.id}, isOnRoom {item.isOnRoom}");
+                        if (!item.isOnRoom)
                         {
-                            Server.rooms[targetRoom].SetGroupMember(item);
-                            return;
+                            Console.WriteLine($"{item.id} is {item.GroupSize()} members, need {Server.rooms[targetRoom].groupSize - Server.rooms[targetRoom].playersInGroup}");
+                            if (item.GroupSize() <= (Server.rooms[targetRoom].groupSize - Server.rooms[targetRoom].playersInGroup))
+                            {
+                                Server.rooms[targetRoom].SetGroupMember(item.id);
+                                return;
+                            }
                         }
                     }
                 }
+                catch (System.Exception)
+                {
+                    Console.WriteLine("Coleccion modificada Update");
+                }
+
             }
         }
 
@@ -56,10 +65,12 @@ namespace LeyendsServer
                 if (!Server.rooms[i].isSet)
                 {
                     Server.rooms[i].isSet = true;
-                    Server.rooms[i].groupSize = 2;
+                    Server.rooms[i].groupSize = 1;
                     Console.WriteLine("Add new Room");
                     targetRoom = i;
-                    isBuilding = true;
+                    isBuilding = false;
+                    string filename = Path.Combine("D:\\Legends\\GameServerSln", "UnityGameServer.exe");
+                    var proc = System.Diagnostics.Process.Start(filename, Server.rooms[i].port.ToString());
                     return;
                 }
             }
@@ -67,15 +78,38 @@ namespace LeyendsServer
 
         private async static void CallGame()
         {
-            isCalling = true;
-            Console.WriteLine($"CAlling {isCalling}");
-            ServerSend.GameFoundRequest(Server.rooms[targetRoom].GroupMembers());
-            await Task.Delay(10000);
-            if(Server.rooms[targetRoom].isGameRoomReady()){
-                Console.WriteLine("Todos aceptaron");
+            try
+            {
+                isCalling = true;
+                Console.WriteLine($"CAlling {isCalling}");
+                ServerCommands.ReadArgs("-Games");
+                ServerCommands.ReadArgs("-listGroups");
+                ServerCommands.ReadArgs("-listQueues");
+                ServerSend.GameFoundRequest(Server.rooms[targetRoom].GroupMembers());
+                await Task.Delay(10000);
+                if (Server.rooms[targetRoom].isGameRoomReady())
+                {
+                    Console.WriteLine("Todos aceptaron");
+                    Server.rooms[targetRoom].SendGame();
+                    foreach (int item in Server.rooms[targetRoom].groupsInRoom)
+                    {
+                        randomQueuesGrup.Remove(item);
+                    }
+                    QueueManager.isBuilding = true;
+                }
+                else
+                {
+                    Server.rooms[targetRoom].ResetGame();
+                }
+                isCalling = false;
+                Console.WriteLine($"CAlling {isCalling}");
             }
-            isCalling = false;
-            Console.WriteLine($"CAlling {isCalling}");
+            catch (System.Exception)
+            {
+
+                Console.WriteLine("Coleccion modificada CallGame");
+            }
+
         }
     }
 }

@@ -168,6 +168,10 @@ public class LoginHandler : MonoBehaviour
     }
     public static void GameRequest(Packet _packet)//ID:15
     {
-        UIFindGame.instance.txtQueueStatus.text = "InGame";
+        int _gamePort = _packet.ReadInt();
+        Debug.Log($"GameRequest {_gamePort}");
+        UIFindGame.instance.txtQueueStatus.text = $"InGame port:{_gamePort}";
+        LoginClient.instance.gamePort = _gamePort;
+        SceneManager.LoadScene("Main");
     }
 }

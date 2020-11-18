@@ -153,7 +153,7 @@ namespace LeyendsServer
             for (int i = 1; i <= MaxRooms; i++)
             {
                 _portCounter++;
-                rooms.Add(i, new GameRoom(i, 4500));
+                rooms.Add(i, new GameRoom(i, _portCounter));
             }
 
             packetHandlers = new Dictionary<int, PacketHandler>()
@@ -168,7 +168,7 @@ namespace LeyendsServer
                 { (int)ClientPackets.inviteFriendToGroupResponse, ServerHandle.InviteFriendToGroupResponse },
                 { (int)ClientPackets.searchFriend, ServerHandle.SearchFriend },
                 { (int)ClientPackets.searchFriendResponse, ServerHandle.SearchFriendResponse },
-                { (int)ClientPackets.gameCallResponse, ServerHandle.GameCallResponse },
+                { (int)ClientPackets.gameCallResponse, ServerHandle.GameFoundResponse },
             };
             Console.WriteLine("Initialized packets.");
         }

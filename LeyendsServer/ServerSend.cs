@@ -297,13 +297,26 @@ namespace LeyendsServer
                 SendTCPData(_toFriend, _packet);
             }
         }
-        public static void GameCall(int _fromFriend)//ID:15
+        public static void GameCall(int _roomId)//ID:15
         {
-            Console.WriteLine($"Sending GameCall to client {_fromFriend}");
+            List<int> _gameMembers = new List<int>();
+            foreach (int group in Server.rooms[_roomId].groupsInRoom)
+            {
+                Console.WriteLine($"Group {group}");
+                foreach (PlayerQueue player in QueueManager.randomQueuesGrup[group].groupMembers)
+                {
+                    Console.WriteLine($"Player {player.id}");
+                    _gameMembers.Add(player.id);
+                    Server.clients[player.id].queueStatus = false;
+                    Server.clients[player.id].queueType = QueueType.NON;
+                    Server.clients[player.id].inGame = true;
+                }
+            }
+            Console.WriteLine($"Sending GameCall to room {_roomId}");
             using (Packet _packet = new Packet((int)ServerPackets.gameCall))
             {
-                _packet.Write($"{Server.clients[_fromFriend].nickName} grouop request");
-                //SendTCPData(_toFriend, _packet);
+                _packet.Write(Server.rooms[_roomId].port);
+                SendTCPDataToAll(_gameMembers, _packet);
             }
         }
         #endregion

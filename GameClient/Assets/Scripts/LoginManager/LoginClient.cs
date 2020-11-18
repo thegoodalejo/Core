@@ -22,6 +22,7 @@ public partial class LoginClient : MonoBehaviour
     public string ip = "127.0.0.1";
     public string token = "";
     public int port = 26940;
+    public int gamePort = 0;
     public int myId = 0;
     public TCP tcp;
     public UDP udp;

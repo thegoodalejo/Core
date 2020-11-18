@@ -53,7 +53,6 @@ namespace LeyendsServer
                 return new User();
             }
         }
-
         public static void UpdateState(ObjectId _token, int _status, int _slot)
         {
             MongoClient dbClient = new MongoClient(DB_CONNECTION);

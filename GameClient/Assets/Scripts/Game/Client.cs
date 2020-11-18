@@ -11,7 +11,6 @@ public class Client : MonoBehaviour
     public static int dataBufferSize = 4096;
 
     public string ip = "127.0.0.1";
-    public int port = 26950;
     public int myId = 0;
     public TCP tcp;
     public UDP udp;
@@ -69,7 +68,8 @@ public class Client : MonoBehaviour
             };
 
             receiveBuffer = new byte[dataBufferSize];
-            socket.BeginConnect(instance.ip, instance.port, ConnectCallback, socket);
+            Debug.Log($"Connection to {instance.ip}:{LoginClient.instance.port}");
+            socket.BeginConnect(instance.ip, LoginClient.instance.gamePort, ConnectCallback, socket);
         }
 
         /// <summary>Initializes the newly connected client's TCP-related info.</summary>
@@ -205,7 +205,7 @@ public class Client : MonoBehaviour
 
         public UDP()
         {
-            endPoint = new IPEndPoint(IPAddress.Parse(instance.ip), instance.port);
+            endPoint = new IPEndPoint(IPAddress.Parse(instance.ip), LoginClient.instance.port);
         }
 
         /// <summary>Attempts to connect to the server via UDP.</summary>

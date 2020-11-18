@@ -7,9 +7,6 @@ public class UIManager : MonoBehaviour
 {
     public static UIManager instance;
 
-    public GameObject startMenu;
-    public InputField usernameField;
-
     private void Awake()
     {
         if (instance == null)
@@ -21,14 +18,6 @@ public class UIManager : MonoBehaviour
             Debug.Log("Instance already exists, destroying object!");
             Destroy(this);
         }
-    }
-
-    /// <summary>Attempts to connect to the server.</summary>
-    public void ConnectToServer()
-    {
-        startMenu.SetActive(false);
-        usernameField.interactable = false;
-        Debug.Log("Nombre del Usuario " + LoginUIManager.GetUserName());
         Client.instance.ConnectToServer();
     }
 }

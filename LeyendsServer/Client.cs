@@ -18,6 +18,7 @@ namespace LeyendsServer
         public string queueType;
         public int groupLeader;
         public int roomId;
+        public bool inGame;
         public TCP tcp;
         public UDP udp;
         public List<FriendReference> user_friends;
@@ -31,6 +32,7 @@ namespace LeyendsServer
             queueType = null;
             groupLeader = 0;
             roomId = 0;
+            inGame = false;
             tcp = new TCP(id, _token);
             udp = new UDP(id);
 
@@ -57,7 +59,7 @@ namespace LeyendsServer
             }
             else
             {
-                return "Client ID: " + id + " - OnGroupOf: " + Server.clients[groupLeader].nickName + " - Nick: " + nickName + " - OnQueue: " + queueStatus + " - QueueType: " + queueType;
+                return "Client ID: " + id + " - OnGroupOf: " + Server.clients[groupLeader].nickName + " - Nick: " + nickName + " - OnQueue: " + queueStatus + " - QueueType: " + queueType + " - InGame: " + inGame;
             }
 
         }
@@ -311,6 +313,8 @@ namespace LeyendsServer
             this.queueType = null;
             this.groupLeader = 0;
             this.queueStatus = false;
+            this.roomId = 0;
+            this.inGame = false;
         }
     }
 }

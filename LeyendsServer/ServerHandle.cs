@@ -54,11 +54,10 @@ namespace LeyendsServer
             {
                 Server.rooms[
                     Server.clients[_fromClient].roomId].RemoveGroupMember(
-                        QueueManager.randomQueuesGrup[
-                            Server.clients[_fromClient].groupLeader]);
+                        Server.clients[_fromClient].groupLeader);
             }
             QueueManager.preMadeGroups.Add(
-                Server.clients[_fromClient].groupLeader, 
+                Server.clients[_fromClient].groupLeader,
                 QueueManager.randomQueuesGrup[
                     Server.clients[_fromClient].groupLeader]);
             foreach (int item in QueueManager.preMadeGroups[Server.clients
@@ -87,8 +86,7 @@ namespace LeyendsServer
             {
                 Server.rooms[
                     Server.clients[_fromClient].roomId].RemoveGroupMember(
-                        QueueManager.randomQueuesGrup[
-                            Server.clients[_fromClient].groupLeader]);
+                        Server.clients[_fromClient].groupLeader);
             }
             if (Server.clients[_fromClient].queueStatus)
             {
@@ -170,10 +168,11 @@ namespace LeyendsServer
             ServerSend.FriendList(_fromClient);
             ServerSend.FriendList(_toClient);
         }
-        public static void GameCallResponse(int _fromClient, Packet _packet)//ID:11
+        public static void GameFoundResponse(int _fromClient, Packet _packet)//ID:11
         {
-            //TODO aca cambiar el estado a que si acepto la partida
-            Console.WriteLine($"GameCallResponse");
+            if (!Server.clients[_fromClient].queueStatus) return;
+            Console.WriteLine($"GameCallResponse {Server.clients[_fromClient].nickName}");
+            Server.rooms[Server.clients[_fromClient].roomId].AceptGame(_fromClient);
         }
     }
 }
