@@ -15,8 +15,8 @@ namespace LeyendsServer
         public static Dictionary<int, Client> clients = new Dictionary<int, Client>();
         public static Dictionary<int, GameRoom> rooms = new Dictionary<int, GameRoom>();
         public delegate void PacketHandler(int _fromClient, Packet _packet);
-        public static Dictionary<int, PacketHandler> packetHandlers;
-
+        public static Dictionary<int, PacketHandler> fromClientpacketHandlers;
+        public static Dictionary<int, PacketHandler> fromGamepacketHandlers;
         private static TcpListener tcpListener;
         private static UdpClient udpListener;
         private static List<EndPoint> registredIPS;
@@ -32,6 +32,7 @@ namespace LeyendsServer
 
             Console.WriteLine("Starting server...");
             InitializeServerData();
+            InitializeRoomData();
 
             tcpListener = new TcpListener(IPAddress.Any, Port);
             tcpListener.Start();
@@ -42,7 +43,7 @@ namespace LeyendsServer
 
             registredIPS = new List<EndPoint>();
 
-            Console.WriteLine($"Server started on port {Port}.");
+            Console.WriteLine($"Server listen clients on port {Port}.");
 
             DbManager.UpdateStateAll();
         }
@@ -149,14 +150,8 @@ namespace LeyendsServer
             {
                 clients.Add(i, new Client(i, ObjectId.Empty));
             }
-            int _portCounter = 4500;
-            for (int i = 1; i <= MaxRooms; i++)
-            {
-                _portCounter++;
-                rooms.Add(i, new GameRoom(i, _portCounter));
-            }
 
-            packetHandlers = new Dictionary<int, PacketHandler>()
+            fromClientpacketHandlers = new Dictionary<int, PacketHandler>()
             {
                 { (int)ClientPackets.welcomeReceived, ServerHandle.WelcomeReceived },
                 { (int)ClientPackets.queueRequestForRandomMatch, ServerHandle.QueueRequestForRandomMatch },
@@ -170,7 +165,22 @@ namespace LeyendsServer
                 { (int)ClientPackets.searchFriendResponse, ServerHandle.SearchFriendResponse },
                 { (int)ClientPackets.gameCallResponse, ServerHandle.GameFoundResponse },
             };
-            Console.WriteLine("Initialized packets.");
+            Console.WriteLine("Initialized InitializeServerData packets.");
+        }
+        /// <summary>Initializes all necessary room data.</summary>
+        public static void InitializeRoomData()
+        {
+            int _portCounter = 4500;
+            for (int i = 1; i <= MaxRooms; i++)
+            {
+                _portCounter++;
+                rooms.Add(i, new GameRoom(i, _portCounter));
+            }
+            fromClientpacketHandlers = new Dictionary<int, PacketHandler>()
+            {
+                { (int)GamePackets.welcomeReceived, GameHandle.WelcomeReceived },
+            };
+            Console.WriteLine("Initialized InitializeRoomData packets.");
         }
 
         public static void Stop()

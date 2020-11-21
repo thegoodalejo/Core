@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using MongoDB.Bson;
 namespace LeyendsServer
 {
-    class ServerCommands
+    class Commands
 
     {
         public static void ReadArgs(string _command)

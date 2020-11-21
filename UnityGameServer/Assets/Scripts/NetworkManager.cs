@@ -25,11 +25,6 @@ public class NetworkManager : MonoBehaviour
             }
         }
 
-        // if (port == "Y")
-        // {
-        //     Application.Quit();
-        // }
-
         if (instance == null)
         {
             instance = this;
@@ -39,14 +34,16 @@ public class NetworkManager : MonoBehaviour
             Debug.Log("Instance already exists, destroying object!");
             Destroy(this);
         }
+        Start();
     }
 
     private void Start()
     {
         QualitySettings.vSyncCount = 0;
         Application.targetFrameRate = 30;
-
-        Server.Start(10, port);
+        
+        // Server.Start(10, port);
+        Server.Start(10, 4501);
     }
 
     private void OnApplicationQuit()

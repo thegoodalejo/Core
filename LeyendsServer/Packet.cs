@@ -41,6 +41,14 @@ namespace LeyendsServer
         searchFriendResponse,
         gameCallResponse
     }
+    public enum GamePackets
+    {
+        welcomeReceived = 1,
+    }
+    public enum RoomPackets
+    {
+        welcome = 1,
+    }
 
     public class Packet : IDisposable
     {

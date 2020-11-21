@@ -33,6 +33,14 @@ public enum ClientPackets
     playerShoot,
     playerThrowItem
 }
+public enum FromServer
+{
+    welcome = 1,
+}
+public enum ToServer
+{
+    welcomeReceived = 1,
+}
 
 public class Packet : IDisposable
 {

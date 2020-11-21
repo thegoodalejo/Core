@@ -13,6 +13,7 @@ namespace LeyendsServer
         public static int targetRoom { get; private set; }
         public static Dictionary<int, QueueGroup> preMadeGroups;
         public static Dictionary<int, QueueGroup> randomQueuesGrup;
+        
         static QueueManager()
         {
             isBuilding = true;
@@ -69,8 +70,10 @@ namespace LeyendsServer
                     Console.WriteLine("Add new Room");
                     targetRoom = i;
                     isBuilding = false;
-                    string filename = Path.Combine("D:\\Legends\\GameServerSln", "UnityGameServer.exe");
-                    var proc = System.Diagnostics.Process.Start(filename, Server.rooms[i].port.ToString());
+                    //string filename = Path.Combine("D:\\Legends\\GameServerSln", "UnityGameServer.exe");
+                    //var proc = System.Diagnostics.Process.Start(filename, Server.rooms[i].port.ToString());
+                    Server.rooms[i].Start();
+                    
                     return;
                 }
             }
@@ -82,9 +85,9 @@ namespace LeyendsServer
             {
                 isCalling = true;
                 Console.WriteLine($"CAlling {isCalling}");
-                ServerCommands.ReadArgs("-Games");
-                ServerCommands.ReadArgs("-listGroups");
-                ServerCommands.ReadArgs("-listQueues");
+                Commands.ReadArgs("-Games");
+                Commands.ReadArgs("-listGroups");
+                Commands.ReadArgs("-listQueues");
                 ServerSend.GameFoundRequest(Server.rooms[targetRoom].GroupMembers());
                 await Task.Delay(10000);
                 if (Server.rooms[targetRoom].isGameRoomReady())

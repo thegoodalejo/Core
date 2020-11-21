@@ -7,12 +7,14 @@ namespace LeyendsServer
     class Program
     {
         private static bool isRunning = false;
+        private static int MaxPlayers = 50;
+        private static int MaxRooms = 10;
 
         static void Main(string[] args)
         {
             Console.Title = "Game Server";
             isRunning = true;
-            Server.Start(50, 10, 26940);
+            Server.Start(MaxPlayers, MaxRooms, 26940);
             Thread logInThread = new Thread(new ThreadStart(LoginThread));
             Thread startKeyboardListener = new Thread(new ThreadStart(StartKeyboardListener));
             Thread queueListener = new Thread(new ThreadStart(QueueListener));
@@ -51,7 +53,7 @@ namespace LeyendsServer
                 while (_nextLoop < DateTime.Now)
                 {
                     // If the time for the next loop is in the past, aka it's time to execute another tick
-                    ServerCommands.ReadArgs(Console.ReadLine()); // Execute game logic
+                    Commands.ReadArgs(Console.ReadLine()); // Execute game logic
 
                     _nextLoop = _nextLoop.AddMilliseconds(Constants.MS_PER_TICK_LOGIN); // Calculate at what point in time the next tick should be executed
 

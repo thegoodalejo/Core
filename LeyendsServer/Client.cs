@@ -37,6 +37,19 @@ namespace LeyendsServer
             udp = new UDP(id);
 
         }
+        public Client()
+        {
+            id = 1;
+            token = ObjectId.Empty;
+            nickName = "GameServerClient";
+            queueStatus = false;
+            queueType = null;
+            groupLeader = 0;
+            roomId = 0;
+            inGame = false;
+            tcp = new TCP(1);
+
+        }
         public FriendReference GetFriendReference()
         {
             return new FriendReference(token, id, nickName);
@@ -76,6 +89,11 @@ namespace LeyendsServer
             {
                 id = _id;
                 token = _token;
+            }
+            public TCP(int _id)
+            {
+                id = _id;
+                token = ObjectId.Empty;
             }
             /// <summary>Initializes the newly connected client's TCP-related info.</summary>
             /// <param name="_socket">The TcpClient instance of the newly connected client.</param>
@@ -166,7 +184,7 @@ namespace LeyendsServer
                             int _packetId = _packet.ReadInt();
                             try
                             {
-                                Server.packetHandlers[_packetId](id, _packet); // Call appropriate method to handle the packet 
+                                Server.fromClientpacketHandlers[_packetId](id, _packet); // Call appropriate method to handle the packet 
                             }
                             catch (System.Exception)
                             {
@@ -247,7 +265,7 @@ namespace LeyendsServer
                     using (Packet _packet = new Packet(_packetBytes))
                     {
                         int _packetId = _packet.ReadInt();
-                        Server.packetHandlers[_packetId](id, _packet); // Call appropriate method to handle the packet
+                        Server.fromClientpacketHandlers[_packetId](id, _packet); // Call appropriate method to handle the packet
                     }
                 });
             }

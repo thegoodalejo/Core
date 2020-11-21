@@ -11,9 +11,5 @@ namespace LeyendsServer
         {
             ThreadManager.UpdateMain();
         }
-
-        public static void QueueSystem(){
-            
-        }
     }
 }
