@@ -15,6 +15,7 @@ public class ClientHandle : MonoBehaviour
         ClientSend.WelcomeReceived();
 
         // Now that we have the client's id, connect UDP
+        Debug.Log($"UDP listn game by :{((IPEndPoint)Client.instance.tcp.socket.Client.LocalEndPoint).Port}");
         Client.instance.udp.Connect(((IPEndPoint)Client.instance.tcp.socket.Client.LocalEndPoint).Port);
     }
 
@@ -24,12 +25,13 @@ public class ClientHandle : MonoBehaviour
         string _username = _packet.ReadString();
         Vector3 _position = _packet.ReadVector3();
         Quaternion _rotation = _packet.ReadQuaternion();
-
+        Debug.Log("SpawnPlayer recived as: " + _username);
         GameManager.instance.SpawnPlayer(_id, _username, _position, _rotation);
     }
 
     public static void PlayerPosition(Packet _packet)
     {
+        Debug.Log("ClientHandle.PlayerPosition (UDP)");
         int _id = _packet.ReadInt();
         Vector3 _position = _packet.ReadVector3();
 

@@ -85,8 +85,8 @@ public class Player : MonoBehaviour
         _moveDirection.y = yVelocity;
         controller.Move(_moveDirection);
 
-        ServerSend.PlayerPosition(this);
-        ServerSend.PlayerRotation(this);
+        SendToClient.PlayerPosition(this);
+        SendToClient.PlayerRotation(this);
     }
 
     /// <summary>Updates the player input with newly received input.</summary>
@@ -145,11 +145,11 @@ public class Player : MonoBehaviour
             health = 0f;
             controller.enabled = false;
             transform.position = new Vector3(0f, 25f, 0f);
-            ServerSend.PlayerPosition(this);
+            SendToClient.PlayerPosition(this);
             StartCoroutine(Respawn());
         }
 
-        ServerSend.PlayerHealth(this);
+        SendToClient.PlayerHealth(this);
     }
 
     private IEnumerator Respawn()
@@ -158,7 +158,7 @@ public class Player : MonoBehaviour
 
         health = maxHealth;
         controller.enabled = true;
-        ServerSend.PlayerRespawned(this);
+        SendToClient.PlayerRespawned(this);
     }
 
     public bool AttemptPickupItem()

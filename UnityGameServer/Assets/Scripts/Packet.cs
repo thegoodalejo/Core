@@ -5,7 +5,7 @@ using System.Text;
 using UnityEngine;
 
 /// <summary>Sent from server to client.</summary>
-public enum ServerPackets
+public enum ToClientPackets
 {
     welcome = 1,
     spawnPlayer,
@@ -26,18 +26,18 @@ public enum ServerPackets
 }
 
 /// <summary>Sent from client to server.</summary>
-public enum ClientPackets
+public enum FromClientPackets
 {
     welcomeReceived = 1,
     playerMovement,
     playerShoot,
     playerThrowItem
 }
-public enum FromServer
+public enum FromServerPackets
 {
     welcome = 1,
 }
-public enum ToServer
+public enum ToServerPackets
 {
     welcomeReceived = 1,
 }

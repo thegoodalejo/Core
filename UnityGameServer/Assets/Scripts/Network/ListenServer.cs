@@ -5,9 +5,9 @@ using System.Net;
 using System.Net.Sockets;
 using UnityEngine;
 
-public class GameToServer : MonoBehaviour
+public class ListenServer : MonoBehaviour
 {
-    public static GameToServer instance;
+    public static ListenServer instance;
     public TCP tcp;
     private bool isConnected = false;
     private delegate void PacketHandler(Packet _packet);
@@ -23,10 +23,22 @@ public class GameToServer : MonoBehaviour
             Debug.Log("GameToServer instance already exists, destroying object!");
             Destroy(this);
         }
-        tcp = new TCP(4501);
+        string[] args = System.Environment.GetCommandLineArgs();
+        int _port = 0;
+        for (int i = 0; i < args.Length; i++)
+        {
+            //Debug.Log("ARG " + i + ": " + args[i]);
+            if (args[i] == "-port")
+            {
+                _port = Int32.Parse(args[i + 1]);
+            }
+        }
+        tcp = new TCP(_port);
         isConnected = true;
         InitializeClientData();
+        _port += 14501;
         tcp.Connect(); // Connect tcp, udp gets connected once tcp is done
+        HostClients.Start(10, _port);
     }
     private void OnApplicationQuit()
     {
@@ -50,23 +62,23 @@ public class GameToServer : MonoBehaviour
         private string ip = "127.0.0.1";
         private int port = 0;
 
-        /// <summary>Attempts to connect to the server via TCP.</summary>
-        public TCP(int _port){
+        public TCP(int _port)
+        {
             port = _port;
         }
+
+        /// <summary>Attempts to connect to the server via TCP.</summary>
         public void Connect()
         {
+            Debug.Log("Connect to server");
             socket = new TcpClient
             {
                 ReceiveBufferSize = dataBufferSize,
                 SendBufferSize = dataBufferSize
             };
             receiveBuffer = new byte[dataBufferSize];
-            socket.BeginConnect(IPAddress.Parse(ip), port, ConnectCallback, socket);
-            if (!socket.Connected)
-            {
-                Debug.Log("No se pudo conectar");
-            }
+            socket.BeginConnect(ip, 4501, ConnectCallback, socket);
+            //socket.BeginConnect(IPAddress.Parse(ip), port, ConnectCallback, socket);
         }
 
         /// <summary>Initializes the newly connected client's TCP-related info.</summary>
@@ -189,7 +201,7 @@ public class GameToServer : MonoBehaviour
     {
         packetHandlers = new Dictionary<int, PacketHandler>()
         {
-            { (int)FromServer.welcome, HandleFromServer.Welcome },
+            { (int)FromServerPackets.welcome, HandleServerMsg.Welcome },
         };
     }
 }

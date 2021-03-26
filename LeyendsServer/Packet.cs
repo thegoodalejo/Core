@@ -41,11 +41,11 @@ namespace LeyendsServer
         searchFriendResponse,
         gameCallResponse
     }
-    public enum GamePackets
+    public enum FromGamePackets
     {
         welcomeReceived = 1,
     }
-    public enum RoomPackets
+    public enum ToGamePackets
     {
         welcome = 1,
     }

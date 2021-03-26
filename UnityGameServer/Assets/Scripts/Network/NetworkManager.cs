@@ -10,20 +10,9 @@ public class NetworkManager : MonoBehaviour
     public GameObject playerPrefab;
     public GameObject enemyPrefab;
     public GameObject projectilePrefab;
-    private int port = 0;
 
     private void Awake()
     {
-        string[] args = System.Environment.GetCommandLineArgs();
-
-        for (int i = 0; i < args.Length; i++)
-        {
-            Debug.Log("ARG " + i + ": " + args[i]);
-            if (args[i] == "-port")
-            {
-                port = Int32.Parse(args[i + 1]);
-            }
-        }
 
         if (instance == null)
         {
@@ -41,14 +30,11 @@ public class NetworkManager : MonoBehaviour
     {
         QualitySettings.vSyncCount = 0;
         Application.targetFrameRate = 30;
-        
-        // Server.Start(10, port);
-        Server.Start(10, 4501);
     }
 
     private void OnApplicationQuit()
     {
-        Server.Stop();
+        HostClients.Stop();
     }
 
     public Player InstantiatePlayer()

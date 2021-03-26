@@ -33,7 +33,7 @@ namespace LeyendsServer
                 receiveBuffer = new byte[dataBufferSize];
 
                 stream.BeginRead(receiveBuffer, 0, dataBufferSize, ReceiveCallback, null);
-                ServerSend.Welcome(id, "Welcome to Auth Server");
+                ServerSend.Welcome(id, "Welcome to Main Server mr Client");
             }
 
             /// <summary>Sends data to the client via TCP.</summary>

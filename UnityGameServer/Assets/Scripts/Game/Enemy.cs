@@ -33,7 +33,7 @@ public class Enemy : MonoBehaviour
         nextEnemyId++;
         enemies.Add(id, this);
 
-        ServerSend.SpawnEnemy(this);
+        SendToClient.SpawnEnemy(this);
 
         state = EnemyState.patrol;
         gravity *= Time.fixedDeltaTime * Time.fixedDeltaTime;
@@ -67,7 +67,7 @@ public class Enemy : MonoBehaviour
 
     private bool LookForPlayer()
     {
-        foreach (Client _client in Server.clients.Values)
+        foreach (ClientModel _client in HostClients.clients.Values)
         {
             if (_client.player != null)
             {
@@ -182,7 +182,7 @@ public class Enemy : MonoBehaviour
         _movement.y = yVelocity;
         controller.Move(_movement);
 
-        ServerSend.EnemyPosition(this);
+        SendToClient.EnemyPosition(this);
     }
 
     private void Shoot(Vector3 _shootDirection)
@@ -210,7 +210,7 @@ public class Enemy : MonoBehaviour
             Destroy(gameObject);
         }
 
-        ServerSend.EnemyHealth(this);
+        SendToClient.EnemyHealth(this);
     }
 
     private bool CanSeeTarget()

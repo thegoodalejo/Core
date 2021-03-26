@@ -22,7 +22,7 @@ namespace LeyendsServer
         /// <param name="_msg">The message to send.</param>
         public static void Welcome(int _toClient, string _msg)//ID:1
         {
-            using (Packet _packet = new Packet((int)RoomPackets.welcome))
+            using (Packet _packet = new Packet((int)ToGamePackets.welcome))
             {
                 _packet.Write(_msg);
                 _packet.Write(_toClient);

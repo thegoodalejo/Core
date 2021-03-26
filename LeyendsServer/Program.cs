@@ -14,7 +14,7 @@ namespace LeyendsServer
         {
             Console.Title = "Game Server";
             isRunning = true;
-            Server.Start(MaxPlayers, MaxRooms, 26940);
+            Server.Start(MaxPlayers, MaxRooms);
             Thread logInThread = new Thread(new ThreadStart(LoginThread));
             Thread startKeyboardListener = new Thread(new ThreadStart(StartKeyboardListener));
             Thread queueListener = new Thread(new ThreadStart(QueueListener));

@@ -5,16 +5,15 @@ using System.Net;
 using System.Net.Sockets;
 using UnityEngine;
 
-public class Client
+public class ClientModel
 {
     public static int dataBufferSize = 4096;
-
     public int id;
     public Player player;
     public TCP tcp;
     public UDP udp;
 
-    public Client(int _clientId)
+    public ClientModel(int _clientId)
     {
         id = _clientId;
         tcp = new TCP(id);
@@ -50,7 +49,8 @@ public class Client
 
             stream.BeginRead(receiveBuffer, 0, dataBufferSize, ReceiveCallback, null);
 
-            ServerSend.Welcome(id, "Welcome to the server!");
+            SendToClient.Welcome(id, "Welcome to the game room, fool!");
+            Debug.Log("player inc");  
         }
 
         /// <summary>Sends data to the client via TCP.</summary>
@@ -78,7 +78,7 @@ public class Client
                 int _byteLength = stream.EndRead(_result);
                 if (_byteLength <= 0)
                 {
-                    Server.clients[id].Disconnect();
+                    HostClients.clients[id].Disconnect();
                     return;
                 }
 
@@ -91,7 +91,7 @@ public class Client
             catch (Exception _ex)
             {
                 Debug.Log($"Error receiving TCP data: {_ex}");
-                Server.clients[id].Disconnect();
+                HostClients.clients[id].Disconnect();
             }
         }
 
@@ -123,7 +123,7 @@ public class Client
                     using (Packet _packet = new Packet(_packetBytes))
                     {
                         int _packetId = _packet.ReadInt();
-                        Server.packetHandlers[_packetId](id, _packet); // Call appropriate method to handle the packet
+                        HostClients.packetHandlers[_packetId](id, _packet); // Call appropriate method to handle the packet
                     }
                 });
 
@@ -181,7 +181,7 @@ public class Client
         /// <param name="_packet">The packet to send.</param>
         public void SendData(Packet _packet)
         {
-            Server.SendUDPData(endPoint, _packet);
+            HostClients.SendUDPData(endPoint, _packet);
         }
 
         /// <summary>Prepares received data to be used by the appropriate packet handler methods.</summary>
@@ -196,7 +196,7 @@ public class Client
                 using (Packet _packet = new Packet(_packetBytes))
                 {
                     int _packetId = _packet.ReadInt();
-                    Server.packetHandlers[_packetId](id, _packet); // Call appropriate method to handle the packet
+                    HostClients.packetHandlers[_packetId](id, _packet); // Call appropriate method to handle the packet
                 }
             });
         }
@@ -216,35 +216,35 @@ public class Client
         player.Initialize(id, _playerName);
 
         // Send all players to the new player
-        foreach (Client _client in Server.clients.Values)
+        foreach (ClientModel _client in HostClients.clients.Values)
         {
             if (_client.player != null)
             {
                 if (_client.id != id)
                 {
-                    ServerSend.SpawnPlayer(id, _client.player);
+                    SendToClient.SpawnPlayer(id, _client.player);
                 }
             }
         }
 
         // Send the new player to all players (including himself)
-        foreach (Client _client in Server.clients.Values)
+        foreach (ClientModel _client in HostClients.clients.Values)
         {
             if (_client.player != null)
             {
-                ServerSend.SpawnPlayer(_client.id, player);
+                SendToClient.SpawnPlayer(_client.id, player);
             }
         }
-
+        /*
         foreach (ItemSpawner _itemSpawner in ItemSpawner.spawners.Values)
         {
-            ServerSend.CreateItemSpawner(id, _itemSpawner.spawnerId, _itemSpawner.transform.position, _itemSpawner.hasItem);
+            SendToClient.CreateItemSpawner(id, _itemSpawner.spawnerId, _itemSpawner.transform.position, _itemSpawner.hasItem);
         }
 
         foreach (Enemy _enemy in Enemy.enemies.Values)
         {
-            ServerSend.SpawnEnemy(id, _enemy);
-        }
+            SendToClient.SpawnEnemy(id, _enemy);
+        }*/
     }
 
     /// <summary>Disconnects the client and stops all network traffic.</summary>
@@ -261,6 +261,6 @@ public class Client
         tcp.Disconnect();
         udp.Disconnect();
 
-        ServerSend.PlayerDisconnected(id);
+        SendToClient.PlayerDisconnected(id);
     }
 }

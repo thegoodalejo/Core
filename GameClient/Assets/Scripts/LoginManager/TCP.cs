@@ -25,6 +25,7 @@ public partial class LoginClient
             };
             receiveBuffer = new byte[dataBufferSize];
             socket.BeginConnect(instance.ip, instance.port, ConnectCallback, socket);
+            Debug.Log($"Listening Server by {instance.ip}:{instance.port} ");
             if (!socket.Connected)
             {
                 LoginUIManager.instance.text.text = "No se pudo conectar";

@@ -27,7 +27,6 @@ namespace LeyendsServer
             playersInGroup = 0;
             gameClient = new RoomTCP();
             groupsInRoom = new List<int>();
-            Console.WriteLine($"GameRoom {id} Init");
         }
         public void Start(){
             tcpListener = new TcpListener(IPAddress.Any, port);
@@ -41,10 +40,7 @@ namespace LeyendsServer
             tcpListener.BeginAcceptTcpClient(TCPConnectCallback, null);
             Console.WriteLine($"Incoming connection from room {_client.Client.RemoteEndPoint} ...");
 
-            
             gameClient.Connect(_client);
-
-            Console.WriteLine($"{_client.Client.RemoteEndPoint} failed to connect: Server full!");
         }
 
         public override string ToString()
@@ -170,7 +166,6 @@ namespace LeyendsServer
         {
             public static int dataBufferSize = 4096;
             public TcpClient socket;
-            private readonly int id;
             private NetworkStream stream;
             private Packet receivedData;
             private byte[] receiveBuffer;
@@ -189,13 +184,9 @@ namespace LeyendsServer
                 receiveBuffer = new byte[dataBufferSize];
 
                 stream.BeginRead(receiveBuffer, 0, dataBufferSize, ReceiveCallback, null);
-                //ServerSend.Welcome(id, "Welcome to Auth Server");
 
-                receivedData = new Packet();
-                receiveBuffer = new byte[dataBufferSize];
-
-                stream.BeginRead(receiveBuffer, 0, dataBufferSize, ReceiveCallback, null);
-                GameSend.Welcome(1, "Welcome to Auth Server");
+                Console.WriteLine("RoomTCP Connect");
+                GameSend.Welcome(1, "Welcome to Main Server mr Game");
             }
 
             /// <summary>Sends data to the client via TCP.</summary>
@@ -211,7 +202,7 @@ namespace LeyendsServer
                 }
                 catch (Exception _ex)
                 {
-                    Console.WriteLine($"Error sending data to player {id} via TCP: {_ex}");
+                    Console.WriteLine($"Error sending data to server via TCP: {_ex}");
                 }
             }
 
@@ -268,14 +259,14 @@ namespace LeyendsServer
                         using (Packet _packet = new Packet(_packetBytes))
                         {
                             int _packetId = _packet.ReadInt();
+                            Console.WriteLine($"Packet from room {_packet}");
                             try
                             {
-                                Server.fromGamepacketHandlers[_packetId](id, _packet); // Call appropriate method to handle the packet 
+                                Server.fromGamepacketHandlers[_packetId](_packet); // Call appropriate method to handle the packet 
                             }
                             catch (System.Exception)
                             {
                                 Console.WriteLine($"Unhandled MESSAGE ID ERROR {_packetId}");
-                                ServerSend.SendTrash(id, (int)ErrorCode.General);
                                 throw;
                             }
 

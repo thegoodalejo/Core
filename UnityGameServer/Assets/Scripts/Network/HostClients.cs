@@ -5,11 +5,11 @@ using System.Net;
 using System.Net.Sockets;
 using UnityEngine;
 
-public class Server
+public class HostClients
 {
     public static int MaxPlayers { get; private set; }      
     public static int Port { get; private set; }
-    public static Dictionary<int, Client> clients = new Dictionary<int, Client>();
+    public static Dictionary<int, ClientModel> clients = new Dictionary<int, ClientModel>();
     public delegate void PacketHandler(int _fromClient, Packet _packet);
     public static Dictionary<int, PacketHandler> packetHandlers;
 
@@ -122,15 +122,15 @@ public class Server
     {
         for (int i = 1; i <= MaxPlayers; i++)
         {
-            clients.Add(i, new Client(i));
+            clients.Add(i, new ClientModel(i));
         }
 
         packetHandlers = new Dictionary<int, PacketHandler>()
         {
-            { (int)ClientPackets.welcomeReceived, ServerHandle.WelcomeReceived },
-            { (int)ClientPackets.playerMovement, ServerHandle.PlayerMovement },
-            { (int)ClientPackets.playerShoot, ServerHandle.PlayerShoot },
-            { (int)ClientPackets.playerThrowItem, ServerHandle.PlayerThrowItem }
+            { (int)FromClientPackets.welcomeReceived, HandleClientMsg.WelcomeReceived },
+            { (int)FromClientPackets.playerMovement, HandleClientMsg.PlayerMovement },
+            { (int)FromClientPackets.playerShoot, HandleClientMsg.PlayerShoot },
+            { (int)FromClientPackets.playerThrowItem, HandleClientMsg.PlayerThrowItem }
         };
         Debug.Log("Initialized packets.");
     }

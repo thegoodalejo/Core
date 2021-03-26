@@ -68,14 +68,13 @@ public class Client : MonoBehaviour
             };
 
             receiveBuffer = new byte[dataBufferSize];
-            Debug.Log($"Connection to {instance.ip}:{LoginClient.instance.port}");
-            socket.BeginConnect(instance.ip, LoginClient.instance.gamePort, ConnectCallback, socket);
+            Debug.Log($"Listening Game by {instance.ip}:{LoginClient.instance.gamePort+10000}");
+            socket.BeginConnect(instance.ip, LoginClient.instance.gamePort+10000, ConnectCallback, socket);
         }
 
         /// <summary>Initializes the newly connected client's TCP-related info.</summary>
         private void ConnectCallback(IAsyncResult _result)
         {
-            Debug.Log("ConnectCallback");
             socket.EndConnect(_result);
 
             if (!socket.Connected)
@@ -94,7 +93,6 @@ public class Client : MonoBehaviour
         /// <param name="_packet">The packet to send.</param>
         public void SendData(Packet _packet)
         {
-            Debug.Log("SendData");
             try
             {
                 if (socket != null)
@@ -111,7 +109,6 @@ public class Client : MonoBehaviour
         /// <summary>Reads incoming data from the stream.</summary>
         private void ReceiveCallback(IAsyncResult _result)
         {
-            Debug.Log("ReceiveCallback");
             try
             {
                 int _byteLength = stream.EndRead(_result);
@@ -137,8 +134,8 @@ public class Client : MonoBehaviour
         /// <param name="_data">The recieved data.</param>
         private bool HandleData(byte[] _data)
         {
+            //Debug.Log("Inc TCP from Game rooom");
             int _packetLength = 0;
-
             receivedData.SetBytes(_data);
 
             if (receivedData.UnreadLength() >= 4)
@@ -205,7 +202,8 @@ public class Client : MonoBehaviour
 
         public UDP()
         {
-            endPoint = new IPEndPoint(IPAddress.Parse(instance.ip), LoginClient.instance.port);
+            endPoint = new IPEndPoint(IPAddress.Parse(instance.ip), LoginClient.instance.gamePort+10000);
+            Debug.Log("UDP endpoint: " + endPoint);
         }
 
         /// <summary>Attempts to connect to the server via UDP.</summary>
@@ -267,6 +265,7 @@ public class Client : MonoBehaviour
         /// <param name="_data">The recieved data.</param>
         private void HandleData(byte[] _data)
         {
+            Debug.Log("Inc UDP from Game rooom");
             using (Packet _packet = new Packet(_data))
             {
                 int _packetLength = _packet.ReadInt();
@@ -283,7 +282,7 @@ public class Client : MonoBehaviour
             });
         }
 
-        /// <summary>Disconnects from the server and cleans up the UDP connection.</summary>
+        /// <summary>Disconnects from the server and cleans up the UDP connection. </summary>
         private void Disconnect()
         {
             instance.Disconnect();
