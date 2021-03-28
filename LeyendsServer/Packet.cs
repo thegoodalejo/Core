@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Numerics;
 using System.Text;
 using MongoDB.Bson;
@@ -48,6 +49,7 @@ namespace LeyendsServer
     public enum ToGamePackets
     {
         welcome = 1,
+        playersGroup
     }
 
     public class Packet : IDisposable
@@ -234,6 +236,15 @@ namespace LeyendsServer
         {
             Write(_value.id);
             Write(_value.nick_name);
+        }
+
+        public void Write(List<EndPoint> _value)
+        {
+            Write(_value.Count);
+            foreach (EndPoint _ep in _value)
+            {
+                Write(_ep.ToString());
+            }
         }
         
         #endregion

@@ -38,7 +38,7 @@ public class ListenServer : MonoBehaviour
         InitializeClientData();
         _port += 14501;
         tcp.Connect(); // Connect tcp, udp gets connected once tcp is done
-        HostClients.Start(10, _port);
+        HostClients.Start(3, _port);
     }
     private void OnApplicationQuit()
     {
@@ -130,7 +130,7 @@ public class ListenServer : MonoBehaviour
             }
             catch
             {
-                Debug.Log("Disconnect");
+                Debug.Log("Disconnect from Main Server");
                 Disconnect();
             }
         }
@@ -202,6 +202,7 @@ public class ListenServer : MonoBehaviour
         packetHandlers = new Dictionary<int, PacketHandler>()
         {
             { (int)FromServerPackets.welcome, HandleServerMsg.Welcome },
+            { (int)FromServerPackets.endPointGroup, HandleServerMsg.EndPointGroup }
         };
     }
 }

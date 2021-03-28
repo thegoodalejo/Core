@@ -5,8 +5,11 @@ using UnityEngine;
 public class CameraController : MonoBehaviour
 {
     public PlayerManager player;
-    public float sensitivity = 100f;
+    [SerializeField]
+    public float sensitivity = 300;
     public float clampAngle = 85f;
+
+    private Vector2 motion;
 
     private float verticalRotation;
     private float horizontalRotation;
@@ -28,7 +31,7 @@ public class CameraController : MonoBehaviour
         {
             Look();
         }
-        Debug.DrawRay(transform.position, transform.forward * 2, Color.red);
+        Debug.DrawRay(transform.position, transform.forward * 3, Color.red);
     }
 
     private void Look()
@@ -43,6 +46,11 @@ public class CameraController : MonoBehaviour
 
         transform.localRotation = Quaternion.Euler(verticalRotation, 0f, 0f);
         player.transform.rotation = Quaternion.Euler(0f, horizontalRotation, 0f);
+    }
+
+    private void Look2(){
+        motion = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+        transform.Translate(motion*sensitivity*Time.deltaTime);
     }
 
     private void ToggleCursorMode()

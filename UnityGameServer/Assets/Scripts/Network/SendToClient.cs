@@ -54,7 +54,16 @@ public class SendToClient
         _packet.WriteLength();
         for (int i = 1; i <= HostClients.MaxPlayers; i++)
         {
-            HostClients.clients[i].udp.SendData(_packet);
+            try
+            {
+                HostClients.clients[i].udp.SendData(_packet);
+            }
+            catch (KeyNotFoundException)
+            {
+                Debug.Log($"UDP slot isnt setup");
+                throw;
+            }
+            
         }
     }
     /// <summary>Sends a packet to all clients except one via UDP.</summary>
@@ -107,7 +116,6 @@ public class SendToClient
     /// <param name="_player">The player whose position to update.</param>
     public static void PlayerPosition(Player _player)
     {
-        Debug.Log("SendToClient.PlayerPosition (UDP)");
         using (Packet _packet = new Packet((int)ToClientPackets.playerPosition))
         {
             _packet.Write(_player.id);

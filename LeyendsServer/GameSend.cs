@@ -20,14 +20,25 @@ namespace LeyendsServer
         /// <summary>Sends a welcome message to the given client.</summary>
         /// <param name="_toClient">The client to send the packet to.</param>
         /// <param name="_msg">The message to send.</param>
-        public static void Welcome(int _toClient, string _msg)//ID:1
+        public static void Welcome(int _toRoom, string _msg)//ID:1
         {
             using (Packet _packet = new Packet((int)ToGamePackets.welcome))
             {
                 _packet.Write(_msg);
-                _packet.Write(_toClient);
+                _packet.Write(_toRoom);
 
-                SendTCPData(_toClient, _packet);
+                SendTCPData(_toRoom, _packet);
+            }
+        }
+
+        public static void PlayersGroupEP(int _toRoom)//ID:2
+        {
+            using (Packet _packet = new Packet((int)ToGamePackets.playersGroup))
+            {
+                _packet.Write(Server.rooms[_toRoom].GroupMembersEndPoint());
+                _packet.Write(_toRoom);
+
+                SendTCPData(_toRoom, _packet);
             }
         }
         #endregion

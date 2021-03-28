@@ -42,12 +42,13 @@ public class HostClients
     {
         TcpClient _client = tcpListener.EndAcceptTcpClient(_result);
         tcpListener.BeginAcceptTcpClient(TCPConnectCallback, null);
-        Debug.Log($"Incoming connection from {_client.Client.RemoteEndPoint}...");
+        
 
         for (int i = 1; i <= MaxPlayers; i++)
         {
             if (clients[i].tcp.socket == null)
             {
+                Debug.Log($"Inc conn from {_client.Client.RemoteEndPoint} on clients[{i}]");
                 clients[i].tcp.Connect(_client);
                 return;
             }
@@ -116,15 +117,18 @@ public class HostClients
             Debug.Log($"Error sending data to {_clientEndPoint} via UDP: {_ex}");
         }
     }
+    /// <summary>Initializes all server players slots.</summary>
+    public static void InitializeServerPlayerSlots(List<String> _epGroup){
+        // Empty
+    }
 
     /// <summary>Initializes all necessary server data.</summary>
     private static void InitializeServerData()
     {
-        for (int i = 1; i <= MaxPlayers; i++)
+        for (int i = 1; i <= MaxPlayers+1; i++)
         {
             clients.Add(i, new ClientModel(i));
         }
-
         packetHandlers = new Dictionary<int, PacketHandler>()
         {
             { (int)FromClientPackets.welcomeReceived, HandleClientMsg.WelcomeReceived },

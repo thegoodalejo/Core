@@ -40,7 +40,7 @@ namespace LeyendsServer
             tcpListener.BeginAcceptTcpClient(TCPConnectCallback, null);
             Console.WriteLine($"Incoming connection from room {_client.Client.RemoteEndPoint} ...");
 
-            gameClient.Connect(_client);
+            gameClient.Connect(_client, id);
         }
 
         public override string ToString()
@@ -93,6 +93,18 @@ namespace LeyendsServer
                 }
             }
             return _members;
+        }
+        public List<EndPoint> GroupMembersEndPoint()
+        {
+            List<EndPoint> _membersIEP = new List<EndPoint>();
+            foreach (int group in groupsInRoom)
+            {
+                foreach (PlayerQueue player in QueueManager.randomQueuesGrup[group].groupMembers)
+                {
+                    _membersIEP.Add(Server.clients[player.id].tcp.socket.Client.RemoteEndPoint);
+                }
+            }
+            return _membersIEP;
         }
         public bool isGameRoomReady()
         {
@@ -172,7 +184,7 @@ namespace LeyendsServer
 
             /// <summary>Initializes the newly connected client's TCP-related info.</summary>
             /// <param name="_socket">The TcpClient instance of the newly connected client.</param>
-            public void Connect(TcpClient _socket)
+            public void Connect(TcpClient _socket, int _id)
             {
                 socket = _socket;
                 socket.ReceiveBufferSize = dataBufferSize;
@@ -186,7 +198,7 @@ namespace LeyendsServer
                 stream.BeginRead(receiveBuffer, 0, dataBufferSize, ReceiveCallback, null);
 
                 Console.WriteLine("RoomTCP Connect");
-                GameSend.Welcome(1, "Welcome to Main Server mr Game");
+                GameSend.Welcome(_id, "Welcome to Main Server mr Game");
             }
 
             /// <summary>Sends data to the client via TCP.</summary>

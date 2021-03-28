@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
+using System.Net;
 
 /// <summary>Sent from server to client.</summary>
 public enum ToClientPackets
@@ -36,6 +37,7 @@ public enum FromClientPackets
 public enum FromServerPackets
 {
     welcome = 1,
+    endPointGroup,
 }
 public enum ToServerPackets
 {
@@ -384,6 +386,18 @@ public class Packet : IDisposable
     public Quaternion ReadQuaternion(bool _moveReadPos = true)
     {
         return new Quaternion(ReadFloat(_moveReadPos), ReadFloat(_moveReadPos), ReadFloat(_moveReadPos), ReadFloat(_moveReadPos));
+    }
+    /// <summary>Reads a List of EndPoints from the packet.</summary>
+    /// <param name="_moveReadPos">Whether or not to move the buffer's read position.</param>
+    public List<String> ReadEpGorup(bool _moveReadPos = true)
+    {
+        int count = ReadInt(_moveReadPos);
+        List<String> epGroup = new List<String>();
+        for (int i = 0; i < count; i++)
+        {
+            epGroup.Add(ReadString(_moveReadPos));
+        }
+        return epGroup;
     }
     #endregion
 

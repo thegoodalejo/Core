@@ -9,6 +9,7 @@ public class ClientModel
 {
     public static int dataBufferSize = 4096;
     public int id;
+    public bool isBusy;
     public Player player;
     public TCP tcp;
     public UDP udp;
@@ -16,6 +17,7 @@ public class ClientModel
     public ClientModel(int _clientId)
     {
         id = _clientId;
+        isBusy = false;
         tcp = new TCP(id);
         udp = new UDP(id);
     }
@@ -50,7 +52,6 @@ public class ClientModel
             stream.BeginRead(receiveBuffer, 0, dataBufferSize, ReceiveCallback, null);
 
             SendToClient.Welcome(id, "Welcome to the game room, fool!");
-            Debug.Log("player inc");  
         }
 
         /// <summary>Sends data to the client via TCP.</summary>
@@ -260,7 +261,7 @@ public class ClientModel
 
         tcp.Disconnect();
         udp.Disconnect();
-
+        isBusy = false;
         SendToClient.PlayerDisconnected(id);
     }
 }

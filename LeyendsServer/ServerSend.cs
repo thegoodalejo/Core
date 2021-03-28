@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using MongoDB.Bson;
 
 namespace LeyendsServer
@@ -57,6 +58,7 @@ namespace LeyendsServer
             _packet.WriteLength();
             foreach (int _id in _grupClients)
             {
+                Console.WriteLine($"/-/ Sync Send to {_id} player slot");
                 if (_id != 0)
                 {
                     Server.clients[_id].tcp.SendData(_packet);
@@ -297,7 +299,7 @@ namespace LeyendsServer
                 SendTCPData(_toFriend, _packet);
             }
         }
-        public static void GameCall(int _roomId)//ID:15
+        public async static void GameCall(int _roomId)//ID:15
         {
             List<int> _gameMembers = new List<int>();
             foreach (int group in Server.rooms[_roomId].groupsInRoom)
@@ -313,10 +315,15 @@ namespace LeyendsServer
                 }
             }
             Console.WriteLine($"Sending GameCall to room {_roomId}");
-            using (Packet _packet = new Packet((int)ServerPackets.gameCall))
+            foreach (int _id in _gameMembers)
             {
-                _packet.Write(Server.rooms[_roomId].port);
-                SendTCPDataToAll(_gameMembers, _packet);
+                Console.WriteLine($"Calling player{_id}");
+                using (Packet _packet = new Packet((int)ServerPackets.gameCall))
+                {
+                    _packet.Write(Server.rooms[_roomId].port);
+                    SendTCPData(_id, _packet);
+                }
+                await Task.Delay(500);
             }
         }
         #endregion

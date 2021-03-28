@@ -66,14 +66,13 @@ namespace LeyendsServer
                 if (!Server.rooms[i].isSet)
                 {
                     Server.rooms[i].isSet = true;
-                    Server.rooms[i].groupSize = 1;
-                    Console.WriteLine("Add new Room");
+                    Server.rooms[i].groupSize = 3;
+                    Console.WriteLine($"Add new Room {Server.rooms[i].id} of {Server.MaxRooms} Rooms");
                     targetRoom = i;
                     isBuilding = false;
                     //string filename = Path.Combine("D:\\Legends\\GameServerSln", "UnityGameServer.exe");
                     //var proc = System.Diagnostics.Process.Start(filename, Server.rooms[i].port.ToString());
                     Server.rooms[i].Start();
-                    
                     return;
                 }
             }
@@ -84,16 +83,18 @@ namespace LeyendsServer
             try
             {
                 isCalling = true;
-                Console.WriteLine($"CAlling {isCalling}");
-                Commands.ReadArgs("-Games");
+                Console.WriteLine($"Calling {isCalling}");
+                /*Commands.ReadArgs("-Games");
                 Commands.ReadArgs("-listGroups");
-                Commands.ReadArgs("-listQueues");
+                Commands.ReadArgs("-listQueues");*/
                 ServerSend.GameFoundRequest(Server.rooms[targetRoom].GroupMembers());
+                GameSend.PlayersGroupEP(Server.rooms[targetRoom].id);
                 await Task.Delay(10000);
                 if (Server.rooms[targetRoom].isGameRoomReady())
                 {
                     Console.WriteLine("Todos aceptaron");
                     Server.rooms[targetRoom].SendGame();
+                    await Task.Delay(10000);
                     foreach (int item in Server.rooms[targetRoom].groupsInRoom)
                     {
                         randomQueuesGrup.Remove(item);
