@@ -66,7 +66,7 @@ namespace LeyendsServer
                 if (!Server.rooms[i].isSet)
                 {
                     Server.rooms[i].isSet = true;
-                    Server.rooms[i].groupSize = 3;
+                    Server.rooms[i].groupSize = 1;
                     Console.WriteLine($"Add new Room {Server.rooms[i].id} of {Server.MaxRooms} Rooms");
                     targetRoom = i;
                     isBuilding = false;

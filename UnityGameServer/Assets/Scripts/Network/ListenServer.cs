@@ -38,7 +38,7 @@ public class ListenServer : MonoBehaviour
         InitializeClientData();
         _port += 14501;
         tcp.Connect(); // Connect tcp, udp gets connected once tcp is done
-        HostClients.Start(3, _port);
+        HostClients.Start(1, _port);
     }
     private void OnApplicationQuit()
     {
