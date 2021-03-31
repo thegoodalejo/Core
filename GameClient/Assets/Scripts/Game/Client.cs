@@ -265,7 +265,6 @@ public class Client : MonoBehaviour
         /// <param name="_data">The recieved data.</param>
         private void HandleData(byte[] _data)
         {
-            Debug.Log("Inc UDP from Game rooom");
             using (Packet _packet = new Packet(_data))
             {
                 int _packetLength = _packet.ReadInt();

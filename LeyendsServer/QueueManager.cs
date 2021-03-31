@@ -26,11 +26,10 @@ namespace LeyendsServer
         {
             if (isBuilding)
             {
-                BuildNewRoom();
+                BuildNewRoom(1);// Numero de jugadores para la sala
             }
             if (isCalling) return;
             if (Server.rooms[targetRoom].isReadyToCall()) CallGame();
-            // Console.WriteLine($"Not isCalling, Pointing {targetRoom}");
             if (Server.rooms[targetRoom].playersInGroup <= Server.rooms[targetRoom].groupSize &&
             QueueManager.randomQueuesGrup.Count > 0)
             {
@@ -59,19 +58,19 @@ namespace LeyendsServer
             }
         }
 
-        private static void BuildNewRoom()
+        private static void BuildNewRoom(int _groupSize)
         {
             for (int i = 1; i <= Server.MaxRooms; i++)
             {
                 if (!Server.rooms[i].isSet)
                 {
                     Server.rooms[i].isSet = true;
-                    Server.rooms[i].groupSize = 1;
+                    Server.rooms[i].groupSize = _groupSize;
                     Console.WriteLine($"Add new Room {Server.rooms[i].id} of {Server.MaxRooms} Rooms");
                     targetRoom = i;
                     isBuilding = false;
-                    //string filename = Path.Combine("D:\\Legends\\GameServerSln", "UnityGameServer.exe");
-                    //var proc = System.Diagnostics.Process.Start(filename, Server.rooms[i].port.ToString());
+                    string filename = Path.Combine("D:\\Legends\\GameServerSln", "UnityGameServer.exe");
+                    var proc = System.Diagnostics.Process.Start(filename, "-port " + Server.rooms[i].port.ToString()+" -maxPlayers "+ _groupSize);
                     Server.rooms[i].Start();
                     return;
                 }
