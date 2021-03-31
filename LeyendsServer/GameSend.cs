@@ -24,7 +24,10 @@ namespace LeyendsServer
         {
             using (Packet _packet = new Packet((int)ToGamePackets.welcome))
             {
-                _packet.Write(_msg);
+                Guid guid = Guid.NewGuid();
+                Server.rooms[_toRoom].guid = guid;
+                string strGuid = guid.ToString();
+                _packet.Write(strGuid);
                 _packet.Write(_toRoom);
 
                 SendTCPData(_toRoom, _packet);

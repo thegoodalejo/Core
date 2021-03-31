@@ -14,6 +14,7 @@ namespace LeyendsServer
         public bool isSet { get; set; }
         public int port { get; set; }
         public int groupSize { get; set; }
+        public Guid guid { get; set; }
         public int playersInGroup { get; set; }
         public List<int> groupsInRoom { get; set; }
         private TcpListener tcpListener;
@@ -24,6 +25,7 @@ namespace LeyendsServer
             isSet = false;
             port = _port;
             groupSize = 0;
+            guid = Guid.Empty;
             playersInGroup = 0;
             gameClient = new RoomTCP();
             groupsInRoom = new List<int>();

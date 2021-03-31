@@ -9,6 +9,7 @@ public class ListenServer : MonoBehaviour
 {
     public static ListenServer instance;
     public TCP tcp;
+    public int maxPlayers;
     private bool isConnected = false;
     private delegate void PacketHandler(Packet _packet);
     private static Dictionary<int, PacketHandler> packetHandlers;
@@ -24,7 +25,10 @@ public class ListenServer : MonoBehaviour
             Destroy(this);
         }
         string[] args = System.Environment.GetCommandLineArgs();
-        int _port = 0;
+        int _port = 0; //Auto Mode
+        maxPlayers = 0;
+        //int _port = 4501; //Manual mode
+        //maxPlayers = 1;
         for (int i = 0; i < args.Length; i++)
         {
             //Debug.Log("ARG " + i + ": " + args[i]);
@@ -32,13 +36,17 @@ public class ListenServer : MonoBehaviour
             {
                 _port = Int32.Parse(args[i + 1]);
             }
+            if (args[i] == "-maxPlayers")
+            {
+                maxPlayers = Int32.Parse(args[i + 1]);
+            }
         }
         tcp = new TCP(_port);
         isConnected = true;
         InitializeClientData();
-        _port += 14501;
         tcp.Connect(); // Connect tcp, udp gets connected once tcp is done
-        HostClients.Start(1, _port);
+        _port += 10000;
+        HostClients.Start(maxPlayers, _port);
     }
     private void OnApplicationQuit()
     {
@@ -60,7 +68,7 @@ public class ListenServer : MonoBehaviour
         private byte[] receiveBuffer;
         private int dataBufferSize = 4096;
         private string ip = "127.0.0.1";
-        private int port = 0;
+        public int port = 0;
 
         public TCP(int _port)
         {
@@ -77,7 +85,7 @@ public class ListenServer : MonoBehaviour
                 SendBufferSize = dataBufferSize
             };
             receiveBuffer = new byte[dataBufferSize];
-            socket.BeginConnect(ip, 4501, ConnectCallback, socket);
+            socket.BeginConnect(ip, port, ConnectCallback, socket);
             //socket.BeginConnect(IPAddress.Parse(ip), port, ConnectCallback, socket);
         }
 
@@ -206,3 +214,4 @@ public class ListenServer : MonoBehaviour
         };
     }
 }
+

@@ -19,10 +19,9 @@ public class SendToServer : MonoBehaviour
     /// <param name="_msg">The message to send.</param>
     public static void WelcomeReceived(string _msg)
     {
-        Debug.Log("WelcomeReceived");
         using (Packet _packet = new Packet((int)ToServerPackets.welcomeReceived))
         {
-            _packet.Write("Hola desde la sala de juegos");
+            _packet.Write(_msg);
             SendTCPData(_packet);
         }
     }

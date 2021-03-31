@@ -34,7 +34,7 @@ public class HostClients
         udpListener = new UdpClient(Port);
         udpListener.BeginReceive(UDPReceiveCallback, null);
 
-        Debug.Log($"Server started on port {Port}.");
+        Debug.Log($"Hosting Players by port: {Port}.");
     }
 
     /// <summary>Handles new TCP connections.</summary>

@@ -7,9 +7,11 @@ public class HandleServerMsg : MonoBehaviour
 {
     public static void Welcome(Packet _packet)//ID:1
     {
-        string _msg = _packet.ReadString();
-        Debug.Log($"Message from server: {_msg}");
-        SendToServer.WelcomeReceived("OKrdgrsgssefesfesfeasfsfsffssfsffsfsfsfsf");
+        string _token = _packet.ReadString();
+        int _myRid = _packet.ReadInt();
+        Debug.Log($"Temp Token: {_token}");
+        Debug.Log($"Room ID: {_myRid}");
+        SendToServer.WelcomeReceived($"Server [{_myRid}]: Temp Token: {_token} Room ID: {_myRid} Port: {ListenServer.instance.tcp.port} MaxPlayers: {ListenServer.instance.maxPlayers}");
     }
     public static void EndPointGroup(Packet _packet)//ID:2
     {
