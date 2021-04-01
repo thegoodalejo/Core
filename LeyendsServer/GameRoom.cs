@@ -47,7 +47,7 @@ namespace LeyendsServer
 
         public override string ToString()
         {
-            return $" [{id}] [{port}] groupSize[{groupSize}]";
+            return $" [{id}] [{port}] groupSize[{groupSize}] isSet: {isSet}";
         }
         public void SetGroupMember(int _groupId)
         {
@@ -183,11 +183,13 @@ namespace LeyendsServer
             private NetworkStream stream;
             private Packet receivedData;
             private byte[] receiveBuffer;
+            private int id;
 
             /// <summary>Initializes the newly connected client's TCP-related info.</summary>
             /// <param name="_socket">The TcpClient instance of the newly connected client.</param>
             public void Connect(TcpClient _socket, int _id)
             {
+                id = _id;
                 socket = _socket;
                 socket.ReceiveBufferSize = dataBufferSize;
                 socket.SendBufferSize = dataBufferSize;
@@ -311,6 +313,8 @@ namespace LeyendsServer
             /// <summary>Closes and cleans up the TCP connection.</summary>
             public void Disconnect()
             {
+                Console.WriteLine($"GameServer [{id}] disconected from MainServer");
+                Server.rooms[id].isSet = false;
                 socket.Close();
                 stream = null;
                 receivedData = null;
