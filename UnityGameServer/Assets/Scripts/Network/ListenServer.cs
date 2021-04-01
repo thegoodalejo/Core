@@ -25,10 +25,10 @@ public class ListenServer : MonoBehaviour
             Destroy(this);
         }
         string[] args = System.Environment.GetCommandLineArgs();
-        int _port = 0; //Auto Mode
-        maxPlayers = 0;
-        //int _port = 4501; //Manual mode
-        //maxPlayers = 1;
+        // int _port = 0; //Auto Mode
+        // maxPlayers = 0;
+        int _port = 4501; //Manual mode
+        maxPlayers = 1;
         for (int i = 0; i < args.Length; i++)
         {
             //Debug.Log("ARG " + i + ": " + args[i]);
