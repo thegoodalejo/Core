@@ -324,6 +324,18 @@ namespace LeyendsServer
                     SendTCPData(_id, _packet);
                 }
                 await Task.Delay(500);
+                //BaseMap(_id);
+            }
+        }
+        public static void BaseMap(int _toClient)//ID:16
+        {
+            using (Packet _packet = new Packet((int)ServerPackets.baseMap))
+            {
+                _packet.Write(Procedural.GetTriangles());
+                _packet.Write(Procedural.GetVertices());
+                _packet.Write(_toClient);
+
+                SendTCPData(_toClient, _packet);
             }
         }
         #endregion

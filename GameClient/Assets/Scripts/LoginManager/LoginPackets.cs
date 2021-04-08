@@ -22,6 +22,7 @@ public enum LoginServerPackets
     queueCanceled,
     friendRequest,
     gameRequest,
+    getMap,
 }
 
 /// <summary>Sent from client to server.</summary>

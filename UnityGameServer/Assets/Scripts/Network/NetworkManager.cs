@@ -36,10 +36,9 @@ public class NetworkManager : MonoBehaviour
     {
         HostClients.Stop();
     }
-
     public Player InstantiatePlayer()
     {
-        return Instantiate(playerPrefab, new Vector3(0f, 0.5f, 0f), Quaternion.identity).GetComponent<Player>();
+        return Instantiate(playerPrefab, new Vector3(2f, 5f, 2f), Quaternion.identity).GetComponent<Player>();
     }
 
     public void InstantiateEnemy(Vector3 _position)

@@ -11,6 +11,7 @@ namespace LeyendsServer
         {
             string _msg = _packet.ReadString();
             Console.WriteLine(_msg);
+            //GameSend.BaseMap(1);
         }
     }
 }

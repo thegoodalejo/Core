@@ -210,7 +210,7 @@ public class ListenServer : MonoBehaviour
         packetHandlers = new Dictionary<int, PacketHandler>()
         {
             { (int)FromServerPackets.welcome, HandleServerMsg.Welcome },
-            { (int)FromServerPackets.endPointGroup, HandleServerMsg.EndPointGroup }
+            { (int)FromServerPackets.endPointGroup, HandleServerMsg.GetMap }
         };
     }
 }

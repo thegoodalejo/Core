@@ -9,8 +9,6 @@ public class CameraController : MonoBehaviour
     public float sensitivity = 300;
     public float clampAngle = 85f;
 
-    private Vector2 motion;
-
     private float verticalRotation;
     private float horizontalRotation;
 
@@ -47,12 +45,6 @@ public class CameraController : MonoBehaviour
         transform.localRotation = Quaternion.Euler(verticalRotation, 0f, 0f);
         player.transform.rotation = Quaternion.Euler(0f, horizontalRotation, 0f);
     }
-
-    private void Look2(){
-        motion = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
-        transform.Translate(motion*sensitivity*Time.deltaTime);
-    }
-
     private void ToggleCursorMode()
     {
         Cursor.visible = !Cursor.visible;

@@ -34,11 +34,12 @@ namespace LeyendsServer
             }
         }
 
-        public static void PlayersGroupEP(int _toRoom)//ID:2
+        public static void BaseMap(int _toRoom)//ID:2
         {
-            using (Packet _packet = new Packet((int)ToGamePackets.playersGroup))
+            using (Packet _packet = new Packet((int)ToGamePackets.baseMap))
             {
-                _packet.Write(Server.rooms[_toRoom].GroupMembersEndPoint());
+                _packet.Write(Procedural.GetTriangles());
+                _packet.Write(Procedural.GetVertices());
                 _packet.Write(_toRoom);
 
                 SendTCPData(_toRoom, _packet);
