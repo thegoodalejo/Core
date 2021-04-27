@@ -83,8 +83,7 @@ public class Zone : MonoBehaviour
     }
     void OnTriggerEnter(Collider obj){
         Debug.Log($"In # {myIndex}");
-        obj.GetComponentInParent<PhysicsCore>().gravity = Vector3.zero;
-        obj.GetComponentInParent<PhysicsCore>().gravity += gravity;
+        obj.GetComponentInParent<Player>().UpdateState(gravity);
     }
     void OnTriggerStay(Collider obj){
         //Debug.Log("Stay");
@@ -96,17 +95,17 @@ public class Zone : MonoBehaviour
         // obj.GetComponentInParent<PhysicsCore>().gravity += -gravity;
     }
 
-    private void OnDrawGizmos () {
-        foreach (Vector3 v in vertices)
-        {
-            Gizmos.color = Color.green;
-		    Gizmos.DrawSphere(v,0.3f);
-        }
-        foreach (Vector3 v in vertices)
-        {
-            Gizmos.color = Color.red;
-		    Gizmos.DrawLine(core,v);
-        }
-	}
+    // private void OnDrawGizmos () {
+    //     foreach (Vector3 v in vertices)
+    //     {
+    //         Gizmos.color = Color.green;
+	// 	    Gizmos.DrawSphere(v,0.3f);
+    //     }
+    //     foreach (Vector3 v in vertices)
+    //     {
+    //         Gizmos.color = Color.red;
+	// 	    Gizmos.DrawLine(core,v);
+    //     }
+	// }
     
 }

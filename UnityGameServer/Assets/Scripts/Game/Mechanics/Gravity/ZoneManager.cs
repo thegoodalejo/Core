@@ -26,8 +26,8 @@ public class ZoneManager : MonoBehaviour
     }
     void Start()
     {
-        Zone.size = 50;
-        Zone.gForce = 2;
+        Zone.size = 25;
+        Zone.gForce = 15;
         MakeCube();
     }
 

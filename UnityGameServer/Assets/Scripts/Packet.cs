@@ -23,7 +23,8 @@ public enum ToClientPackets
     projectileExploded,
     spawnEnemy,
     enemyPosition,
-    enemyHealth
+    enemyHealth,
+    playerGravity
 }
 
 /// <summary>Sent from client to server.</summary>

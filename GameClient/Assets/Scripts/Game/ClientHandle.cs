@@ -154,4 +154,12 @@ public class ClientHandle : MonoBehaviour
 
         GameManager.enemies[_enemyId].SetHealth(_health);
     }
+
+    public static void PlayerGravity(Packet _packet)
+    {
+        int _id = _packet.ReadInt();
+        Vector3 _gravity = _packet.ReadVector3();
+        Debug.Log($"Player {_id} swap to {_gravity}");
+        GameManager.players[_id].UpdateState(_gravity);
+    }
 }

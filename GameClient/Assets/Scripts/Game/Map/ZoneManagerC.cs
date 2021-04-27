@@ -18,7 +18,7 @@ public class ZoneManagerC : MonoBehaviour
             Debug.Log("Instance already exists, destroying object!");
             Destroy(this);
         }
-        Zone.size = 3;
+        Zone.size = 15;
     }
     public Zone InstantiateZone()
     {
@@ -26,8 +26,8 @@ public class ZoneManagerC : MonoBehaviour
     }
     void Start()
     {
-        Zone.size = 50;
-        Zone.gForce = 2;
+        Zone.size = 25;
+        Zone.gForce = 15;
         MakeCube();
     }
 

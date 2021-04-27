@@ -28,8 +28,9 @@ public class HandleClientMsg
         {
             _inputs[i] = _packet.ReadBool();
         }
-        Quaternion _rotation = _packet.ReadQuaternion();
-        HostClients.clients[_fromClient].player.SetInput(_inputs, _rotation);
+        Vector3 _rotation = _packet.ReadVector3();
+        Vector3 _sight = _packet.ReadVector3();
+        HostClients.clients[_fromClient].player.SetInput(_inputs, _rotation, _sight);
     }
 
     public static void PlayerShoot(int _fromClient, Packet _packet)

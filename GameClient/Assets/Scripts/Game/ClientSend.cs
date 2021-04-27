@@ -44,8 +44,9 @@ public class ClientSend : MonoBehaviour
             {
                 _packet.Write(_input);
             }
-            _packet.Write(GameManager.players[Client.instance.myId].transform.rotation);
-
+            _packet.Write(GameManager.players[Client.instance.myId].transform.rotation.eulerAngles);
+            _packet.Write(GameManager.players[Client.instance.myId].sight.transform.rotation.eulerAngles);
+            Debug.Log($"Rot {GameManager.players[Client.instance.myId].transform.rotation.eulerAngles}");
             SendTCPData(_packet);
         }
     }
