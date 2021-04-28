@@ -5,19 +5,19 @@ using UnityEngine;
 public class CameraController : MonoBehaviour
 {
     public PlayerManager player;
-    [SerializeField]
-    public float sensitivity = 300;
-    public float clampAngle = 85f;
+    [SerializeField][Range(0,2)]
+    public float sensitivity = 1f;
+    public float clampAngle = 65f;
+    public float vertCounter = 0f;
 
-    private Vector2 motion;
-
-    private float verticalRotation;
-    private float horizontalRotation;
+    private float oldVerticalRot;
+    
+    private float oldHorizontalRot;
 
     private void Start()
     {
-        verticalRotation = transform.localEulerAngles.x;
-        horizontalRotation = player.transform.eulerAngles.y;
+        player.verticalRotation = 0f;
+        player.horizontalRotation = 0f;
     }
 
     private void Update()
@@ -26,33 +26,39 @@ public class CameraController : MonoBehaviour
         {
             ToggleCursorMode();
         }
-
+        
         if (Cursor.lockState == CursorLockMode.Locked)
         {
             Look();
         }
-        Debug.DrawRay(transform.position, transform.forward * 3, Color.red);
     }
 
     private void Look()
     {
         float _mouseVertical = -Input.GetAxis("Mouse Y");
-        float _mouseHorizontal = Input.GetAxis("Mouse X");
+        float _mouseHorizontal = Input.GetAxis("Mouse X");        
 
-        verticalRotation += _mouseVertical * sensitivity * Time.deltaTime;
-        horizontalRotation += _mouseHorizontal * sensitivity * Time.deltaTime;
+        player.horizontalRotation += (_mouseHorizontal-oldHorizontalRot)*sensitivity;
+        oldHorizontalRot=_mouseHorizontal;
+        player.transform.RotateAround(player.transform.position, player.transform.up, player.horizontalRotation);
 
-        verticalRotation = Mathf.Clamp(verticalRotation, -clampAngle, clampAngle);
-
-        transform.localRotation = Quaternion.Euler(verticalRotation, 0f, 0f);
-        player.transform.rotation = Quaternion.Euler(0f, horizontalRotation, 0f);
+        player.verticalRotation += (_mouseVertical-oldVerticalRot)*sensitivity;
+        // player.verticalRotation = Mathf.Clamp(player.verticalRotation, -clampAngle, clampAngle);
+        oldVerticalRot=_mouseVertical;
+        vertCounter += player.verticalRotation;
+        if(vertCounter > clampAngle) {
+            vertCounter = clampAngle;
+            return;
+            };
+        if(vertCounter < -clampAngle) {
+            vertCounter = -clampAngle;
+            return;
+            }
+        player.sight.transform.RotateAround(player.transform.position, player.transform.right, player.verticalRotation);
+        
+        // localRotation = Quaternion.AngleAxis(player.verticalRotation,transform.right);
+        // transform.localRotation = RotateAround(transform.position, transform.right, player.verticalRotation);
     }
-
-    private void Look2(){
-        motion = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
-        transform.Translate(motion*sensitivity*Time.deltaTime);
-    }
-
     private void ToggleCursorMode()
     {
         Cursor.visible = !Cursor.visible;

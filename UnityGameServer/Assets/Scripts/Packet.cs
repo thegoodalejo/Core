@@ -23,7 +23,8 @@ public enum ToClientPackets
     projectileExploded,
     spawnEnemy,
     enemyPosition,
-    enemyHealth
+    enemyHealth,
+    playerGravity
 }
 
 /// <summary>Sent from client to server.</summary>
@@ -387,17 +388,31 @@ public class Packet : IDisposable
     {
         return new Quaternion(ReadFloat(_moveReadPos), ReadFloat(_moveReadPos), ReadFloat(_moveReadPos), ReadFloat(_moveReadPos));
     }
-    /// <summary>Reads a List of EndPoints from the packet.</summary>
+    /// <summary>Reads a List of ints from the packet.</summary>
     /// <param name="_moveReadPos">Whether or not to move the buffer's read position.</param>
-    public List<String> ReadEpGorup(bool _moveReadPos = true)
+    public int[] ReadTriangles(bool _moveReadPos = true)
     {
-        int count = ReadInt(_moveReadPos);
-        List<String> epGroup = new List<String>();
-        for (int i = 0; i < count; i++)
+        int length = ReadInt(_moveReadPos);
+        int[] triangles = new int[length];
+        
+        for (int i = 0; i < length; i++)
         {
-            epGroup.Add(ReadString(_moveReadPos));
+            triangles[i] = (ReadInt(_moveReadPos));
         }
-        return epGroup;
+        return triangles;
+    }
+    /// <summary>Reads a Vector3 of ints from the packet.</summary>
+    /// <param name="_moveReadPos">Whether or not to move the buffer's read position.</param>
+    public Vector3[] ReadVertices(bool _moveReadPos = true)
+    {
+        int length = ReadInt(_moveReadPos);
+        Vector3[] vertices = new Vector3[length];
+        
+        for (int i = 0; i < length; i++)
+        {
+            vertices[i] = (ReadVector3(_moveReadPos));
+        }
+        return vertices;
     }
     #endregion
 

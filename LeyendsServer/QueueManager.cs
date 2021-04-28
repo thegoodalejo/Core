@@ -26,7 +26,7 @@ namespace LeyendsServer
         {
             if (isBuilding)
             {
-                BuildNewRoom(1);// Numero de jugadores para la sala
+                BuildNewRoom(2);// Numero de jugadores para la sala
             }
             if (isCalling) return;
             if (Server.rooms[targetRoom].isReadyToCall()) CallGame();
@@ -88,7 +88,7 @@ namespace LeyendsServer
                 Commands.ReadArgs("-listGroups");
                 Commands.ReadArgs("-listQueues");*/
                 ServerSend.GameFoundRequest(Server.rooms[targetRoom].GroupMembers());
-                GameSend.PlayersGroupEP(Server.rooms[targetRoom].id);
+                //GameSend.BaseMap(Server.rooms[targetRoom].id);
                 await Task.Delay(10000);
                 if (Server.rooms[targetRoom].isGameRoomReady())
                 {

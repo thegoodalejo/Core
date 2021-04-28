@@ -25,6 +25,7 @@ namespace LeyendsServer
         queueCanceled,
         friendRequest,
         gameCall,
+        baseMap,
     }
 
     /// <summary>Sent from client to server.</summary>
@@ -49,7 +50,7 @@ namespace LeyendsServer
     public enum ToGamePackets
     {
         welcome = 1,
-        playersGroup
+        baseMap
     }
 
     public class Packet : IDisposable
@@ -244,6 +245,24 @@ namespace LeyendsServer
             foreach (EndPoint _ep in _value)
             {
                 Write(_ep.ToString());
+            }
+        } 
+        public void Write(int[] _value)
+        {
+            int length = _value.Length;
+            Write(length);
+            for (int i = 0; i < length; i++)
+            {
+                Write(_value[i]);
+            }
+        }
+        public void Write(Vector3[] _value)
+        {
+            int length = _value.Length;
+            Write(length);
+            for (int i = 0; i < length; i++)
+            {
+                Write(_value[i]);
             }
         }
         

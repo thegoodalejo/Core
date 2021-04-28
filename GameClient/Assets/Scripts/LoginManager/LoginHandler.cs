@@ -174,4 +174,11 @@ public class LoginHandler : MonoBehaviour
         LoginClient.instance.gamePort = _gamePort;
         SceneManager.LoadScene("Main");
     }
+    public static void GetMap(Packet _packet)//ID:16
+    {
+        int[] triangles = _packet.ReadTriangles();
+        Vector3[] vertices = _packet.ReadVertices();
+        Debug.Log($"GetMap tris {triangles.Length} verts {vertices.Length}");
+        MapManager.instance.SpawnMesh(1,triangles,vertices);
+    }
 }

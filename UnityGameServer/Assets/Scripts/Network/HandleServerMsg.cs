@@ -13,9 +13,12 @@ public class HandleServerMsg : MonoBehaviour
         Debug.Log($"Room ID: {_myRid}");
         SendToServer.WelcomeReceived($"Server [{_myRid}]: Temp Token: {_token} Room ID: {_myRid} Port: {ListenServer.instance.tcp.port} MaxPlayers: {ListenServer.instance.maxPlayers}");
     }
-    public static void EndPointGroup(Packet _packet)//ID:2
+    public static void GetMap(Packet _packet)//ID:2
     {
-        List<string> _epGroup = _packet.ReadEpGorup();
-        HostClients.InitializeServerPlayerSlots(_epGroup);
+        
+        int[] triangles = _packet.ReadTriangles();
+        Vector3[] vertices = _packet.ReadVertices();
+        Debug.Log($"GetMap tris {triangles.Length} verts {vertices.Length}");
+        MapManager.instance.SpawnMesh(1,triangles,vertices);
     }
 }

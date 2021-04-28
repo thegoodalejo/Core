@@ -127,14 +127,18 @@ public class SendToClient
 
     /// <summary>Sends a player's updated rotation to all clients except to himself (to avoid overwriting the local player's rotation).</summary>
     /// <param name="_player">The player whose rotation to update.</param>
-    public static void PlayerRotation(Player _player)
+    public static void PlayerRotation(Player _player,bool isAreaSwap)
     {
         using (Packet _packet = new Packet((int)ToClientPackets.playerRotation))
         {
             _packet.Write(_player.id);
             _packet.Write(_player.transform.rotation);
 
-            SendUDPDataToAll(_player.id, _packet);
+            if(!isAreaSwap){
+                SendUDPDataToAll(_player.id, _packet);
+            }else{
+                SendUDPDataToAll(_packet);
+            } ;
         }
     }
 
@@ -143,7 +147,6 @@ public class SendToClient
         using (Packet _packet = new Packet((int)ToClientPackets.playerDisconnected))
         {
             _packet.Write(_playerId);
-
             SendTCPDataToAll(_packet);
         }
     }
@@ -277,6 +280,17 @@ public class SendToClient
             _packet.Write(_enemy.health);
 
             SendTCPDataToAll(_packet);
+        }
+    }
+
+    public static void PlayerGravity(int _toClient, Vector3 _gravity)
+    {
+        using (Packet _packet = new Packet((int)ToClientPackets.playerGravity))
+        {
+            _packet.Write(_toClient);
+            _packet.Write(_gravity);
+            Debug.Log($"Player {_toClient} swap to {_gravity}");
+            SendTCPData(_toClient,_packet);
         }
     }
     #endregion

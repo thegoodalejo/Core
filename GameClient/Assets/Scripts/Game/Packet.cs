@@ -22,7 +22,8 @@ public enum ServerPackets
     projectileExploded,
     spawnEnemy,
     enemyPosition,
-    enemyHealth
+    enemyHealth,
+    playerGravity
 }
 
 /// <summary>Sent from client to server.</summary>
@@ -399,6 +400,32 @@ public class Packet : IDisposable
             Debug.Log($"F {_friend.user_legends_nick}");
         }
         return response;
+    }
+    /// <summary>Reads a List of ints from the packet.</summary>
+    /// <param name="_moveReadPos">Whether or not to move the buffer's read position.</param>
+    public int[] ReadTriangles(bool _moveReadPos = true)
+    {
+        int length = ReadInt(_moveReadPos);
+        int[] triangles = new int[length];
+        
+        for (int i = 0; i < length; i++)
+        {
+            triangles[i] = (ReadInt(_moveReadPos));
+        }
+        return triangles;
+    }
+    /// <summary>Reads a Vector3 of ints from the packet.</summary>
+    /// <param name="_moveReadPos">Whether or not to move the buffer's read position.</param>
+    public Vector3[] ReadVertices(bool _moveReadPos = true)
+    {
+        int length = ReadInt(_moveReadPos);
+        Vector3[] vertices = new Vector3[length];
+        
+        for (int i = 0; i < length; i++)
+        {
+            vertices[i] = (ReadVector3(_moveReadPos));
+        }
+        return vertices;
     }
     #endregion
 
