@@ -20,7 +20,7 @@ public class Player : MonoBehaviour
     // public float gravity = -9.81f;
     public float moveSpeed = 0.5f;
     private Rigidbody rb;
-    public float jumpSpeed = 15f;
+    public float jumpSpeed = 0.5f;
     public float health;
     public float maxHealth = 100f;
     public bool isGrounded;
@@ -46,24 +46,20 @@ public class Player : MonoBehaviour
 
     public void UpdateState(Vector3 _gravity){
         localGravity = _gravity;
-        transform.rotation = Quaternion.FromToRotation(Vector3.down, localGravity); 
-        // GetComponent<Camera>().transform.rotation = Quaternion.FromToRotation(Vector3.down, localGravity);
+        transform.rotation = Quaternion.FromToRotation(Vector3.down, localGravity);
         SendToClient.PlayerGravity(id,_gravity);
     }
 
     /// <summary>Processes player input and moves the player.</summary>
     public void FixedUpdate()
-    {        
-        Vector3 tempVect = Vector3.zero;
-                
+    {
+        rb.AddForce(localGravity);
         isGrounded = Physics.Raycast(transform.position,bot.transform.position,1.7f);
-        if(!isGrounded){
-            tempVect += localGravity;
-        }
         if (inputs[4] && isGrounded)
         {
             Debug.Log("Imaginarie Jump");
-            tempVect += -localGravity*jumpSpeed;
+            rb.AddForce(-localGravity*jumpSpeed, ForceMode.Impulse);
+            // tempVect += -localGravity*jumpSpeed;
         }
         if(inputs[0]){
             Debug.Log($"MoveForward {transform.position} to {front.transform.position} Rot {transform.rotation}");
@@ -81,15 +77,14 @@ public class Player : MonoBehaviour
             Debug.Log($"MoveLeft {transform.position} to {left.transform.position} Rot {transform.rotation}");
             transform.position = left.transform.position;
         }
-
-        Physics.gravity = localGravity+tempVect;
-        Move(tempVect);        
+        
+        Move();        
     }
 
 
     /// <summary>Calculates the player's desired movement direction and moves him.</summary>
     /// <param name="_inputDirection"></param>
-    private void Move(Vector2 _inputDirection)
+    private void Move()
     {
         SendToClient.PlayerPosition(this);
         SendToClient.PlayerRotation(this,false);
