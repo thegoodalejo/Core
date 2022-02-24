@@ -18,6 +18,6 @@ public class UIManager : MonoBehaviour
             Debug.Log("Instance already exists, destroying object!");
             Destroy(this);
         }
-        Client.instance.ConnectToServer();
+        ClientModel.instance.ConnectToServer();
     }
 }
