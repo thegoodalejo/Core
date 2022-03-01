@@ -9,7 +9,7 @@ public class PlayerManager : MonoBehaviour
     public float health;
     public float maxHealth = 100f;
     public int itemCount = 0;
-    public MeshRenderer model;
+    public GameObject model;
     private Vector3 localGravity = new Vector3(0,0,0);
     public GameObject sight;
     public float horizontalRotation = 0;
@@ -42,12 +42,12 @@ public class PlayerManager : MonoBehaviour
 
     public void Die()
     {
-        model.enabled = false;
+        model.SetActive(false);
     }
 
     public void Respawn()
     {
-        model.enabled = true;
+        model.SetActive(true);
         SetHealth(maxHealth);
     }
 }

@@ -36,8 +36,9 @@ public class HandleClientMsg
     public static void PlayerShoot(int _fromClient, Packet _packet)
     {
         Vector3 _shootDirection = _packet.ReadVector3();
-
         HostClients.clients[_fromClient].player.Shoot(_shootDirection);
+
+        Debug.Log("Player " +_fromClient+" Shoot to " + _shootDirection);
     }
 
     public static void PlayerThrowItem(int _fromClient, Packet _packet)

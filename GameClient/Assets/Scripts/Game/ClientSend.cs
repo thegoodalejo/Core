@@ -46,13 +46,14 @@ public class ClientSend : MonoBehaviour
             }
             _packet.Write(GameManager.players[ClientModel.instance.myId].transform.rotation.eulerAngles);
             _packet.Write(GameManager.players[ClientModel.instance.myId].sight.transform.rotation.eulerAngles);
-            Debug.Log($"Rot {GameManager.players[ClientModel.instance.myId].transform.rotation.eulerAngles}");
+            //Debug.Log($"Rot {GameManager.players[ClientModel.instance.myId].transform.rotation.eulerAngles}");
             SendTCPData(_packet);
         }
     }
 
     public static void PlayerShoot(Vector3 _facing)
     {
+        Debug.Log("Shoot to " + _facing);
         using (Packet _packet = new Packet((int)ClientPackets.playerShoot))
         {
             _packet.Write(_facing);

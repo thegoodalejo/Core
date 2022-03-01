@@ -216,22 +216,22 @@ public class Player : MonoBehaviour
 
     public void Shoot(Vector3 _viewDirection)
     {
-        // if (health <= 0f)
-        // {
-        //     return;
-        // }
-
-        // if (Physics.Raycast(shootOrigin.position, _viewDirection, out RaycastHit _hit, 25f))
-        // {
-        //     if (_hit.collider.CompareTag("Player"))
-        //     {
-        //         _hit.collider.GetComponent<Player>().TakeDamage(50f);
-        //     }
-        //     else if (_hit.collider.CompareTag("Enemy"))
-        //     {
-        //         _hit.collider.GetComponent<Enemy>().TakeDamage(50f);
-        //     }
-        // }
+        if (health <= 0f)
+        {
+            return;
+        }
+        NetworkManager.instance.InstantiateProjectile(sight.transform).Initialize(_viewDirection, 10000.0f, id);
+        if (Physics.Raycast(sight.transform.position, _viewDirection, out RaycastHit _hit, 25f))
+        {
+            if (_hit.collider.CompareTag("Player"))
+            {
+                _hit.collider.GetComponent<Player>().TakeDamage(50f);
+            }
+            else if (_hit.collider.CompareTag("Enemy"))
+            {
+                _hit.collider.GetComponent<Enemy>().TakeDamage(50f);
+            }
+        }
     }
 
     public void ThrowItem(Vector3 _viewDirection)
@@ -250,22 +250,20 @@ public class Player : MonoBehaviour
 
     public void TakeDamage(float _damage)
     {
-        // if (health <= 0f)
-        // {
-        //     return;
-        // }
-
-        // health -= _damage;
-        // if (health <= 0f)
-        // {
-        //     health = 0f;
-        //     controller.enabled = false;
-        //     transform.position = new Vector3(0f, 25f, 0f);
-        //     SendToClient.PlayerPosition(this);
-        //     StartCoroutine(Respawn());
-        // }
-
-        // SendToClient.PlayerHealth(this);
+        if (health <= 0f)
+        {
+            return;
+        }
+      health -= _damage;
+        if (health <= 0f)
+        {
+            health = 0f;
+            _controller.enabled = false;
+            transform.position = new Vector3(0f, 25f, 0f);
+            SendToClient.PlayerPosition(this);
+            StartCoroutine(Respawn());
+        }
+      SendToClient.PlayerHealth(this);
     }
 
     private IEnumerator Respawn()
@@ -273,7 +271,7 @@ public class Player : MonoBehaviour
         yield return new WaitForSeconds(5f);
 
         health = maxHealth;
-        //controller.enabled = true;
+        _controller.enabled = true;
         SendToClient.PlayerRespawned(this);
     }
 
