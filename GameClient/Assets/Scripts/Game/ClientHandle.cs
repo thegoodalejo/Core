@@ -36,7 +36,7 @@ public class ClientHandle : MonoBehaviour
 
         if (GameManager.players.TryGetValue(_id, out PlayerManager _player))
         {
-            _player.transform.position = _position;
+            _player.Move(_position);
         }
     }
 

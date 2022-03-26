@@ -220,7 +220,7 @@ public class Player : MonoBehaviour
         {
             return;
         }
-        NetworkManager.instance.InstantiateProjectile(sight.transform).Initialize(_viewDirection, 10000.0f, id);
+        NetworkManager.instance.InstantiateProjectile(sight.transform).Initialize(_viewDirection, 1000.0f, id);
         if (Physics.Raycast(sight.transform.position, _viewDirection, out RaycastHit _hit, 25f))
         {
             if (_hit.collider.CompareTag("Player"))
