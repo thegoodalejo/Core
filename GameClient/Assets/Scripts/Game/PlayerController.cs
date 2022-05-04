@@ -36,6 +36,16 @@ public class PlayerController : MonoBehaviour
             Input.GetKey(KeyCode.Space)
         };
 
+        if(_inputs[0] && _inputs[1]){
+            _inputs[0] = false;
+            _inputs[1] = false;
+        }
+
+        if(_inputs[2] && _inputs[3]){
+            _inputs[2] = false;
+            _inputs[3] = false;
+        }
+
         ClientSend.PlayerMovement(_inputs);
     }
 }

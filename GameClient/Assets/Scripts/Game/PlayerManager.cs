@@ -71,9 +71,12 @@ public class PlayerManager : MonoBehaviour
 
         if (Mathf.Abs(moveGlobal.x) < threshold && Mathf.Abs(moveGlobal.z) < threshold){
             _animator.idle();
-        }
-        else{
+            return;
+        } 
+        if(true){
             _animator.walk();
+        }else{
+            _animator.back();
         }
     }
 

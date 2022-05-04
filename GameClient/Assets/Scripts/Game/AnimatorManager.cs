@@ -9,33 +9,72 @@ public class AnimatorManager : MonoBehaviour
     private Animator _animator;
     public GameObject player;
     public bool _idle;
+    public enum eAnimations{
+        ENABLE,
+        IDLE,
+        WALK,
+        BACK,
+        JUMP,
+        e,f,g,h,i,j,k,l}
+    struct AnimationInfo{
+        public int id;
+        public string name;
+        // constructor 
+        public AnimationInfo(int _id, string _name) {
+            id = _id;
+            name = _name;
+        }
+    }
+    private Dictionary <int, string > animDictionary = new Dictionary < int, string >();
 
     void Awake(){
+        animSetup();
         _idle = true;
         _animator = GameObject.Find("/"+player.name+"ybot").GetComponent<Animator>();
+        _animator.SetBool("Enable",true);
         Debug.Log(player.name);
+
+    }
+
+    private void animSetup(){
+        animDictionary.Add((int)eAnimations.ENABLE,"Enable");
+        animDictionary.Add((int)eAnimations.IDLE,"Idle");
+        animDictionary.Add((int)eAnimations.WALK,"Walk");
+        animDictionary.Add((int)eAnimations.BACK,"Back");
     }
 
     public void idle(){
         if(!_animator.GetBool("Idle")){
             Debug.LogWarning("Idleing");
-            _animator.SetBool("Idle",true);
+            animationSwitch(eAnimations.IDLE);
         }
     }
     public void walk(){
-        if(_animator.GetBool("Idle")){
+        if(!_animator.GetBool("Walk")){
             Debug.LogWarning("Walking");
-            _animator.SetBool("Idle",false);
+            animationSwitch(eAnimations.WALK);
         }
     }
-    void Start()
-    {
-        
+
+    public void back(){
+        if(!_animator.GetBool("Back")){
+            Debug.LogWarning("Backwards");
+            animationSwitch(eAnimations.BACK);
+        }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        //_animator.SetBool("Idle",_idle);
+    private void animationSwitch(eAnimations state){
+        int _state = (int) state;
+        for (int i = 1; i < animDictionary.Count; i++)
+        {
+            if (i==_state)
+            {
+                _animator.SetBool(animDictionary[i],true);
+            }
+            _animator.SetBool(animDictionary[i],false);
+        }
+    }
+    private void animationSwitch(List<eAnimations> state){
+
     }
 }

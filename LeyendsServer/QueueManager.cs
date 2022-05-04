@@ -26,7 +26,7 @@ namespace LeyendsServer
         {
             if (isBuilding)
             {
-                BuildNewRoom(3);// Numero de jugadores para la sala
+                BuildNewRoom(2);// Numero de jugadores para la sala
             }
             if (isCalling) return;
             if (Server.rooms[targetRoom].isReadyToCall()) CallGame();
