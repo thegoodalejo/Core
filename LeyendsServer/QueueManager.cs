@@ -71,7 +71,7 @@ namespace LeyendsServer
                     targetRoom = i;
                     isBuilding = false;
                     string filename = Path.Combine("D:\\Legends\\GameServerSln", "UnityGameServer.exe");
-                    //var proc = System.Diagnostics.Process.Start(filename, "-port " + Server.rooms[i].port.ToString()+" -maxPlayers "+ _groupSize);
+                    var proc = System.Diagnostics.Process.Start(filename, "-port " + Server.rooms[i].port.ToString()+" -maxPlayers "+ _groupSize + " -batchmode -nographics");
                     Server.rooms[i].Start();
                     return;
                 }
