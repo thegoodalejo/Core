@@ -11,12 +11,12 @@ public class ClientHandle : MonoBehaviour
         int _myId = _packet.ReadInt();
 
         Debug.Log($"Message from server: {_msg}");
-        Client.instance.myId = _myId;
+        ClientModel.instance.myId = _myId;
         ClientSend.WelcomeReceived();
 
         // Now that we have the client's id, connect UDP
-        Debug.Log($"UDP listn game by :{((IPEndPoint)Client.instance.tcp.socket.Client.LocalEndPoint).Port}");
-        Client.instance.udp.Connect(((IPEndPoint)Client.instance.tcp.socket.Client.LocalEndPoint).Port);
+        Debug.Log($"UDP listn game by :{((IPEndPoint)ClientModel.instance.tcp.socket.Client.LocalEndPoint).Port}");
+        ClientModel.instance.udp.Connect(((IPEndPoint)ClientModel.instance.tcp.socket.Client.LocalEndPoint).Port);
     }
 
     public static void SpawnPlayer(Packet _packet)
@@ -36,7 +36,7 @@ public class ClientHandle : MonoBehaviour
 
         if (GameManager.players.TryGetValue(_id, out PlayerManager _player))
         {
-            _player.transform.position = _position;
+            _player.Move(_position);
         }
     }
 
